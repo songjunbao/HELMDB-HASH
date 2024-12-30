@@ -184,8 +184,21 @@ restart:
                 /* 插入哈希邻接表策略：
                  * 1）待插入level>5,则执行插入哈希邻接表操作
                  * 2）考虑到前缀尽可能的复用，则每5个层级进行前缀分割操作，并将其插入邻接表
-                 *
-                 */
+                 * 3）对于内部节点的索引，在邻接表存储的是子节点的指针，对于叶子节点的索引，则插入哈希邻接表存储的是ptid
+                 * 4)为了更好的匹配ART的特性，hash索引的前缀不需要把key的所有字符都作为hash的key,只需要与ART匹配的前缀长度一致即可
+                 * 5）为了更好的辨别是否索引到叶子节点，则需要判断索引的指针是否是指向叶子节点的指针，在NVMPtr<N>中加入一个标志位，用于辨别是否索引到叶子节点
+                 * 6) 为了更方便索引叶子节点，由于采用节点复用，目前打算采取的策略是如果ART到leaf的前缀不等于key,则邻接表的索引key按照5长度进行补全，或者直接包含整个key
+                 * 举例（1）key:fnaskdlfjnfd
+                 * fnaskdlf->leaf(8个前缀则索引到了leaf)
+                 * 则在hashAdjTable中存储的key为fnask->dlfjn->ptid
+                 * 举例（2）key:fnaskdlfj
+                 * fnaskdlf->leaf(8个前缀则索引到了leaf)
+                 * 则在hashAdjTable中存储的key为fnask->dlfj->ptid
+                 * 将其标志位设置为1，表示索引到了叶子节点
+                 * */
+
+//                if(nextLevel > 5){
+//                }
                 return;
             }
             case CheckPrefixPessimisticResult::MATCH:
@@ -224,6 +237,7 @@ restart:
 
             if (key == k) {
                 NVMPtr<N> pTid(0, (unsigned long)N::SetLeaf(tid));
+                //需要更新ptid
                 N::Change(node, k[level], pTid);
                 oplogsCount = 0;
                 flushToNVM(reinterpret_cast<char *>(&oplogsCount), sizeof(uint64_t));
