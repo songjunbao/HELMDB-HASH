@@ -1,0 +1,42 @@
+--for LLT
+--test gsqlerr error
+\! @abs_bindir@/gsqlerr
+Invalid option, please use 'gsqlerr -h' for more information.
+Display errorcode description
+
+gsqlerror [options...]
+
+Options:
+  -h               print online manual
+  -v               print version
+  [errorcode]      print errorcode description
+--?.*
+
+\! @abs_bindir@/gsqlerr -a 11
+Invalid option, please use 'gsqlerr -h' for more information.
+Display errorcode description
+
+gsqlerror [options...]
+
+Options:
+  -h               print online manual
+  -v               print version
+  [errorcode]      print errorcode description
+--?.*
+
+--test gsqlerr outer help
+\! @abs_bindir@/gsqlerr -h
+Display errorcode description
+
+gsqlerror [options...]
+
+Options:
+  -h               print online manual
+  -v               print version
+  [errorcode]      print errorcode description
+--?.*
+
+--test gsql outer -v
+\! @abs_bindir@/gsqlerr -v
+
+V1.0 for gsqlerror. 

@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+    stages {
+        stage('checkout pr') {
+            steps {
+                //cleanup
+                cleanWs()
+                checkout scm
+            }
+        }
+        stage('build') {
+            steps {
+                sh '''
+                rm -rf tmp_build
+                export https_proxy=http://hkt1.hkg.hypernat.com:38120;
+                export http_proxy=http://hkt1.hkg.hypernat.com:38119;
+                export all_proxy=socks5://hkt1.hkg.hypernat.com:38118;
+                sudo yum install -y git glibc-devel libaio-devel flex bison ncurses-devel patch lsb_release readline-devel ndctl-devel daxctl-devel numactl-devel ipmctl rdma-core-devel
+                sudo yum install -y libaio-devel flex ncurses-devel pam-devel libffi-devel autoconf automake cmake openssl-devel libtool libtool-devel make readline readline-devel python python3-devel bison tbb ndctl daxctl ndctl-devel daxctl-devel
+                mkdir tmp_build
+                sh build.sh -m release -3rd /var/jenkins_home/binarylibs/ -pkg 
+                tar -zcvf mppdb_temp_install.tar.gz mppdb_temp_install
+                '''
+            }
+        }
+        stage('openGauss test') {
+            steps {
+                //fastcheck
+                sh '''
+                sed -i 's/declare CMAKE_PKG="Y"/declare CMAKE_PKG="N"/' build/script/build_opengauss.sh
+                sh build.sh -m release -3rd /var/jenkins_home/binarylibs/ -pkg 
+                export CODE_BASE=$PWD    
+                export BINARYLIBS=/var/jenkins_home/binarylibs    
+                export GAUSSHOME=$CODE_BASE/mppdb_temp_install
+                export GCC_PATH=$BINARYLIBS/buildtools/gcc7.3
+                export CC=$GCC_PATH/gcc/bin/gcc
+                export CXX=$GCC_PATH/gcc/bin/g++
+                export LD_LIBRARY_PATH=$GAUSSHOME/lib:$GCC_PATH/gcc/lib64:$GCC_PATH/isl/lib:$GCC_PATH/mpc/lib/:$GCC_PATH/mpfr/lib/:$GCC_PATH/gmp/lib/:$LD_LIBRARY_PATH
+                export PATH=$GAUSSHOME/bin:$GCC_PATH/gcc/bin:$PATH
+                #cd mppdb_temp_install/bin/
+                #gs_initdb -D /var/jenkins_home/workspace/CI_PR-4/mppdb_temp_install/data/ --nodename=node1
+                #gs_ctl start -D /var/jenkins_home/workspace/CI_PR-4/mppdb_temp_install/data -Z single_node -l logfile
+                cd src/test/regress
+                make fastcheck_single PART=A
+                make fastcheck_single PART=B 
+                make fastcheck_single PART=C
+                '''
+            }
+        }
+        stage('unit test') {
+            steps {
+                sh 'make fastcheck_single PART=E'
+            }
+        }
+        stage('coding check') {
+            steps {
+                //todo
+                sh 'echo "coding check";'
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Finish!'
+        }
+        success {
+            echo 'Success'
+        }
+        failure {
+            echo 'Failed'
+        }
+    }
+}

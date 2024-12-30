@@ -1,0 +1,23 @@
+<refentry id="SQL-ALTER_SCHEMA">
+<refmeta>
+<refentrytitle>ALTER SCHEMA</refentrytitle>
+<manvolnum>7</manvolnum>
+<refmiscinfo>SQL - Language Statements</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>ALTER SCHEMA</refname>
+<refpurpose>change the definition of a schema</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis>
+ALTER SCHEMA schema_name
+    RENAME TO new_name;
+ALTER SCHEMA schema_name
+    OWNER TO new_owner;
+ALTER SCHEMA schema_name {WITH | WITHOUT} BLOCKCHAIN;
+ALTER SCHEMA schema_name
+    [ [ DEFAULT ] CHARACTER SET | CHARSET [ = ] default_charset ] [ [ DEFAULT ] COLLATE [ = ] default_collation ];
+NOTICE: '[ [ DEFAULT ] CHARACTER SET | CHARSET [ = ] default_charset ] [ [ DEFAULT ] COLLATE [ = ] default_collation ]' is only available in CENTRALIZED mode and B-format database!
+</synopsis>
+</refsynopsisdiv>
+</refentry>

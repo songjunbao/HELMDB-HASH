@@ -1,0 +1,8 @@
+--for LLT
+--test gsqlerr error
+\! @abs_bindir@/gsqlerr
+\! @abs_bindir@/gsqlerr -a 11
+--test gsqlerr outer help
+\! @abs_bindir@/gsqlerr -h
+--test gsql outer -v
+\! @abs_bindir@/gsqlerr -v

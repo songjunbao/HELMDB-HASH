@@ -1,0 +1,27 @@
+<refentry id="SQL-CREATE_TABLE_AS">
+<refmeta>
+<refentrytitle>CREATE TABLE AS</refentrytitle>
+<manvolnum>7</manvolnum>
+<refmiscinfo>SQL - Language Statements</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>CREATE TABLE AS</refname>
+<refpurpose>define a new table from the results of a query</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis>
+CREATE [ UNLOGGED ] TABLE table_name
+    [ (column_name [ data_type ]  [, ...] ) ]
+    [ WITH ( {storage_parameter = value} [, ... ] ) ]
+    [ COMPRESS | NOCOMPRESS ]
+    [ TABLESPACE tablespace_name ]
+    [ DISTRIBUTE BY { REPLICATION | { [HASH ] ( column_name ) } } ]
+    [ TO { GROUP groupname | NODE ( nodename [, ... ] ) } ]
+    AS query
+    [ WITH [ NO ] DATA ];
+NOTICE: [data_type] is only available in CENTRALIZED mode and B-format database.
+NOTICE: DISTRIBUTE BY is only avaliable in DISTRIBUTED mode.
+NOTICE: TO {...} is only avaliable in DISTRIBUTED mode.
+</synopsis>
+</refsynopsisdiv>
+</refentry>

@@ -1,0 +1,1 @@
+CREATE VECTORS IF NOT EXISTS items[3](category_id int);

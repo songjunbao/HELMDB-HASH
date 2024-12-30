@@ -1,0 +1,269 @@
+-- error
+select 10 into @aa;
+
+\! @abs_bindir@/gs_guc reload -Z datanode -D @abs_srcdir@/tmp_check/datanode1 -c "b_format_behavior_compat_options='enable_set_variables'" >/dev/null 2>&1
+\! sleep 1
+
+-- error
+select 10 into @aa;
+create database test_select_into_var dbcompatibility 'b';
+\c test_select_into_var
+drop table if exists t;
+create table t(i int, t text, b bool, f float, bi bit(3), vbi bit varying(5));
+insert into t(i, t, b, f, bi, vbi)
+values(1, 'aaa', true, 1.11, B'101', B'00'),
+      (2, 'bbb', false, 2.22, B'100', B'10'),
+      (3, null, true, 3.33, B'101', B'00'),
+      (4, 'ddd', null, 4.44, B'100', B'10'),
+      (5, 'eee', false, null, B'101', B'00'),
+      (6, 'fff', true, 6.66, null, B'00'),
+      (7, 'ggg', false, 7.77, B'100', null),
+      (null, 'hhh', true, 8.88, B'101', B'10');
+select * from t;
+
+--three places
+select 10,20 into @aa,@bb;
+select @aa,@bb;
+select 20,10 into @aa,@bb for update;
+select @aa,@bb;
+select 10,20 for update into @aa,@bb;
+select @aa,@bb;
+
+--error
+select 10,20 into @aa into @bb; --more than one into_clause
+select * from t where i in (select 1 into @aa); --not allow here
+select * from t limit 1 into @aa;  --too many columns
+select * from t into @aa,@bb,@cc,@dd,@ee,@ff;  --too many rows
+
+--values change
+select * from t where i=1 into @aa,@bb,@cc,@dd,@ee,@ff;
+select @aa,@bb,@cc,@dd,@ee,@ff;
+select * from t where i=2 into @aa,@bb,@cc,@dd,@ee,@ff;
+select @aa,@bb,@cc,@dd,@ee,@ff;
+select * from t where i=3 into @aa,@bb,@cc,@dd,@ee,@ff;
+select @aa,@bb,@cc,@dd,@ee,@ff;
+select * from t where i=4 into @aa,@bb,@cc,@dd,@ee,@ff;
+select @aa,@bb,@cc,@dd,@ee,@ff;
+select * from t where i=5 into @aa,@bb,@cc,@dd,@ee,@ff;
+select @aa,@bb,@cc,@dd,@ee,@ff;
+select * from t where i=6 into @aa,@bb,@cc,@dd,@ee,@ff;
+select @aa,@bb,@cc,@dd,@ee,@ff;
+select * from t where i=7 into @aa,@bb,@cc,@dd,@ee,@ff;
+select @aa,@bb,@cc,@dd,@ee,@ff;
+select * from t where i isnull into @aa,@bb,@cc,@dd,@ee,@ff;
+select @aa,@bb,@cc,@dd,@ee,@ff;
+select * from t where i=100 into @aa,@bb,@cc,@dd,@ee,@ff;
+select @aa,@bb,@cc,@dd,@ee,@ff;
+create table int_tb(c1 TINYINT,c2 SMALLINT,c3 INTEGER,c5 BIGINT);
+insert into int_tb values(0,-32768,-2147483648,-9223372036854775808),(0,1,100000,100000000);
+select c1 into @my_var from int_tb order by c1 limit 1;
+select @my_var;
+
+CREATE TABLE t001(c1 int, c2 int, c3 int);
+insert into t001 values(100,100,100),(100,101,101);
+SELECT SUM(c2) as f1, @aa as f2 INTO @aa,@bb FROM t001 GROUP BY c1; 
+SELECT @aa,@bb;
+SELECT SUM(c2) as f1, SUM(c1) as f2 INTO @aa,@bb FROM t001 GROUP BY c1; 
+SELECT @aa,@bb;
+create or replace procedure my_pro()
+as
+declare outfile int default 0;
+begin
+select 10 into outfile;
+end;
+/
+call my_pro();
+--procedure stmt 1
+create or replace procedure my_pro()
+as
+begin
+select 1 into @my_var;
+end;
+/
+call my_pro();
+select @my_var;
+
+--procedure stmt 2
+create or replace procedure my_pro(in p_in int)
+as
+begin
+select p_in into @my_var;
+end;
+/
+call my_pro(2);
+select @my_var;
+
+--procedure stmt 3
+create or replace procedure my_pro(p_in int, out p_out int)
+as
+begin
+select p_in into p_out;
+end;
+/
+call my_pro(3, @my_var::int);
+select @my_var;
+
+--procedure stmt 4
+create or replace procedure my_pro(inout p_inout int)
+as
+begin
+select p_inout+1 into p_inout;
+end;
+/
+call my_pro(@my_var::int);
+select @my_var;
+
+--procedure stmt 5
+create or replace procedure inner_pro(inout a int, b int, inout c int)
+as
+begin
+select a*b,b*c into a,c;
+end
+/
+create or replace procedure outer_pro(d int)
+as
+begin
+select 3,5 into @x,@y;
+drop table if exists tb1;
+create table tb1(a int, b int);
+insert into tb1 values(@x, @y);
+call inner_pro(@x::int, d, @y::int);
+insert into tb1 values(@x, @y);
+end;
+/
+call outer_pro(10);
+select * from tb1;
+
+--prepare
+select 'select 1024 into @bb;' into @aa;
+prepare stmt as @aa;
+execute stmt;
+select @bb;
+
+prepare stmt1 as select :p,:q into @aa,@bb;
+execute stmt1(1,2);
+select @aa,@bb;
+
+prepare stmt2 as select * from t where i in (:p,:q);
+execute stmt2(@aa,@bb);
+
+execute stmt1('abcde', 'qwer');
+select @aa,@bb;
+
+prepare stmt3 as select lengthb(:p);
+execute stmt3(@aa);
+
+--triggers
+drop table if exists t1;
+create table t1(a int);
+create or replace function tri_func1() returns trigger as
+$$
+begin
+    select @num + NEW.a into @num;
+    return NEW;
+end
+$$ LANGUAGE PLPGSQL;
+
+create trigger tri_insert_before before insert on t1 for each row execute procedure tri_func1();
+select 0 into @num;
+select @num;
+insert into t1 values(100);
+select @num;
+insert into t1 values(200);
+select @num;
+
+drop trigger tri_insert_before on t1;
+
+create trigger tri_update_before before update on t1 for each row execute procedure tri_func1();
+select 0 into @num;
+select @num;
+update t1 set a = 1000 where a = 100;
+select @num;
+update t1 set a = 2000 where a = 200;
+select @num;
+
+create or replace function tri_func2() returns trigger as
+$$
+declare
+begin
+    set @num = @num + OLD.a;
+    return OLD;
+end
+$$ LANGUAGE PLPGSQL;
+
+create trigger tri_update_after after update on t1 for each row execute procedure tri_func2();
+select 0 into @num;
+select @num;
+update t1 set a = 100 where a = 1000;
+select @num;
+update t1 set a = 200 where a = 2000;
+select @num;
+
+drop trigger tri_update_after on t1;
+
+create trigger tri_delete_after after delete on t1 for each row execute procedure tri_func2();
+select 0 into @num;
+select @num;
+delete t1 where a = 100;
+select @num;
+delete t1 where a = 200;
+select @num;
+
+drop trigger tri_delete_after on t1;
+drop table if exists trigger_t2;
+create table trigger_t2(a int);
+create or replace function tri_func3() returns trigger as
+$$
+begin
+    select abs(@num)+1 into @num;
+    return NEW;
+end
+$$ LANGUAGE PLPGSQL;
+create trigger tri_insert_before before insert on trigger_t2 for each row execute procedure tri_func3();
+select -1 into @num;
+select @num;
+insert into trigger_t2 values(10);
+select @num;
+drop trigger tri_insert_before on trigger_t2;
+
+select 10,@v1/2 into @v1,@v2;
+select @v1,@v2;
+
+select 10,@v1/2 into @v1,@v2;
+select @v1,@v2;
+
+select 10 into @value;
+select @value;
+select sha(@value) into @sha_value;
+select @sha_value;
+
+select -1,'hello' into @v1, @v2;
+select @v1, @v2;
+select @v1 + 1, abs(@v1), concat(@v2, ' world!') into @v3, @abs, @concat;
+select @v3, @abs, @concat;
+
+\! @abs_bindir@/gs_guc reload -Z datanode -D @abs_srcdir@/tmp_check/datanode1 -c "b_format_behavior_compat_options=''" >/dev/null 2>&1
+\! sleep 1
+create table t2(a int, b int);
+set b_format_behavior_compat_options="enable_set_variables";
+create or replace procedure test(a int, b int) as
+declare
+    num3 int := a;
+    num4 int := b;
+    pragma autonomous_transaction;
+
+begin
+    set b_format_behavior_compat_options="enable_set_variables";
+    select num3,num4 into @v1,@v2;
+    commit;
+    insert into t2 values(@v1, @v2);
+    rollback;
+    set b_format_behavior_compat_options="enable_set_variables";	
+    insert into t2 values(@v1-1, @v2+1);
+end;
+/
+call test(1,1);
+select * from t2;
+
+\c regression
+drop database if exists test_select_into_var;

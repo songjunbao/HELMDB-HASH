@@ -1,32 +1,33 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
+/.gitee/
+/.vscode/
+/.idea/
+/.cache/
+/cmake-build-debug/
 *.a
-*.lib
+*.o
+*.so
+*.so.[0-9]
+*.so.[0-9].[0-9]
+*.sgml
+*.log
+*.inc
+*.rej
 
-# Executables
-*.exe
-*.out
-*.app
+*.pb.cc
+*.pb.h
+*.prof
+config.mk
+
+
+objfiles.txt
+compile_commands.json
+
+/tmp_build/
+/output/
+/mppdb_temp_install/
+/GNUmakefile
+/config.status
+/ereport.txt
+
+/build/script/version.cfg
+/src/gausskernel/storage/nvmdb/ycsb_test/index-microbench/workloads/*

@@ -1,0 +1,2 @@
+/opt/rh/devtoolset-11/root/usr/bin/ar qc libgflags_nothreads.a CMakeFiles/gflags_nothreads_static.dir/src/gflags.cc.o CMakeFiles/gflags_nothreads_static.dir/src/gflags_reporting.cc.o CMakeFiles/gflags_nothreads_static.dir/src/gflags_completions.cc.o
+/opt/rh/devtoolset-11/root/usr/bin/ranlib libgflags_nothreads.a

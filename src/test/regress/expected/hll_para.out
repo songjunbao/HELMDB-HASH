@@ -1,0 +1,566 @@
+create schema hll_para;
+set current_schema = hll_para;
+--------------CONTENTS--------------------
+-- test hll functions with parameters
+------------------------------------------
+--1. hll_empty 
+--2. hll_add_agg
+--3. use cases with parameter
+------------------------------------------
+------------------------------------------
+-- 1. hll_empty
+------------------------------------------
+-- default 14/10/12/0, max 16/12/14/1, min 10/0/0/0, but -1 means default
+-- Empty
+select hll_print(hll_empty(14));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_empty(14,10));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_empty(14,10,12));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_empty(14,10,12,0));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_empty(-1));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_empty(9));
+ERROR:  log2m = 9 is out of range, it should be in range 10 to 16, or set -1 as default
+CONTEXT:  referenced column: hll_print
+select hll_print(hll_empty(17));
+ERROR:  log2m = 17 is out of range, it should be in range 10 to 16, or set -1 as default
+CONTEXT:  referenced column: hll_print
+select hll_print(hll_empty(14,-1));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_empty(14,-2));
+ERROR:  log2explicit = -2 is out of range, it should be in range 0 to 12, or set -1 as default
+CONTEXT:  referenced column: hll_print
+select hll_print(hll_empty(14,13));
+ERROR:  log2explicit = 13 is out of range, it should be in range 0 to 12, or set -1 as default
+CONTEXT:  referenced column: hll_print
+select hll_print(hll_empty(14,10,-1));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_empty(14,10,-2));
+ERROR:  log2sparse = -2 is out of range, it should be in range 0 to 14, or set -1 as default
+CONTEXT:  referenced column: hll_print
+select hll_print(hll_empty(14,10,15));
+ERROR:  log2sparse = 15 is out of range, it should be in range 0 to 14, or set -1 as default
+CONTEXT:  referenced column: hll_print
+select hll_print(hll_empty(14,10,12,-1));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_empty(14,10,12,-2));
+ERROR:  duplicatecheck = -2 is out of range, it should be in range 0 to 1, or set -1 as default
+CONTEXT:  referenced column: hll_print
+select hll_print(hll_empty(14,10,12,2));
+ERROR:  duplicatecheck = 2 is out of range, it should be in range 0 to 1, or set -1 as default
+CONTEXT:  referenced column: hll_print
+select hll_print(hll_empty(14,10,12,false));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+-- Explicit
+select hll_print(
+       hll_add(hll_empty(),
+           hll_hash_integer(1,0)));
+                                    hll_print                                     
+----------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(
+       hll_add(
+       hll_add(hll_empty(),
+           hll_hash_integer(2,0)),
+           hll_hash_integer(1,0)));
+                                    hll_print                                     
+----------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+           
+-- Sparse
+select hll_print(
+       hll_add(
+       hll_add(
+       hll_add(hll_empty(14,0),
+           hll_hash_integer(3,0)),
+           hll_hash_integer(2,0)),
+           hll_hash_integer(1,0)));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=14, log2explicit=0, log2sparse=12, duplicatecheck=0
+(1 row)
+
+           
+-- Sparse, has 15 filled
+select #hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(hll_empty(14,0),
+           hll_hash_integer(15,0)),
+           hll_hash_integer(14,0)),
+           hll_hash_integer(15,0)),
+           hll_hash_integer(14,0)),
+           hll_hash_integer(13,0)),
+           hll_hash_integer(12,0)),
+           hll_hash_integer(11,0)),
+           hll_hash_integer(10,0)),
+           hll_hash_integer(9,0)),
+           hll_hash_integer(8,0)),
+           hll_hash_integer(7,0)),
+           hll_hash_integer(6,0)),
+           hll_hash_integer(5,0)),
+           hll_hash_integer(4,0)),
+           hll_hash_integer(3,0)),
+           hll_hash_integer(2,0)),
+           hll_hash_integer(1,0));
+     ?column?     
+------------------
+ 15.0067280782053
+(1 row)
+
+-- Full, has 17 filled
+select #hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(hll_empty(14,0,0,0),
+           hll_hash_integer(17,0)),
+           hll_hash_integer(16,0)),
+           hll_hash_integer(15,0)),
+           hll_hash_integer(14,0)),
+           hll_hash_integer(13,0)),
+           hll_hash_integer(12,0)),
+           hll_hash_integer(11,0)),
+           hll_hash_integer(10,0)),
+           hll_hash_integer(9,0)),
+           hll_hash_integer(8,0)),
+           hll_hash_integer(7,0)),
+           hll_hash_integer(6,0)),
+           hll_hash_integer(5,0)),
+           hll_hash_integer(4,0)),
+           hll_hash_integer(3,0)),
+           hll_hash_integer(2,0)),
+           hll_hash_integer(1,0));
+     ?column?     
+------------------
+ 17.0088008076957
+(1 row)
+
+-- Explicit->Sparse->Full, has 17 filled
+select #hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(
+       hll_add(hll_empty(14,5,6,1),
+           hll_hash_integer(17,0)),
+           hll_hash_integer(16,0)),
+           hll_hash_integer(15,0)),
+           hll_hash_integer(14,0)),
+           hll_hash_integer(13,0)),
+           hll_hash_integer(12,0)),
+           hll_hash_integer(11,0)),
+           hll_hash_integer(10,0)),
+           hll_hash_integer(9,0)),
+           hll_hash_integer(8,0)),
+           hll_hash_integer(7,0)),
+           hll_hash_integer(6,0)),
+           hll_hash_integer(5,0)),
+           hll_hash_integer(4,0)),
+           hll_hash_integer(3,0)),
+           hll_hash_integer(2,0)),
+           hll_hash_integer(1,0));
+     ?column?     
+------------------
+ 17.0088008076957
+(1 row)
+
+------------------------------------------
+-- 2.hll_add_agg
+------------------------------------------
+-- prepare data
+create table test_khvengxf (
+	val    integer
+);
+insert into test_khvengxf(val) values (1),(2),(3);
+-- Check default and explicit signatures.
+select hll_print(hll_add_agg(hll_hash_integer(val)))
+       from test_khvengxf;
+                                    hll_print                                     
+----------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), 10))
+       from test_khvengxf;
+                                    hll_print                                     
+----------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=10, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), NULL))
+       from test_khvengxf;
+                                    hll_print                                     
+----------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), -1))
+       from test_khvengxf;
+                                    hll_print                                     
+----------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4))
+       from test_khvengxf;
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=10, log2explicit=4, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, NULL))
+       from test_khvengxf;
+                                    hll_print                                     
+----------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=10, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, -1))
+       from test_khvengxf;
+                                    hll_print                                     
+----------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=10, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4, 8))
+       from test_khvengxf;
+                                  hll_print                                   
+------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=10, log2explicit=4, log2sparse=8, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4, NULL))
+       from test_khvengxf;
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=10, log2explicit=4, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4, -1))
+       from test_khvengxf;
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=10, log2explicit=4, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4, 8, 0))
+       from test_khvengxf;
+                                  hll_print                                   
+------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=10, log2explicit=4, log2sparse=8, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4, 9, NULL))
+       from test_khvengxf;
+                                  hll_print                                   
+------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=10, log2explicit=4, log2sparse=9, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4, 9, -1))
+       from test_khvengxf;
+                                  hll_print                                   
+------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=10, log2explicit=4, log2sparse=9, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), NULL, NULL, NULL, NULL))
+       from test_khvengxf;
+                                    hll_print                                     
+----------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(val), -1,-1,-1,-1))
+       from test_khvengxf;
+                                    hll_print                                     
+----------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+-- Check range checking.
+select hll_print(hll_add_agg(hll_hash_integer(val), 8))
+       from test_khvengxf;
+ERROR:  log2m = 8 is out of range, it should be in range 10 to 16, or set -1 as default
+select hll_print(hll_add_agg(hll_hash_integer(val), 32))
+       from test_khvengxf;
+ERROR:  log2m = 32 is out of range, it should be in range 10 to 16, or set -1 as default
+select hll_print(hll_add_agg(hll_hash_integer(val), 12, -2))
+       from test_khvengxf;
+ERROR:  log2explicit = -2 is out of range, it should be in range 0 to 12, or set -1 as default
+select hll_print(hll_add_agg(hll_hash_integer(val), 12, 15))
+       from test_khvengxf;
+ERROR:  log2explicit = 15 is out of range, it should be in range 0 to 12, or set -1 as default
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4, -2))
+       from test_khvengxf;
+ERROR:  log2sparse = -2 is out of range, it should be in range 0 to 14, or set -1 as default
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4, 15))
+       from test_khvengxf;
+ERROR:  log2sparse = 15 is out of range, it should be in range 0 to 14, or set -1 as default
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4, 6, -2))
+       from test_khvengxf;
+ERROR:  duplicatecheck = -2 is out of range, it should be in range 0 to 1, or set -1 as default
+select hll_print(hll_add_agg(hll_hash_integer(val), 10, 4, 6, 2))
+       from test_khvengxf;
+ERROR:  duplicatecheck = 2 is out of range, it should be in range 0 to 1, or set -1 as default
+-- Check that we return hll_empty on null input.
+select hll_print(hll_add_agg(NULL));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, 10));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=10, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, NULL));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, -1));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, 10, 4));
+                                  hll_print                                   
+------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=10, log2explicit=4, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, NULL, NULL));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, -1, -1));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, 10, 4, 8));
+                                  hll_print                                  
+-----------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=10, log2explicit=4, log2sparse=8, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, 10, 4, -1));
+                                  hll_print                                   
+------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=10, log2explicit=4, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, NULL, NULL, NULL));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, 10, 4, 8, 0));
+                                  hll_print                                  
+-----------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=10, log2explicit=4, log2sparse=8, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(NULL, NULL, NULL, NULL, NULL));
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=1(HLL_EMPTY), log2m=14, log2explicit=10, log2sparse=12, duplicatecheck=0
+(1 row)
+
+DROP TABLE test_khvengxf;
+------------------------------------------
+-- 3.use case with parameters
+------------------------------------------
+-- test parameter registers
+create table t_id(id int);
+insert into t_id values(generate_series(1,5000));
+create table t_data(a int, c text);
+insert into t_data select mod(id,2), id from t_id;
+create table t_a_c_hll(a int, c hll);
+create table t_a_c_hll1(a int, c hll);
+create table t_a_c_hll2(a int, c hll);
+insert into t_a_c_hll select a, hll_add_agg(hll_hash_text(c),10) from t_data group by a;
+insert into t_a_c_hll1 select a, hll_add_agg(hll_hash_text(c),12) from t_data group by a;
+insert into t_a_c_hll2 select a, hll_add_agg(hll_hash_text(c),14) from t_data group by a;
+select a, #c as cardinality from t_a_c_hll order by a;
+ a |   cardinality    
+---+------------------
+ 0 | 2430.91725215198
+ 1 | 2503.96574863447
+(2 rows)
+
+select a, #c as cardinality from t_a_c_hll1 order by a;
+ a |   cardinality    
+---+------------------
+ 0 | 2430.57904767476
+ 1 | 2491.76124830701
+(2 rows)
+
+select a, #c as cardinality from t_a_c_hll2 order by a;
+ a |   cardinality    
+---+------------------
+ 0 | 2500.38427539288
+ 1 | 2493.13651597733
+(2 rows)
+
+-- test parameter explicitsize
+create table t_id1(id int);
+insert into t_id1 values(generate_series(1,20));
+select #hll_add_agg(hll_hash_integer(id), 12, 5) from t_id1;
+     ?column?     
+------------------
+ 20.0491592741089
+(1 row)
+
+select #hll_add_agg(hll_hash_integer(id), 12, 10) from t_id1;
+ ?column? 
+----------
+       20
+(1 row)
+
+-- test parameter sparsesize
+create table t_id2(id int);
+insert into t_id2 values(generate_series(1,50));
+select hll_print(hll_add_agg(hll_hash_integer(id), 14, 5, 8)) from t_id2;
+                                  hll_print                                   
+------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=14, log2explicit=5, log2sparse=8, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(id), 14, 5, 10)) from t_id2;
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=14, log2explicit=5, log2sparse=10, duplicatecheck=0
+(1 row)
+
+select hll_print(hll_add_agg(hll_hash_integer(id), 14, 5, 12)) from t_id2;
+                                   hll_print                                   
+-------------------------------------------------------------------------------
+ type=3(HLL_SPARSE), log2m=14, log2explicit=5, log2sparse=12, duplicatecheck=0
+(1 row)
+
+-- test parameter duplicateCheck
+select hll_print(
+       hll_add(
+       hll_add(
+       hll_add(hll_empty(14,5,8,1),
+           hll_hash_integer(3,0)),
+           hll_hash_integer(2,0)),
+           hll_hash_integer(1,0)));
+                                   hll_print                                    
+--------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=14, log2explicit=5, log2sparse=8, duplicatecheck=1
+(1 row)
+
+		   
+select hll_print(
+       hll_add(
+       hll_add(
+       hll_add(hll_empty(14,5,8,0),
+           hll_hash_integer(3,0)),
+           hll_hash_integer(2,0)),
+           hll_hash_integer(1,0)));
+                                   hll_print                                    
+--------------------------------------------------------------------------------
+ type=2(HLL_EXPLICIT), log2m=14, log2explicit=5, log2sparse=8, duplicatecheck=0
+(1 row)
+
+-- final clear data
+drop table t_id;
+drop table t_id1;
+drop table t_id2;
+drop table t_data;
+drop table t_a_c_hll;
+drop table t_a_c_hll1;
+drop table t_a_c_hll2;
+drop schema hll_para cascade;
+reset current_schema;

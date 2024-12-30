@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.coverage
+htmlcov/
+.idea
+scripts/inputs
+scripts/outputs
+scripts/*.bat
+bandit_scan_results.sarif

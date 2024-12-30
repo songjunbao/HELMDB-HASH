@@ -1,0 +1,127 @@
+clevel_hash constructor: HashPower = 20
+hashpower : 20
+Initialization done.
+Initial capacity 12582912
+key trace size: 120960000
+generate 120960000 keys
+generate duration 2.478956 s.
+------------------------------------------------
+HashType:              CLEVEL
+Init Capacity:         12582912
+Key Size:              15
+Val Size:              15
+Entries:               120960000
+Trace size:            120960000
+Read:                  10000000 
+Write:                 1000000 
+Thread:                28 
+Report interval:       0 s
+Stats interval:        200000000 records
+benchmarks:            load,delete,readrandom
+------------------------------------------------
+[32mStart IPMWatcher for load
+[0mThread-26 starts expanding for 2097152 buckets
+Thread-16 starts expanding for 2097152 buckets
+Thread-26 finishes expanding, capacity: 29360128
+expand during resizing!
+Thread-0 starts expanding for 4194304 buckets
+Thread-3 starts expanding for 4194304 buckets
+Thread-0 finishes expanding, capacity: 62914560
+Expand thread updates metadata, is_resizing: 1 levels_left: 3
+expand during resizing!
+Thread-0 starts expanding for 8388608 buckets
+Thread-0 finishes expanding, capacity: 125829120
+Expand thread updates metadata, is_resizing: 1 levels_left: 3
+expand during resizing!
+Thread-0 starts expanding for 16777216 buckets
+Thread-0 finishes expanding, capacity: 251658240
+Expand thread updates metadata, is_resizing: 1 levels_left: 3
+load         :       0.656 micros/op 1.453944 Mops/s;
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |      28598.79 |       11285.14 |    55162.84 |     18174.76 |   1.93 |   1.61 |
+  1   |      54716.35 |       55597.62 |   103621.35 |    106923.45 |   1.89 |   1.92 |
+  2   |      44351.14 |       18709.08 |    63634.50 |     22253.67 |   1.43 |   1.19 |
+  3   |      26114.23 |        8829.23 |    53339.52 |     15520.72 |   2.04 |   1.76 |
+  4   |      26118.22 |        8829.23 |    53295.09 |     15508.13 |   2.04 |   1.76 |
+  5   |      26119.93 |        8831.79 |    53279.28 |     15476.05 |   2.04 |   1.75 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R:  4777.4 MB/s, 382332.6 MB
+ User-R:  2574.3 MB/s, 206018.6 MB
+ DIMM-W:  2422.3 MB/s, 193856.8 MB
+ User-W:  1400.5 MB/s, 112082.1 MB
+   Time:    80.0 s
+[32mDestroy IPMWatcher.
+[0m
+randomize 120960000 keys
+randomize duration 0.173409 s.
+[32mStart IPMWatcher for delete
+[0mExpand thread updates metadata, is_resizing: 0 levels_left: 2
+Thread  6: num: 4320000, deleted: 4320000
+Thread  8: num: 4320000, deleted: 4320000
+Thread  1: num: 4320000, deleted: 4320000
+Thread  5: num: 4320000, deleted: 4320000
+Thread 27: num: 4320000, deleted: 4320000
+Thread  9: num: 4320000, deleted: 4320000
+Thread 11: num: 4320000, deleted: 4320000
+Thread 10: num: 4320000, deleted: 4320000
+Thread 15: num: 4320000, deleted: 4320000
+Thread  3: num: 4320000, deleted: 4320000
+Thread  7: num: 4320000, deleted: 4320000
+Thread 25: num: 4320000, deleted: 4320000
+Thread 13: num: 4320000, deleted: 4320000
+Thread 12: num: 4320000, deleted: 4320000
+Thread 16: num: 4320000, deleted: 4320000
+Thread  4: num: 4320000, deleted: 4320000
+Thread 22: num: 4320000, deleted: 4320000
+Thread 24: num: 4320000, deleted: 4320000
+Thread 18: num: 4320000, deleted: 4320000
+Thread 19: num: 4320000, deleted: 4320000
+Thread 23: num: 4320000, deleted: 4320000
+Thread 20: num: 4320000, deleted: 4320000
+Thread 17: num: 4320000, deleted: 4320000
+Thread  2: num: 4320000, deleted: 4320000
+Thread 26: num: 4320000, deleted: 4320000
+Thread 21: num: 4320000, deleted: 4320000
+Thread 14: num: 4320000, deleted: 4320000
+Thread  0: num: 4320000, deleted: 4320000
+delete       :       0.176 micros/op 5.429191 Mops/s;
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |      23234.79 |        3769.18 |    49420.22 |     13116.71 |   2.13 |   3.48 |
+  1   |      23233.54 |        3769.98 |    49428.76 |     13134.86 |   2.13 |   3.48 |
+  2   |      23736.99 |        3938.05 |    49457.12 |     13204.43 |   2.08 |   3.35 |
+  3   |      20595.05 |        1308.44 |    42669.62 |      5139.24 |   2.07 |   3.93 |
+  4   |      20596.24 |        1308.20 |    42657.18 |      5134.70 |   2.07 |   3.93 |
+  5   |      20596.47 |        1308.21 |    42654.20 |      5131.41 |   2.07 |   3.92 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R: 12591.7 MB/s, 276287.1 MB
+ User-R:  6015.5 MB/s, 131993.1 MB
+ DIMM-W:  2500.3 MB/s, 54861.3 MB
+ User-W:   701.9 MB/s, 15402.1 MB
+   Time:    21.9 s
+[32mDestroy IPMWatcher.
+[0m
+randomize 120960000 keys
+randomize duration 0.150976 s.
+[32mStart IPMWatcher for readrandom
+[0mreadrandom   :       0.044 micros/op 21.511682 Mops/s; (num: 10000000, not find: 10000000)
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |      20115.88 |           0.01 |    50598.87 |        23.22 |   2.52 | 1572.30 |
+  1   |      20115.02 |           0.01 |    50602.25 |        22.95 |   2.52 | 1554.08 |
+  2   |      20115.85 |           0.01 |    50597.74 |        23.02 |   2.52 | 1558.58 |
+  3   |      20109.51 |           0.01 |    50588.10 |        23.55 |   2.52 | 1594.07 |
+  4   |      20111.88 |           0.01 |    50590.75 |        23.08 |   2.52 | 1562.71 |
+  5   |      20112.58 |           0.01 |    50594.29 |        22.73 |   2.52 | 1538.98 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R: 23166.4 MB/s, 303572.0 MB
+ User-R:  9209.5 MB/s, 120680.7 MB
+ DIMM-W:    10.6 MB/s,   138.6 MB
+ User-W:     0.0 MB/s,     0.1 MB
+   Time:    13.1 s
+[32mDestroy IPMWatcher.
+[0m

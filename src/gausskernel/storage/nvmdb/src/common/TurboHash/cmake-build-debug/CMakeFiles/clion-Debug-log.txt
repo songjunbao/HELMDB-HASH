@@ -1,0 +1,77 @@
+/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -G Ninja -S /home/song/nvm/pactree/lib/TurboHash -B /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug
+-- The C compiler identification is GNU 11.2.1
+-- The CXX compiler identification is GNU 11.2.1
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /opt/rh/devtoolset-11/root/usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/rh/devtoolset-11/root/usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- build type: debug
+make: “libralloc.a”是最新的。
+CMake Deprecation Warning at lib/gflags/CMakeLists.txt:73 (cmake_minimum_required):
+  Compatibility with CMake < 3.5 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+-- Looking for C++ include unistd.h
+-- Looking for C++ include unistd.h - found
+-- Looking for C++ include stdint.h
+-- Looking for C++ include stdint.h - found
+-- Looking for C++ include inttypes.h
+-- Looking for C++ include inttypes.h - found
+-- Looking for C++ include sys/types.h
+-- Looking for C++ include sys/types.h - found
+-- Looking for C++ include sys/stat.h
+-- Looking for C++ include sys/stat.h - found
+-- Looking for C++ include fnmatch.h
+-- Looking for C++ include fnmatch.h - found
+-- Looking for C++ include stddef.h
+-- Looking for C++ include stddef.h - found
+-- Check size of uint32_t
+-- Check size of uint32_t - done
+-- Looking for strtoll
+-- Looking for strtoll - found
+-- Performing Test COMPILER_SUPPORTS_MARCH_NATIVE
+-- Performing Test COMPILER_SUPPORTS_MARCH_NATIVE - Success
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Looking for jemalloc/jemalloc.h
+-- Looking for jemalloc/jemalloc.h - found
+-- include dir='/usr/include'
+-- include dir='/usr/local/include'
+-- include dir='/home/song/nvm/pactree/lib/TurboHash/lib/pcm/src'
+-- include dir='/home/song/nvm/pactree/lib/TurboHash/lib/ralloc/src'
+-- include dir='/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/lib/gflags/include'
+-- include dir='/home/song/nvm/pactree/lib/TurboHash/src'
+-- include dir='/home/song/nvm/pactree/lib/TurboHash/lib'
+-- lib dir='/home/song/nvm/pactree/lib/TurboHash/lib/ralloc/test'
+-- lib dir='/home/song/nvm/pactree/lib/TurboHash/lib/pcm/build/lib'
+-- lib dir='/home/song/nvm/pactree/lib/TurboHash/lib/ralloc/test'
+-- lib dir='/usr/local/lib'
+-- lib dir='/usr/lib'
+-- lib dir='/usr/lib64'
+-- lib dir='/usr/local/sbin'
+-- lib name='ralloc'
+-- lib name='gflags'
+-- lib name='/usr/local/lib64/libtbb.so'
+-- lib name='jemalloc'
+-- lib name='pcm'
+-- lib name='vmem'
+-- lib name='pmem'
+-- lib name='pmemobj'
+-- Configuring done (1.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug

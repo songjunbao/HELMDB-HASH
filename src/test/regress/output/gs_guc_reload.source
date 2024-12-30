@@ -1,0 +1,35 @@
+-----gs_guc_reload(GUC)   set default value of lockwait_timeout by gs_guc reload
+--set new value
+\! /usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gs_guc reload -D /usr3/data1/jiangyan/openGauss-server/src/test/regress/tmp_check/datanode1/ -c "lockwait_timeout=1s"
+The gs_guc run with the following arguments: [/usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gs_guc -D /usr3/data1/jiangyan/openGauss-server/src/test/regress/tmp_check/datanode1/ -c lockwait_timeout=1s reload ].
+expected instance path: [/usr3/data1/jiangyan/openGauss-server/src/test/regress/tmp_check/datanode1/postgresql.conf]
+gs_guc reload: lockwait_timeout=1s: [/usr3/data1/jiangyan/openGauss-server/src/test/regress/tmp_check/datanode1/postgresql.conf]
+server signaled
+
+Total instances: 1. Failed instances: 0.
+Success to perform gs_guc!
+
+\! sleep 3s
+show lockwait_timeout;
+ lockwait_timeout 
+------------------
+ 1s
+(1 row)
+
+--no assign value
+\! /usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gs_guc reload -D /usr3/data1/jiangyan/openGauss-server/src/test/regress/tmp_check/datanode1/ -c "lockwait_timeout"
+The gs_guc run with the following arguments: [/usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gs_guc -D /usr3/data1/jiangyan/openGauss-server/src/test/regress/tmp_check/datanode1/ -c lockwait_timeout reload ].
+expected instance path: [/usr3/data1/jiangyan/openGauss-server/src/test/regress/tmp_check/datanode1/postgresql.conf]
+gs_guc reload: #lockwait_timeout: [/usr3/data1/jiangyan/openGauss-server/src/test/regress/tmp_check/datanode1/postgresql.conf]
+server signaled
+
+Total instances: 1. Failed instances: 0.
+Success to perform gs_guc!
+
+\! sleep 3s
+show lockwait_timeout;
+ lockwait_timeout 
+------------------
+ 20min
+(1 row)
+

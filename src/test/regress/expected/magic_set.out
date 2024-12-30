@@ -1,0 +1,2276 @@
+create schema magic_set;
+set search_path=magic_set;
+create table magic_t1(a int, b varchar, c int, d int);
+create table magic_t2(a int, b varchar, c int, d int);
+create table magic_t3(a int, b varchar, c int, d int);
+insert into magic_t1 select generate_series(1, 1000), generate_series(1, 1000), generate_series(1, 1000), generate_series(1, 1000) from public.src;
+ERROR:  relation "public.src" does not exist on datanode1
+LINE 1: ...te_series(1, 1000), generate_series(1, 1000) from public.src...
+                                                             ^
+insert into magic_t2 select generate_series(1, 100), generate_series(1, 200), generate_series(1, 300), generate_series(1, 500) from public.src;
+ERROR:  relation "public.src" does not exist on datanode1
+LINE 1: ...rate_series(1, 300), generate_series(1, 500) from public.src...
+                                                             ^
+insert into magic_t3 select generate_series(1, 100), generate_series(1, 200), generate_series(1, 300), generate_series(1, 500) from public.src;
+ERROR:  relation "public.src" does not exist on datanode1
+LINE 1: ...rate_series(1, 300), generate_series(1, 500) from public.src...
+                                                             ^
+analyze magic_t1;
+analyze magic_t2;
+analyze magic_t3;
+show rewrite_rule;
+ rewrite_rule 
+--------------
+ magicset
+(1 row)
+
+--sublink in where qual
+explain (costs off)
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b = 10 and 
+t1.c < (select sum(c) from magic_t2 t2 where t1.a = t2.a);
+                               QUERY PLAN                               
+------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: (t2.a = t1.a)
+   ->  Seq Scan on magic_t2 t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (t2.a = t1.a)
+               Join Filter: (t1.c < (sum(t2.c)))
+               ->  HashAggregate
+                     Group By Key: t2.a
+                     ->  Hash Join
+                           Hash Cond: (t2.a = t1.a)
+                           ->  Seq Scan on magic_t2 t2
+                           ->  Hash
+                                 ->  HashAggregate
+                                       Group By Key: t1.a
+                                       ->  Seq Scan on magic_t1 t1
+                                             Filter: ((b)::bigint = 10)
+               ->  Hash
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: ((b)::bigint = 10)
+(20 rows)
+
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b = 10 and 
+t1.c < (select sum(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b < 2 and 
+t1.c < (select max(c) from magic_t2 t2 where t1.a = t2.a);
+                                    QUERY PLAN                                     
+-----------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: (t2.a = t1.a)
+   ->  Seq Scan on magic_t2 t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (t1.a = subquery."?column?")
+               Join Filter: (t1.c < subquery.max)
+               ->  Seq Scan on magic_t1 t1
+                     Filter: ((b)::bigint < 2)
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: t2.a
+                                 ->  Hash Join
+                                       Hash Cond: (t2.a = t1.a)
+                                       ->  Seq Scan on magic_t2 t2
+                                       ->  Hash
+                                             ->  HashAggregate
+                                                   Group By Key: t1.a
+                                                   ->  Seq Scan on magic_t1 t1
+                                                         Filter: ((b)::bigint < 2)
+(21 rows)
+
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b < 2 and 
+t1.c < (select max(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b > 50 and t1.b < 55 and
+t1.c < (select max(c) from magic_t2 t2 where t1.a = t2.a);
+                                           QUERY PLAN                                            
+-------------------------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: (t2.a = t1.a)
+   ->  Seq Scan on magic_t2 t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (t2.a = t1.a)
+               Join Filter: (t1.c < (max(t2.c)))
+               ->  HashAggregate
+                     Group By Key: t2.a
+                     ->  Hash Join
+                           Hash Cond: (t2.a = t1.a)
+                           ->  Seq Scan on magic_t2 t2
+                           ->  Hash
+                                 ->  HashAggregate
+                                       Group By Key: t1.a
+                                       ->  Seq Scan on magic_t1 t1
+                                             Filter: (((b)::bigint > 50) AND ((b)::bigint < 55))
+               ->  Hash
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: (((b)::bigint > 50) AND ((b)::bigint < 55))
+(20 rows)
+
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b > 50 and t1.b < 55 and
+t1.c < (select max(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b > 50 or t1.b < 55 and
+t1.c < (select max(c) from magic_t2 t2 where t1.a = t2.a);
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop
+   Join Filter: (((t1.a = t2.a) AND ((t1.b)::bigint > 50)) OR (((t1.b)::bigint < 55) AND (subquery."?column?" IS NOT NULL) AND (t1.c < subquery.max)))
+   ->  Hash Left Join
+         Hash Cond: (t1.a = subquery."?column?")
+         ->  Seq Scan on magic_t1 t1
+         ->  Hash
+               ->  Subquery Scan on subquery
+                     ->  HashAggregate
+                           Group By Key: t2.a
+                           ->  Seq Scan on magic_t2 t2
+   ->  Materialize
+         ->  Seq Scan on magic_t2 t2
+(12 rows)
+
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b > 50 or t1.b < 55 and
+t1.c < (select max(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4 limit 50;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+(t1.b > 50 or t1.b < 55) and
+t1.c < (select max(c) from magic_t2 t2 where t1.a = t2.a);
+                                                 QUERY PLAN                                                 
+------------------------------------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: (t2.a = t1.a)
+   ->  Seq Scan on magic_t2 t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (t1.a = subquery."?column?")
+               Join Filter: (t1.c < subquery.max)
+               ->  Seq Scan on magic_t1 t1
+                     Filter: (((b)::bigint > 50) OR ((b)::bigint < 55))
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: t2.a
+                                 ->  Hash Join
+                                       Hash Cond: (t2.a = t1.a)
+                                       ->  Seq Scan on magic_t2 t2
+                                       ->  Hash
+                                             ->  HashAggregate
+                                                   Group By Key: t1.a
+                                                   ->  Seq Scan on magic_t1 t1
+                                                         Filter: (((b)::bigint > 50) OR ((b)::bigint < 55))
+(21 rows)
+
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+(t1.b > 50 or t1.b < 55) and
+t1.c < (select max(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4 limit 50;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b > 50 and t1.b < 55 and COALESCE(t1.a::varchar, t1.b) = 51 and
+t1.c < (select max(c) from magic_t2 t2 where t1.a = t2.a);
+                                                                        QUERY PLAN                                                                        
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: (t2.a = t1.a)
+   ->  Seq Scan on magic_t2 t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (t2.a = t1.a)
+               Join Filter: (t1.c < (max(t2.c)))
+               ->  HashAggregate
+                     Group By Key: t2.a
+                     ->  Hash Join
+                           Hash Cond: (t2.a = t1.a)
+                           ->  Seq Scan on magic_t2 t2
+                           ->  Hash
+                                 ->  HashAggregate
+                                       Group By Key: t1.a
+                                       ->  Seq Scan on magic_t1 t1
+                                             Filter: (((b)::bigint > 50) AND ((b)::bigint < 55) AND ((COALESCE((a)::character varying, b))::bigint = 51))
+               ->  Hash
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: (((b)::bigint > 50) AND ((b)::bigint < 55) AND ((COALESCE((a)::character varying, b))::bigint = 51))
+(20 rows)
+
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b > 50 and t1.b < 55 and COALESCE(t1.a::varchar, t1.b) = 51 and
+t1.c < (select max(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select COUNT(*) from magic_t1 as t1, magic_t2 as t2 where t1.b < 100 and 
+case when t1.b is null then false else true end and 
+t1.c <= (select avg(c) from magic_t2 t2 where t1.a = t2.a);
+                                                                   QUERY PLAN                                                                   
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate
+   ->  Nested Loop
+         ->  Seq Scan on magic_t2 t2
+         ->  Materialize
+               ->  Hash Join
+                     Hash Cond: (t1.a = subquery."?column?")
+                     Join Filter: ((t1.c)::numeric <= subquery.avg)
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: (CASE WHEN (b IS NULL) THEN false ELSE true END AND ((b)::bigint < 100))
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t2.a
+                                       ->  Hash Join
+                                             Hash Cond: (t2.a = t1.a)
+                                             ->  Seq Scan on magic_t2 t2
+                                             ->  Hash
+                                                   ->  HashAggregate
+                                                         Group By Key: t1.a
+                                                         ->  Seq Scan on magic_t1 t1
+                                                               Filter: (CASE WHEN (b IS NULL) THEN false ELSE true END AND ((b)::bigint < 100))
+(21 rows)
+
+select COUNT(*) from magic_t1 as t1, magic_t2 as t2 where t1.b < 100 and 
+case when t1.b is null then false else true end and 
+t1.c <= (select avg(c) from magic_t2 t2 where t1.a = t2.a);
+ count 
+-------
+     0
+(1 row)
+
+explain (costs off) select COUNT(*) from magic_t1 as t1, magic_t2 as t2 where case when t1.b is null then false else true end
+and 
+t1.c <= (select avg(c) from magic_t2 t2 where t1.a = t2.a);
+                                                      QUERY PLAN                                                      
+----------------------------------------------------------------------------------------------------------------------
+ Aggregate
+   ->  Nested Loop
+         ->  Seq Scan on magic_t2 t2
+         ->  Materialize
+               ->  Hash Join
+                     Hash Cond: (t1.a = subquery."?column?")
+                     Join Filter: ((t1.c)::numeric <= subquery.avg)
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: CASE WHEN (b IS NULL) THEN false ELSE true END
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t2.a
+                                       ->  Hash Join
+                                             Hash Cond: (t2.a = t1.a)
+                                             ->  Seq Scan on magic_t2 t2
+                                             ->  Hash
+                                                   ->  HashAggregate
+                                                         Group By Key: t1.a
+                                                         ->  Seq Scan on magic_t1 t1
+                                                               Filter: CASE WHEN (b IS NULL) THEN false ELSE true END
+(21 rows)
+
+explain (costs off)
+select COUNT(*) from magic_t1 as t1, magic_t2 as t2 where t1.b < 100 and 
+t1.c <= (select avg(c) from magic_t2 t2 where t1.a = t2.a);
+                                        QUERY PLAN                                         
+-------------------------------------------------------------------------------------------
+ Aggregate
+   ->  Nested Loop
+         ->  Seq Scan on magic_t2 t2
+         ->  Materialize
+               ->  Hash Join
+                     Hash Cond: (t1.a = subquery."?column?")
+                     Join Filter: ((t1.c)::numeric <= subquery.avg)
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: ((b)::bigint < 100)
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t2.a
+                                       ->  Hash Join
+                                             Hash Cond: (t2.a = t1.a)
+                                             ->  Seq Scan on magic_t2 t2
+                                             ->  Hash
+                                                   ->  HashAggregate
+                                                         Group By Key: t1.a
+                                                         ->  Seq Scan on magic_t1 t1
+                                                               Filter: ((b)::bigint < 100)
+(21 rows)
+
+select COUNT(*) from magic_t1 as t1, magic_t2 as t2 where t1.b < 100 and 
+t1.c <= (select avg(c) from magic_t2 t2 where t1.a = t2.a);
+ count 
+-------
+     0
+(1 row)
+
+explain (costs off)
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b > 10 and t1.c < 12 and t1.b = t1.c and 
+t1.c < (select sum(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4;
+                                                    QUERY PLAN                                                     
+-------------------------------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t2.a = t1.a)
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t2.a = t1.a)
+                     Join Filter: (t1.c < (sum(t2.c)))
+                     ->  HashAggregate
+                           Group By Key: t2.a
+                           ->  Hash Join
+                                 Hash Cond: (t2.a = t1.a)
+                                 ->  Seq Scan on magic_t2 t2
+                                 ->  Hash
+                                       ->  HashAggregate
+                                             Group By Key: t1.a
+                                             ->  Seq Scan on magic_t1 t1
+                                                   Filter: ((c < 12) AND ((b)::bigint > 10) AND ((b)::bigint = c))
+                     ->  Hash
+                           ->  Seq Scan on magic_t1 t1
+                                 Filter: ((c < 12) AND ((b)::bigint > 10) AND ((b)::bigint = c))
+(22 rows)
+
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b > 10 and t1.c < 12 and t1.b = t1.c and 
+t1.c < (select sum(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where t1.b > 99 and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a);
+                                     QUERY PLAN                                     
+------------------------------------------------------------------------------------
+ Hash Right Join
+   Hash Cond: (t2.a = t1.a)
+   ->  Seq Scan on magic_t2 t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (t1.a = subquery."?column?")
+               Join Filter: (t1.c <= subquery.sum)
+               ->  Seq Scan on magic_t1 t1
+                     Filter: ((b)::bigint > 99)
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: t2.a
+                                 ->  Hash Join
+                                       Hash Cond: (t2.a = t1.a)
+                                       ->  Seq Scan on magic_t2 t2
+                                       ->  Hash
+                                             ->  HashAggregate
+                                                   Group By Key: t1.a
+                                                   ->  Seq Scan on magic_t1 t1
+                                                         Filter: ((b)::bigint > 99)
+(21 rows)
+
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where t1.b > 99 and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a)order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where t1.a > 99 and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a);
+                                  QUERY PLAN                                   
+-------------------------------------------------------------------------------
+ Hash Right Join
+   Hash Cond: (t2.a = t1.a)
+   ->  Seq Scan on magic_t2 t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (t1.a = subquery."?column?")
+               Join Filter: (t1.c <= subquery.sum)
+               ->  Seq Scan on magic_t1 t1
+                     Filter: (a > 99)
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: t2.a
+                                 ->  Hash Join
+                                       Hash Cond: (t2.a = t1.a)
+                                       ->  Seq Scan on magic_t2 t2
+                                             Filter: (a > 99)
+                                       ->  Hash
+                                             ->  HashAggregate
+                                                   Group By Key: t1.a
+                                                   ->  Seq Scan on magic_t1 t1
+                                                         Filter: (a > 99)
+(22 rows)
+
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where t1.a > 99 and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where t1.a > 99 and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a and t1.b = t2.b);
+                                             QUERY PLAN                                             
+----------------------------------------------------------------------------------------------------
+ Hash Right Join
+   Hash Cond: (t2.a = t1.a)
+   ->  Seq Scan on magic_t2 t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: ((t1.a = subquery."?column?") AND ((t1.b)::text = subquery."?column?"))
+               Join Filter: (t1.c <= subquery.sum)
+               ->  Seq Scan on magic_t1 t1
+                     Filter: (a > 99)
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: t2.a, (t2.b)::text
+                                 ->  Hash Join
+                                       Hash Cond: ((t2.a = t1.a) AND ((t2.b)::text = (t1.b)::text))
+                                       ->  Seq Scan on magic_t2 t2
+                                             Filter: (a > 99)
+                                       ->  Hash
+                                             ->  HashAggregate
+                                                   Group By Key: t1.a, (t1.b)::text
+                                                   ->  Seq Scan on magic_t1 t1
+                                                         Filter: (a > 99)
+(22 rows)
+
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where t1.a > 99 and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a and t1.b = t2.b)order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where t1.a > 99 and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.b = t2.b and t1.c = t2.c);
+                                             QUERY PLAN                                             
+----------------------------------------------------------------------------------------------------
+ Hash Right Join
+   Hash Cond: (t2.a = t1.a)
+   ->  Seq Scan on magic_t2 t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (((t1.b)::text = subquery."?column?") AND (t1.c = subquery."?column?"))
+               Join Filter: (t1.c <= subquery.sum)
+               ->  Seq Scan on magic_t1 t1
+                     Filter: (a > 99)
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: (t2.b)::text, t2.c
+                                 ->  Hash Join
+                                       Hash Cond: (((t2.b)::text = (t1.b)::text) AND (t2.c = t1.c))
+                                       ->  Seq Scan on magic_t2 t2
+                                       ->  Hash
+                                             ->  HashAggregate
+                                                   Group By Key: (t1.b)::text, t1.c
+                                                   ->  Seq Scan on magic_t1 t1
+                                                         Filter: (a > 99)
+(21 rows)
+
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where t1.a > 99 and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.b = t2.b and t1.c = t2.c)
+order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+--include or clause
+explain (costs off)
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where (t1.a > 999 or t1.a < 2) and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a);
+                                       QUERY PLAN                                       
+----------------------------------------------------------------------------------------
+ Hash Right Join
+   Hash Cond: (t2.a = t1.a)
+   ->  Seq Scan on magic_t2 t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (t1.a = subquery."?column?")
+               Join Filter: (t1.c <= subquery.sum)
+               ->  Seq Scan on magic_t1 t1
+                     Filter: ((a > 999) OR (a < 2))
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: t2.a
+                                 ->  Hash Join
+                                       Hash Cond: (t2.a = t1.a)
+                                       ->  Seq Scan on magic_t2 t2
+                                             Filter: ((a > 999) OR (a < 2))
+                                       ->  Hash
+                                             ->  HashAggregate
+                                                   Group By Key: t1.a
+                                                   ->  Seq Scan on magic_t1 t1
+                                                         Filter: ((a > 999) OR (a < 2))
+(22 rows)
+
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where (t1.a > 999 or t1.a < 2) and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a)order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where (t1.a > 999 or t1.a < 2) and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a and t1.b = t2.b)
+order by 1,2,3,4;
+                                                QUERY PLAN                                                
+----------------------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Right Join
+         Hash Cond: (t2.a = t1.a)
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: ((t1.a = subquery."?column?") AND ((t1.b)::text = subquery."?column?"))
+                     Join Filter: (t1.c <= subquery.sum)
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: ((a > 999) OR (a < 2))
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t2.a, (t2.b)::text
+                                       ->  Hash Join
+                                             Hash Cond: ((t2.a = t1.a) AND ((t2.b)::text = (t1.b)::text))
+                                             ->  Seq Scan on magic_t2 t2
+                                                   Filter: ((a > 999) OR (a < 2))
+                                             ->  Hash
+                                                   ->  HashAggregate
+                                                         Group By Key: t1.a, (t1.b)::text
+                                                         ->  Seq Scan on magic_t1 t1
+                                                               Filter: ((a > 999) OR (a < 2))
+(24 rows)
+
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where (t1.a > 999 or t1.a < 2) and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a and t1.b = t2.b)
+order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where (t1.a > 999 or t1.a < 2) and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.c = t2.c and t1.b = t2.b and t1.d = t2.d)
+order by 1,2,3,4;
+                                                               QUERY PLAN                                                                
+-----------------------------------------------------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Right Join
+         Hash Cond: (t2.a = t1.a)
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: ((t1.c = subquery."?column?") AND ((t1.b)::text = subquery."?column?") AND (t1.d = subquery."?column?"))
+                     Join Filter: (t1.c <= subquery.sum)
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: ((a > 999) OR (a < 2))
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t2.c, (t2.b)::text, t2.d
+                                       ->  Hash Join
+                                             Hash Cond: ((t2.c = t1.c) AND ((t2.b)::text = (t1.b)::text) AND (t2.d = t1.d))
+                                             ->  Seq Scan on magic_t2 t2
+                                             ->  Hash
+                                                   ->  HashAggregate
+                                                         Group By Key: t1.c, (t1.b)::text, t1.d
+                                                         ->  Seq Scan on magic_t1 t1
+                                                               Filter: ((a > 999) OR (a < 2))
+(23 rows)
+
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where (t1.a > 999 or t1.a < 2) and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.c = t2.c and t1.b = t2.b and t1.d = t2.d)
+order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where (t1.a > t2.b or t1.a < 2) and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a)
+order by 1,2,3,4;
+                            QUERY PLAN                             
+-------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Right Join
+         Hash Cond: (t2.a = t1.a)
+         Filter: ((t1.a > (t2.b)::bigint) OR (t1.a < 2))
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t1.a = subquery."?column?")
+                     Join Filter: (t1.c <= subquery.sum)
+                     ->  Seq Scan on magic_t1 t1
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t2.a
+                                       ->  Seq Scan on magic_t2 t2
+(16 rows)
+
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) 
+where (t1.a > t2.b or t1.a < 2) and 
+t1.c <= (select sum(c) from magic_t2 t2 where t1.a = t2.a)
+order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+--sublink in join qual
+explain (costs off)
+select t2.* from magic_t1 as t1 inner join magic_t2 as t2 on 
+t1.a = t2.a and 
+t2.c < (select max(c) from magic_t3 t3 where t2.a = t3.a)
+where t2.b > 50 and t2.b < 55 and t2.c is null
+order by 1,2,3,4;
+                                                      QUERY PLAN                                                       
+-----------------------------------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t1.a = t2.a)
+         ->  Seq Scan on magic_t1 t1
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t3.a = t2.a)
+                     Join Filter: (t2.c < (max(t3.c)))
+                     ->  HashAggregate
+                           Group By Key: t3.a
+                           ->  Hash Join
+                                 Hash Cond: (t3.a = t2.a)
+                                 ->  Seq Scan on magic_t3 t3
+                                 ->  Hash
+                                       ->  HashAggregate
+                                             Group By Key: t2.a
+                                             ->  Seq Scan on magic_t2 t2
+                                                   Filter: ((c IS NULL) AND ((b)::bigint > 50) AND ((b)::bigint < 55))
+                     ->  Hash
+                           ->  Seq Scan on magic_t2 t2
+                                 Filter: ((c IS NULL) AND ((b)::bigint > 50) AND ((b)::bigint < 55))
+(22 rows)
+
+select t2.* from magic_t1 as t1 inner join magic_t2 as t2 on 
+t1.a = t2.a and 
+t2.c < (select max(c) from magic_t3 t3 where t2.a = t3.a)
+where t2.b > 50 and t2.b < 55 and t2.c is null
+order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1 inner join magic_t2 as t2 on 
+t1.a = t2.a and 
+t2.c < (select max(c) from magic_t3 t3 where t2.a = t3.a)
+where t2.b in (select c from magic_t3)
+order by 1,2,3,4;
+                               QUERY PLAN                                
+-------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t1.a = t2.a)
+         ->  Seq Scan on magic_t1 t1
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: ((t2.b)::bigint = magic_t3.c)
+                     ->  Hash Join
+                           Hash Cond: (t2.a = subquery."?column?")
+                           Join Filter: (t2.c < subquery.max)
+                           ->  Seq Scan on magic_t2 t2
+                           ->  Hash
+                                 ->  Subquery Scan on subquery
+                                       ->  HashAggregate
+                                             Group By Key: t3.a
+                                             ->  Seq Scan on magic_t3 t3
+                     ->  Hash
+                           ->  HashAggregate
+                                 Group By Key: magic_t3.c
+                                 ->  Seq Scan on magic_t3
+(21 rows)
+
+select t2.* from magic_t1 as t1 inner join magic_t2 as t2 on 
+t1.a = t2.a and 
+t2.c < (select max(c) from magic_t3 t3 where t2.a = t3.a)
+where t2.b in (select c from magic_t3)
+order by 1,2,3,4 limit 50;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+--out join unsupport 
+explain (costs off)
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on 
+t1.a = t2.a and 
+t2.c < (select max(c) from magic_t3 t3 where t2.a = t3.a)
+where t2.b > 50 and t2.b < 55
+order by 1,2,3,4;
+                                     QUERY PLAN                                      
+-------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t1.a = t2.a)
+         ->  Seq Scan on magic_t1 t1
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t3.a = t2.a)
+                     Join Filter: (t2.c < (max(t3.c)))
+                     ->  HashAggregate
+                           Group By Key: t3.a
+                           ->  Seq Scan on magic_t3 t3
+                     ->  Hash
+                           ->  Seq Scan on magic_t2 t2
+                                 Filter: (((b)::bigint > 50) AND ((b)::bigint < 55))
+(15 rows)
+
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on 
+t1.a = t2.a and 
+t2.c < (select max(c) from magic_t3 t3 where t2.a = t3.a)
+where t2.b > 50 and t2.b < 55
+order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1 right join magic_t2 as t2 on 
+t1.a = t2.a and 
+t1.c < (select max(c) from magic_t3 t3 where t1.a = t3.a)
+where t1.b > 50 and t1.b < 55 order by 1,2,3,4;
+                                     QUERY PLAN                                      
+-------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t2.a = t1.a)
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t3.a = t1.a)
+                     Join Filter: (t1.c < (max(t3.c)))
+                     ->  HashAggregate
+                           Group By Key: t3.a
+                           ->  Seq Scan on magic_t3 t3
+                     ->  Hash
+                           ->  Seq Scan on magic_t1 t1
+                                 Filter: (((b)::bigint > 50) AND ((b)::bigint < 55))
+(15 rows)
+
+select t2.* from magic_t1 as t1 right join magic_t2 as t2 on 
+t1.a = t2.a and 
+t1.c < (select max(c) from magic_t3 t3 where t1.a = t3.a)
+where t1.b > 50 and t1.b < 55 order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select * from magic_t1 as t1
+where t1.c < (select sum(t2.a) from magic_t2 as t2 inner join magic_t3 as t3 on (1 = 1) where
+ (t1.a = t3.a)) 
+and
+t1.b > 100 order by 1,2,3,4;
+                                  QUERY PLAN                                   
+-------------------------------------------------------------------------------
+ Sort
+   Sort Key: t1.a, t1.b, t1.c, t1.d
+   ->  Hash Join
+         Hash Cond: (t1.a = subquery."?column?")
+         Join Filter: (t1.c < subquery.sum)
+         ->  Seq Scan on magic_t1 t1
+               Filter: ((b)::bigint > 100)
+         ->  Hash
+               ->  Subquery Scan on subquery
+                     ->  HashAggregate
+                           Group By Key: t3.a
+                           ->  Hash Join
+                                 Hash Cond: (t1.a = t3.a)
+                                 ->  Nested Loop
+                                       ->  HashAggregate
+                                             Group By Key: t1.a
+                                             ->  Seq Scan on magic_t1 t1
+                                                   Filter: ((b)::bigint > 100)
+                                       ->  Materialize
+                                             ->  Seq Scan on magic_t2 t2
+                                 ->  Hash
+                                       ->  Seq Scan on magic_t3 t3
+(22 rows)
+
+select * from magic_t1 as t1
+where t1.c < (select sum(t2.a) from magic_t2 as t2 inner join magic_t3 as t3 on (1 = 1) where
+ (t1.a = t3.a)) 
+and
+t1.b > 100 order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select * from magic_t1 as t1
+where t1.c < (select sum(t2.a) from magic_t2 as t2, magic_t3 as t4 where t1.a = t4.a) and
+t1.b > 100 order by 1,2,3,4;
+                                  QUERY PLAN                                   
+-------------------------------------------------------------------------------
+ Sort
+   Sort Key: t1.a, t1.b, t1.c, t1.d
+   ->  Hash Join
+         Hash Cond: (t1.a = subquery."?column?")
+         Join Filter: (t1.c < subquery.sum)
+         ->  Seq Scan on magic_t1 t1
+               Filter: ((b)::bigint > 100)
+         ->  Hash
+               ->  Subquery Scan on subquery
+                     ->  HashAggregate
+                           Group By Key: t4.a
+                           ->  Hash Join
+                                 Hash Cond: (t1.a = t4.a)
+                                 ->  Nested Loop
+                                       ->  HashAggregate
+                                             Group By Key: t1.a
+                                             ->  Seq Scan on magic_t1 t1
+                                                   Filter: ((b)::bigint > 100)
+                                       ->  Materialize
+                                             ->  Seq Scan on magic_t2 t2
+                                 ->  Hash
+                                       ->  Seq Scan on magic_t3 t4
+(22 rows)
+
+select * from magic_t1 as t1
+where t1.c < (select sum(t2.a) from magic_t2 as t2, magic_t3 as t4 where t1.a = t4.a) and
+t1.b > 100 order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain(costs off)
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+and t1.c < (select sum(a) from magic_t3 as t3 where t1.a = t3.a)
+where t1.b > 100 order by 1,2,3,4;
+                                        QUERY PLAN                                         
+-------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t2.a = t1.a)
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t1.a = subquery."?column?")
+                     Join Filter: (t1.c < subquery.sum)
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: ((b)::bigint > 100)
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t3.a
+                                       ->  Hash Join
+                                             Hash Cond: (t3.a = t1.a)
+                                             ->  Seq Scan on magic_t3 t3
+                                             ->  Hash
+                                                   ->  HashAggregate
+                                                         Group By Key: t1.a
+                                                         ->  Seq Scan on magic_t1 t1
+                                                               Filter: ((b)::bigint > 100)
+(23 rows)
+
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+and t1.c < (select sum(a) from magic_t3 as t3 where t1.a = t3.a)
+where t1.b > 100 order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain(costs off)
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+and t1.c <= (select sum(a) from (select a from magic_t3 group by a) as t3 where t1.a = t3.a)
+where t1.b >= 100 order by 1,2,3,4;
+                                         QUERY PLAN                                         
+--------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t2.a = t1.a)
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t1.a = subquery."?column?")
+                     Join Filter: (t1.c <= subquery.sum)
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: ((b)::bigint >= 100)
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: magic_t3.a
+                                       ->  Hash Join
+                                             Hash Cond: (magic_t3.a = t1.a)
+                                             ->  HashAggregate
+                                                   Group By Key: magic_t3.a
+                                                   ->  Seq Scan on magic_t3
+                                             ->  Hash
+                                                   ->  HashAggregate
+                                                         Group By Key: t1.a
+                                                         ->  Seq Scan on magic_t1 t1
+                                                               Filter: ((b)::bigint >= 100)
+(25 rows)
+
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+and t1.c <= (select sum(a) from (select a from magic_t3 group by a) as t3 where t1.a = t3.a)
+where t1.b >= 100 order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain(costs off)
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+where t1.c <= (select sum(a) from (select a from magic_t3 group by a) as t3 where t1.a = t3.a)
+and t1.b >= 100 order by 1,2,3,4;
+                                         QUERY PLAN                                         
+--------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t2.a = t1.a)
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t1.a = subquery."?column?")
+                     Join Filter: (t1.c <= subquery.sum)
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: ((b)::bigint >= 100)
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: magic_t3.a
+                                       ->  Hash Join
+                                             Hash Cond: (magic_t3.a = t1.a)
+                                             ->  HashAggregate
+                                                   Group By Key: magic_t3.a
+                                                   ->  Seq Scan on magic_t3
+                                             ->  Hash
+                                                   ->  HashAggregate
+                                                         Group By Key: t1.a
+                                                         ->  Seq Scan on magic_t1 t1
+                                                               Filter: ((b)::bigint >= 100)
+(25 rows)
+
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+where t1.c <= (select sum(a) from (select a from magic_t3 group by a) as t3 where t1.a = t3.a)
+and t1.b >= 100 order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+--with more table correlation
+explain(costs off)
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b = 10 and t2.b = 10 and
+t1.c < (select sum(c) from magic_t3 t3 where t1.a = t3.a and t2.a = t3.a)
+order by 1,2,3,4;
+                                            QUERY PLAN                                            
+--------------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Nested Loop
+         Join Filter: (t1.a = t2.a)
+         ->  Seq Scan on magic_t2 t2
+               Filter: ((b)::bigint = 10)
+         ->  Materialize
+               ->  Hash Join
+                     Hash Cond: (t3.a = t1.a)
+                     Join Filter: (t1.c < (sum(t3.c)))
+                     ->  HashAggregate
+                           Group By Key: t3.a, t3.a
+                           ->  Hash Join
+                                 Hash Cond: (t3.a = t2.a)
+                                 ->  Hash Join
+                                       Hash Cond: (t3.a = t1.a)
+                                       ->  Seq Scan on magic_t3 t3
+                                             Filter: (a = a)
+                                       ->  Hash
+                                             ->  HashAggregate
+                                                   Group By Key: t1.a
+                                                   ->  Seq Scan on magic_t1 t1
+                                                         Filter: ((a = a) AND ((b)::bigint = 10))
+                                 ->  Hash
+                                       ->  HashAggregate
+                                             Group By Key: t2.a
+                                             ->  Seq Scan on magic_t2 t2
+                                                   Filter: ((a = a) AND ((b)::bigint = 10))
+                     ->  Hash
+                           ->  Seq Scan on magic_t1 t1
+                                 Filter: ((b)::bigint = 10)
+(31 rows)
+
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.a = t2.a and 
+t1.b = 10 and t2.b = 10 and
+t1.c < (select sum(c) from magic_t3 t3 where t1.a = t3.a and t2.a = t3.a)
+order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain (costs off)
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.b = t2.b and 
+t1.b = 10 and t2.c = 10 and COALESCE(t1.a::varchar, t1.b) = 10 
+and COALESCE(t2.a::varchar, t2.b) = 10 and
+t1.c < (select sum(c) from magic_t3 t3 where t1.a = t3.a and t2.a = t3.a)
+order by 1,2,3,4;
+                                                               QUERY PLAN                                                                
+-----------------------------------------------------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.d
+   ->  Nested Loop
+         Join Filter: ((t1.c < (sum(t3.c))) AND (t3.a = t1.a) AND ((t2.b)::text = (t1.b)::text))
+         ->  Hash Join
+               Hash Cond: (t3.a = t2.a)
+               ->  HashAggregate
+                     Group By Key: t3.a, t3.a
+                     ->  Hash Join
+                           Hash Cond: (t3.a = t2.a)
+                           ->  Hash Join
+                                 Hash Cond: (t3.a = t1.a)
+                                 ->  Seq Scan on magic_t3 t3
+                                 ->  Hash
+                                       ->  HashAggregate
+                                             Group By Key: t1.a
+                                             ->  Seq Scan on magic_t1 t1
+                                                   Filter: (((b)::bigint = 10) AND ((COALESCE((a)::character varying, b))::bigint = 10))
+                           ->  Hash
+                                 ->  HashAggregate
+                                       Group By Key: t2.a
+                                       ->  Seq Scan on magic_t2 t2
+                                             Filter: ((c = 10) AND ((COALESCE((a)::character varying, b))::bigint = 10))
+               ->  Hash
+                     ->  Seq Scan on magic_t2 t2
+                           Filter: ((c = 10) AND ((COALESCE((a)::character varying, b))::bigint = 10))
+         ->  Seq Scan on magic_t1 t1
+               Filter: (((b)::bigint = 10) AND ((COALESCE((a)::character varying, b))::bigint = 10))
+(28 rows)
+
+select t2.* from magic_t1 as t1, magic_t2 as t2 where t1.b = t2.b and 
+t1.b = 10 and t2.c = 10 and COALESCE(t1.a::varchar, t1.b) = 10 
+and COALESCE(t2.a::varchar, t2.b) = 10 and
+t1.c < (select sum(c) from magic_t3 t3 where t1.a = t3.a and t2.a = t3.a)
+order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain(costs off)
+select count(*) from magic_t1 as t1 left join magic_t2 as t2 on t2.c <= (select max(c) from magic_t3 as t3 where t2.a = t3.a) 
+where t2.b is null;
+                            QUERY PLAN                             
+-------------------------------------------------------------------
+ Aggregate
+   ->  Nested Loop Left Join
+         Filter: (t2.b IS NULL)
+         ->  Seq Scan on magic_t1 t1
+         ->  Materialize
+               ->  Hash Join
+                     Hash Cond: (t2.a = subquery."?column?")
+                     Join Filter: (t2.c <= subquery.max)
+                     ->  Seq Scan on magic_t2 t2
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t3.a
+                                       ->  Seq Scan on magic_t3 t3
+(14 rows)
+
+select count(*) from magic_t1 as t1 left join magic_t2 as t2 on t2.c <= (select max(c) from magic_t3 as t3 where t2.a = t3.a) 
+where t2.b is null;
+ count 
+-------
+     0
+(1 row)
+
+explain(costs off)
+select count(*) from magic_t1 as t1 left join magic_t2 as t2 on t2.c <= (select max(c) from magic_t3 as t3 where t2.a = t3.a and 
+t3.a in (select a from magic_t2 as t2 where t2.b is null)) 
+where t2.b is null;
+                                     QUERY PLAN                                      
+-------------------------------------------------------------------------------------
+ Aggregate
+   ->  Nested Loop Left Join
+         Filter: (t2.b IS NULL)
+         ->  Seq Scan on magic_t1 t1
+         ->  Materialize
+               ->  Hash Join
+                     Hash Cond: (t2.a = subquery."?column?")
+                     Join Filter: (t2.c <= subquery.max)
+                     ->  Seq Scan on magic_t2 t2
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t3.a
+                                       ->  Hash Join
+                                             Hash Cond: (t3.a = t2.a)
+                                             ->  Seq Scan on magic_t3 t3
+                                             ->  Hash
+                                                   ->  HashAggregate
+                                                         Group By Key: t2.a
+                                                         ->  Seq Scan on magic_t2 t2
+                                                               Filter: (b IS NULL)
+(21 rows)
+
+select count(*) from magic_t1 as t1 left join magic_t2 as t2 on t2.c <= (select max(c) from magic_t3 as t3 where t2.a = t3.a and 
+t3.a in (select a from magic_t2 as t2 where t2.b is null)) 
+where t2.b is null;
+ count 
+-------
+     0
+(1 row)
+
+explain (costs off)
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a) 
+where t1.b > 100 and 
+t2.a in (select a from magic_t3 as t3 where t2.b = t3.b) and 
+t1.b < 200 and
+t1.c < (select sum(c) from magic_t2 as t4 where t1.a = t4.a)
+order by 1,2,3,4;
+                                            QUERY PLAN                                             
+---------------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Nested Loop
+         Join Filter: (t1.a = t2.a)
+         ->  Nested Loop
+               Join Filter: ((t1.c < (sum(t4.c))) AND (t1.a = t4.a))
+               ->  HashAggregate
+                     Group By Key: t4.a
+                     ->  Hash Join
+                           Hash Cond: (t4.a = t1.a)
+                           ->  Seq Scan on magic_t2 t4
+                           ->  Hash
+                                 ->  HashAggregate
+                                       Group By Key: t1.a
+                                       ->  Seq Scan on magic_t1 t1
+                                             Filter: (((b)::bigint > 100) AND ((b)::bigint < 200))
+               ->  Materialize
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: (((b)::bigint > 100) AND ((b)::bigint < 200))
+         ->  Materialize
+               ->  Seq Scan on magic_t2 t2
+                     Filter: (SubPlan 1)
+                     SubPlan 1
+                       ->  Seq Scan on magic_t3 t3
+                             Filter: ((t2.b)::text = (b)::text)
+(25 rows)
+
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a) 
+where t1.b > 100 and 
+t2.a in (select a from magic_t3 as t3 where t2.b = t3.b) and 
+t1.b < 200 and
+t1.c < (select sum(c) from magic_t2 as t4 where t1.a = t4.a)
+order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain(costs off)
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a) and t1.b > 100 
+where t1.c < (select sum(c) from magic_t2 as t4 where t1.a = t4.a) and
+t2.a in (select a from magic_t3 as t3 where t2.b = t3.b)order by 1,2,3,4;
+                           QUERY PLAN                           
+----------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t2.a = t1.a)
+         Join Filter: (t1.c < subquery.sum)
+         ->  Hash Join
+               Hash Cond: (t2.a = subquery."?column?")
+               ->  Seq Scan on magic_t2 t2
+                     Filter: (SubPlan 1)
+                     SubPlan 1
+                       ->  Seq Scan on magic_t3 t3
+                             Filter: ((t2.b)::text = (b)::text)
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: t4.a
+                                 ->  Seq Scan on magic_t2 t4
+         ->  Hash
+               ->  Seq Scan on magic_t1 t1
+                     Filter: ((b)::bigint > 100)
+(20 rows)
+
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a) and t1.b > 100 
+where t1.c < (select sum(c) from magic_t2 as t4 where t1.a = t4.a) and
+t2.a in (select a from magic_t3 as t3 where t2.b = t3.b)order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain(costs off)
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+where t1.c < (select sum(a) from (select a from magic_t3) as t4 where t1.a = t4.a) and
+t1.b > 100 and
+t2.a in (select a from magic_t3 as t3 where t2.b = t3.b)order by 1,2,3,4;
+                                     QUERY PLAN                                      
+-------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t2.a = t1.a)
+         Join Filter: (t1.c < subquery.sum)
+         ->  Hash Join
+               Hash Cond: (t2.a = subquery."?column?")
+               ->  Seq Scan on magic_t2 t2
+                     Filter: (SubPlan 1)
+                     SubPlan 1
+                       ->  Seq Scan on magic_t3 t3
+                             Filter: ((t2.b)::text = (b)::text)
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: magic_t3.a
+                                 ->  Hash Join
+                                       Hash Cond: (magic_t3.a = t1.a)
+                                       ->  Seq Scan on magic_t3
+                                       ->  Hash
+                                             ->  HashAggregate
+                                                   Group By Key: t1.a
+                                                   ->  Seq Scan on magic_t1 t1
+                                                         Filter: ((b)::bigint > 100)
+         ->  Hash
+               ->  Seq Scan on magic_t1 t1
+                     Filter: ((b)::bigint > 100)
+(27 rows)
+
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+where t1.c < (select sum(a) from (select a from magic_t3) as t4 where t1.a = t4.a) and
+t1.b > 100 and
+t2.a in (select a from magic_t3 as t3 where t2.b = t3.b)order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain(costs off)
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+where t1.c < (select sum(a) from (select a from magic_t3) as t4 where t1.a = t4.a) and
+t2.a in (select a from magic_t3 as t3 where t2.b = t3.b) and t1.b > 100
+order by 1,2,3,4; 
+                                     QUERY PLAN                                      
+-------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t2.a = t1.a)
+         Join Filter: (t1.c < subquery.sum)
+         ->  Hash Join
+               Hash Cond: (t2.a = subquery."?column?")
+               ->  Seq Scan on magic_t2 t2
+                     Filter: (SubPlan 1)
+                     SubPlan 1
+                       ->  Seq Scan on magic_t3 t3
+                             Filter: ((t2.b)::text = (b)::text)
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: magic_t3.a
+                                 ->  Hash Join
+                                       Hash Cond: (magic_t3.a = t1.a)
+                                       ->  Seq Scan on magic_t3
+                                       ->  Hash
+                                             ->  HashAggregate
+                                                   Group By Key: t1.a
+                                                   ->  Seq Scan on magic_t1 t1
+                                                         Filter: ((b)::bigint > 100)
+         ->  Hash
+               ->  Seq Scan on magic_t1 t1
+                     Filter: ((b)::bigint > 100)
+(27 rows)
+
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+where t1.c < (select sum(a) from (select a from magic_t3) as t4 where t1.a = t4.a) and
+t2.a in (select a from magic_t3 as t3 where t2.b = t3.b) and t1.b > 100
+order by 1,2,3,4; 
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain(costs off)
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+where t1.c < (select sum(a) from (select a from magic_t3) as t4 where t1.a = t4.a) and
+t2.a > (select a from magic_t3 as t3 where t2.b = t3.b limit 1) and t1.b > 100
+order by 1,2,3,4; 
+                                              QUERY PLAN                                              
+------------------------------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t1.a = subquery."?column?")
+         Join Filter: (t1.c < subquery.sum)
+         ->  Hash Join
+               Hash Cond: (t1.a = t2.a)
+               ->  Seq Scan on magic_t1 t1
+                     Filter: ((b)::bigint > 100)
+               ->  Hash
+                     ->  Hash Join
+                           Hash Cond: ((t2.b)::text = subquery."?column?")
+                           Join Filter: (t2.a > subquery.a)
+                           ->  Seq Scan on magic_t2 t2
+                           ->  Hash
+                                 ->  Subquery Scan on subquery
+                                       Filter: (subquery."?column?" OPERATOR(pg_catalog.=) 1::bigint)
+                                       ->  WindowAgg
+                                             ->  Sort
+                                                   Sort Key: ((t3.b)::text)
+                                                   ->  Seq Scan on magic_t3 t3
+         ->  Hash
+               ->  Subquery Scan on subquery
+                     ->  HashAggregate
+                           Group By Key: magic_t3.a
+                           ->  Hash Join
+                                 Hash Cond: (magic_t3.a = t1.a)
+                                 ->  Seq Scan on magic_t3
+                                 ->  Hash
+                                       ->  HashAggregate
+                                             Group By Key: t1.a
+                                             ->  Seq Scan on magic_t1 t1
+                                                   Filter: ((b)::bigint > 100)
+(33 rows)
+
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+where t1.c < (select sum(a) from (select a from magic_t3) as t4 where t1.a = t4.a) and
+t2.a > (select a from magic_t3 as t3 where t2.b = t3.b limit 1) and t1.b > 100
+order by 1,2,3,4; 
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+--can not pull up
+--sublink can not pullup
+explain(costs off)
+select t2.* from magic_t1 as t1 full join magic_t2 as t2 on 
+t1.a = t2.a and 
+t1.c < (select max(c) from magic_t3 t3 where t1.a = t3.a)
+where t1.b > 50 and t1.b < 55 order by 1,2,3,4;
+                               QUERY PLAN                                
+-------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Right Join
+         Hash Cond: (t2.a = t1.a)
+         Join Filter: (t1.c < (SubPlan 1))
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Seq Scan on magic_t1 t1
+                     Filter: (((b)::bigint > 50) AND ((b)::bigint < 55))
+         SubPlan 1
+           ->  Aggregate
+                 ->  Seq Scan on magic_t3 t3
+                       Filter: (t1.a = a)
+(13 rows)
+
+select t2.* from magic_t1 as t1 full join magic_t2 as t2 on 
+t1.a = t2.a and 
+t1.c < (select max(c) from magic_t3 t3 where t1.a = t3.a)
+where t1.b > 50 and t1.b < 55 order by 1,2,3,4 limit 50;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+--not to search join quals, out join can lead to result error
+explain (costs off)
+select t2.* from magic_t1 as t1 right join magic_t2 as t2 on (t1.a = t2.a) and t1.b > 100 
+where t1.c < (select sum(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4;
+                            QUERY PLAN                             
+-------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t2.a = t1.a)
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t1.a = subquery."?column?")
+                     Join Filter: (t1.c < subquery.sum)
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: ((b)::bigint > 100)
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t2.a
+                                       ->  Seq Scan on magic_t2 t2
+(16 rows)
+
+select t2.* from magic_t1 as t1 right join magic_t2 as t2 on (t1.a = t2.a) and t1.b > 100 
+where t1.c < (select sum(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+explain(costs off)
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) and t1.b > 100 
+where t1.c < (select sum(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4;
+                            QUERY PLAN                             
+-------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Right Join
+         Hash Cond: (t2.a = t1.a)
+         Join Filter: ((t1.b)::bigint > 100)
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t1.a = subquery."?column?")
+                     Join Filter: (t1.c < subquery.sum)
+                     ->  Seq Scan on magic_t1 t1
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t2.a
+                                       ->  Seq Scan on magic_t2 t2
+(16 rows)
+
+select t2.* from magic_t1 as t1 left join magic_t2 as t2 on (t1.a = t2.a) and t1.b > 100 
+where t1.c < (select sum(c) from magic_t2 t2 where t1.a = t2.a) order by 1,2,3,4 limit 10;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+--expr sublink include any_sublink, can not pull
+explain(costs off)
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+where t1.c < (select sum(c) from magic_t2 as t4 where t1.a = t4.a and t4.a in (select a from magic_t3)) and
+t1.b > 100 order by 1,2,3,4;
+                                    QUERY PLAN                                    
+----------------------------------------------------------------------------------
+ Sort
+   Sort Key: t2.a, t2.b, t2.c, t2.d
+   ->  Hash Join
+         Hash Cond: (t2.a = t1.a)
+         ->  Seq Scan on magic_t2 t2
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: (t1.a = subquery."?column?")
+                     Join Filter: (t1.c < subquery.sum)
+                     ->  Seq Scan on magic_t1 t1
+                           Filter: ((b)::bigint > 100)
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: t4.a
+                                       ->  Hash Join
+                                             Hash Cond: (t4.a = magic_t3.a)
+                                             ->  Seq Scan on magic_t2 t4
+                                             ->  Hash
+                                                   ->  HashAggregate
+                                                         Group By Key: magic_t3.a
+                                                         ->  Seq Scan on magic_t3
+(22 rows)
+
+select t2.* from magic_t1 as t1 join magic_t2 as t2 on (t1.a = t2.a)
+where t1.c < (select sum(c) from magic_t2 as t4 where t1.a = t4.a and t4.a in (select a from magic_t3)) and
+t1.b > 100 order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+--expr sublink can not pull up, include left join
+explain(costs off)
+select * from magic_t1 as t1
+where t1.c < (select sum(t2.a) from magic_t2 as t2 left join magic_t3 as t3 on (1 = 1) where
+ (t1.a = t3.a)) and
+t1.b > 100 order by 1,2,3,4;
+                                  QUERY PLAN                                   
+-------------------------------------------------------------------------------
+ Sort
+   Sort Key: t1.a, t1.b, t1.c, t1.d
+   ->  Hash Join
+         Hash Cond: (t1.a = subquery."?column?")
+         Join Filter: (t1.c < subquery.sum)
+         ->  Seq Scan on magic_t1 t1
+               Filter: ((b)::bigint > 100)
+         ->  Hash
+               ->  Subquery Scan on subquery
+                     ->  HashAggregate
+                           Group By Key: t3.a
+                           ->  Hash Join
+                                 Hash Cond: (t1.a = t3.a)
+                                 ->  Nested Loop
+                                       ->  HashAggregate
+                                             Group By Key: t1.a
+                                             ->  Seq Scan on magic_t1 t1
+                                                   Filter: ((b)::bigint > 100)
+                                       ->  Materialize
+                                             ->  Seq Scan on magic_t2 t2
+                                 ->  Hash
+                                       ->  Seq Scan on magic_t3 t3
+(22 rows)
+
+select * from magic_t1 as t1
+where t1.c < (select sum(t2.a) from magic_t2 as t2 left join magic_t3 as t3 on (1 = 1) where
+ (t1.a = t3.a)) and
+t1.b > 100 order by 1,2,3,4;
+ a | b | c | d 
+---+---+---+---
+(0 rows)
+
+drop table magic_t1;
+drop table magic_t2;
+drop table magic_t3;
+create table magic_t1(a int, b int, c int);
+create table magic_t2(a int, b int, c int);
+create table magic_t3(a int, b int, c int);
+insert into magic_t1 values(1, 1, 1);
+insert into magic_t2 values(1, 1, 1);
+insert into magic_t3 values(1, 1, 1);
+select count(*) from magic_t1 as t1 left join magic_t2 as t2 on t2.c <= (select max(c) from magic_t3 as t3 where t2.a = t3.a) 
+where t2.b is null;
+ count 
+-------
+     0
+(1 row)
+
+select count(*) from magic_t1 as t1 left join magic_t2 as t2 on t2.c <= (select max(c) from magic_t3 as t3 where t2.a = t3.a and 
+t3.a in (select a from magic_t2 as t2 where t2.b is null)) 
+where t2.b is null;
+ count 
+-------
+     1
+(1 row)
+
+drop table magic_t1;
+drop table magic_t2;
+drop table magic_t3;
+create table magic_t1(t1_a int, t1_b varchar, t1_c int, t1_d int);
+create table magic_t2(t2_a int, t2_b varchar, t2_c int, t2_d int);
+create table magic_t3(t3_a int, t3_b varchar, t3_c int, t3_d int);
+create table magic_t4(t4_a int, t4_b varchar, t4_c int, t4_d int);
+insert into magic_t1 values(generate_series(1, 100), generate_series(1, 100), generate_series(1, 100), generate_series(1, 100));
+insert into magic_t2 values(generate_series(1, 30), generate_series(1, 30), generate_series(1, 30), generate_series(1, 30));
+insert into magic_t3 values(generate_series(1, 20), generate_series(1, 20), generate_series(1, 20), generate_series(1, 20));
+insert into magic_t4 values(generate_series(1, 10), generate_series(1, 10), generate_series(1, 10), generate_series(1, 10));
+analyze magic_t1;
+analyze magic_t2;
+analyze magic_t3;
+analyze magic_t4;
+explain(costs off)
+select t1_a from magic_t1 join magic_t2 on (t1_a = t2_a)
+where t1_b < 10 and t1_c = t2_c and
+t1_d >= (select max(t3_b) from magic_t3 where t3_a = t1_a);
+                                                     QUERY PLAN                                                     
+--------------------------------------------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: (magic_t3.t3_a = magic_set.magic_t1.t1_a)
+   Join Filter: (magic_set.magic_t1.t1_d >= ((max((magic_t3.t3_b)::text)))::bigint)
+   ->  HashAggregate
+         Group By Key: magic_t3.t3_a
+         ->  Hash Right Semi Join
+               Hash Cond: (magic_set.magic_t1.t1_a = magic_t3.t3_a)
+               ->  Seq Scan on magic_t1
+                     Filter: ((t1_b)::bigint < 10)
+               ->  Hash
+                     ->  Seq Scan on magic_t3
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: ((magic_set.magic_t1.t1_a = magic_t2.t2_a) AND (magic_set.magic_t1.t1_c = magic_t2.t2_c))
+               ->  Seq Scan on magic_t1
+                     Filter: ((t1_b)::bigint < 10)
+               ->  Hash
+                     ->  Seq Scan on magic_t2
+(18 rows)
+
+select t1_a from magic_t1 join magic_t2 on (t1_a = t2_a)
+where t1_b < 10 and t1_c = t2_c and
+t1_d >= (select max(t3_b) from magic_t3 where t3_a = t1_a) order by t1_a;
+ t1_a 
+------
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+(9 rows)
+
+explain(costs off)
+select t2_a from magic_t1 join magic_t2 on (t1_a = t2_a) join magic_t3 on(t2_b = t3_b)
+where t1_b < 10 and t1_c = t2_c and
+t1_d >= (select max(t4_b) from magic_t4 where t4_a = t1_a);
+                                                     QUERY PLAN                                                     
+--------------------------------------------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: ((magic_t3.t3_b)::text = (magic_t2.t2_b)::text)
+   ->  Seq Scan on magic_t3
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: ((magic_set.magic_t1.t1_a = magic_t2.t2_a) AND (magic_set.magic_t1.t1_c = magic_t2.t2_c))
+               Join Filter: (magic_set.magic_t1.t1_d >= (subquery.max)::bigint)
+               ->  Seq Scan on magic_t1
+                     Filter: ((t1_b)::bigint < 10)
+               ->  Hash
+                     ->  Hash Join
+                           Hash Cond: (magic_t2.t2_a = subquery."?column?")
+                           ->  Seq Scan on magic_t2
+                           ->  Hash
+                                 ->  Subquery Scan on subquery
+                                       ->  HashAggregate
+                                             Group By Key: magic_t4.t4_a
+                                             ->  Hash Right Semi Join
+                                                   Hash Cond: (magic_set.magic_t1.t1_a = magic_t4.t4_a)
+                                                   ->  Seq Scan on magic_t1
+                                                         Filter: ((t1_b)::bigint < 10)
+                                                   ->  Hash
+                                                         ->  Seq Scan on magic_t4
+(23 rows)
+
+select t2_a from magic_t1 join magic_t2 on (t1_a = t2_a) join magic_t3 on(t2_b = t3_b)
+where t1_b < 10 and t1_c = t2_c and
+t1_d >= (select max(t4_b) from magic_t4 where t4_a = t1_a)order by t2_a;
+ t2_a 
+------
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+(9 rows)
+
+explain(costs off)
+select t1_a from magic_t1 join magic_t2 on (t1_a = t2_a)
+where case when t1_b < 10 then true else false end and t1_c = t2_c and
+t1_d >= (select max(t3_b) from magic_t3 where t3_a = t1_a);
+                                                  QUERY PLAN                                                  
+--------------------------------------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: ((magic_t2.t2_a = magic_set.magic_t1.t1_a) AND (magic_t2.t2_c = magic_set.magic_t1.t1_c))
+   ->  Seq Scan on magic_t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (magic_set.magic_t1.t1_a = subquery."?column?")
+               Join Filter: (magic_set.magic_t1.t1_d >= (subquery.max)::bigint)
+               ->  Seq Scan on magic_t1
+                     Filter: CASE WHEN ((t1_b)::bigint < 10) THEN true ELSE false END
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: magic_t3.t3_a
+                                 ->  Hash Right Semi Join
+                                       Hash Cond: (magic_set.magic_t1.t1_a = magic_t3.t3_a)
+                                       ->  Seq Scan on magic_t1
+                                             Filter: CASE WHEN ((t1_b)::bigint < 10) THEN true ELSE false END
+                                       ->  Hash
+                                             ->  Seq Scan on magic_t3
+(19 rows)
+
+select t1_a from magic_t1 join magic_t2 on (t1_a = t2_a)
+where case when t1_b < 10 then true else false end and t1_c = t2_c and
+t1_d >= (select max(t3_b) from magic_t3 where t3_a = t1_a) order by t1_a;
+ t1_a 
+------
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+(9 rows)
+
+explain(costs off)
+select t1_a from magic_t1 left join magic_t2 on (t1_a = t2_a)
+where t1_b < 10 and t1_c = t2_c and
+t1_d >= (select max(t3_b) from magic_t3 where t3_a = t1_a);
+                                                     QUERY PLAN                                                     
+--------------------------------------------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: (magic_t3.t3_a = magic_set.magic_t1.t1_a)
+   Join Filter: (magic_set.magic_t1.t1_d >= ((max((magic_t3.t3_b)::text)))::bigint)
+   ->  HashAggregate
+         Group By Key: magic_t3.t3_a
+         ->  Hash Right Semi Join
+               Hash Cond: (magic_set.magic_t1.t1_a = magic_t3.t3_a)
+               ->  Seq Scan on magic_t1
+                     Filter: ((t1_b)::bigint < 10)
+               ->  Hash
+                     ->  Seq Scan on magic_t3
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: ((magic_set.magic_t1.t1_a = magic_t2.t2_a) AND (magic_set.magic_t1.t1_c = magic_t2.t2_c))
+               ->  Seq Scan on magic_t1
+                     Filter: ((t1_b)::bigint < 10)
+               ->  Hash
+                     ->  Seq Scan on magic_t2
+(18 rows)
+
+select t1_a from magic_t1 left join magic_t2 on (t1_a = t2_a)
+where t1_b < 10 and t1_c = t2_c and
+t1_d >= (select max(t3_b) from magic_t3 where t3_a = t1_a)order by t1_a;
+ t1_a 
+------
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+(9 rows)
+
+explain(costs off)
+select 1 from magic_t1 left join magic_t2 on (t1_a = t2_a and t2_d >=(select max(t3_b) from magic_t3 where t3_a = t2_a))
+where t1_b < 10 and t1_c = t2_c;
+                                           QUERY PLAN                                           
+------------------------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: (magic_t3.t3_a = magic_t2.t2_a)
+   Join Filter: (magic_t2.t2_d >= ((max((magic_t3.t3_b)::text)))::bigint)
+   ->  HashAggregate
+         Group By Key: magic_t3.t3_a
+         ->  Seq Scan on magic_t3
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: ((magic_t1.t1_a = magic_t2.t2_a) AND (magic_t1.t1_c = magic_t2.t2_c))
+               ->  Seq Scan on magic_t1
+                     Filter: ((t1_b)::bigint < 10)
+               ->  Hash
+                     ->  Seq Scan on magic_t2
+(13 rows)
+
+explain(costs off)
+select 1 from magic_t1 right join magic_t2 on (t1_a = t2_a and t1_d >=(select max(t3_b) from magic_t3 where t3_a = t1_a))
+where t1_b < 10 and t1_c = t2_c;
+                                           QUERY PLAN                                           
+------------------------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: (magic_t3.t3_a = magic_t1.t1_a)
+   Join Filter: (magic_t1.t1_d >= ((max((magic_t3.t3_b)::text)))::bigint)
+   ->  HashAggregate
+         Group By Key: magic_t3.t3_a
+         ->  Seq Scan on magic_t3
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: ((magic_t1.t1_a = magic_t2.t2_a) AND (magic_t1.t1_c = magic_t2.t2_c))
+               ->  Seq Scan on magic_t1
+                     Filter: ((t1_b)::bigint < 10)
+               ->  Hash
+                     ->  Seq Scan on magic_t2
+(13 rows)
+
+explain(costs off)
+select t2_b from magic_t1 left join magic_t2 on (t1_a = t2_a) join magic_t3 on 
+(t2_a = t3_a and t1_d >=(select max(t4_b) from magic_t4 where t4_a = t1_a))
+where t1_b < 10 and t1_c = t2_c;
+                                               QUERY PLAN                                               
+--------------------------------------------------------------------------------------------------------
+ Hash Join
+   Hash Cond: ((magic_t2.t2_a = magic_set.magic_t1.t1_a) AND (magic_t2.t2_c = magic_set.magic_t1.t1_c))
+   ->  Seq Scan on magic_t2
+   ->  Hash
+         ->  Hash Join
+               Hash Cond: (magic_t3.t3_a = magic_set.magic_t1.t1_a)
+               ->  Seq Scan on magic_t3
+               ->  Hash
+                     ->  Hash Join
+                           Hash Cond: (magic_set.magic_t1.t1_a = subquery."?column?")
+                           Join Filter: (magic_set.magic_t1.t1_d >= (subquery.max)::bigint)
+                           ->  Seq Scan on magic_t1
+                                 Filter: ((t1_b)::bigint < 10)
+                           ->  Hash
+                                 ->  Subquery Scan on subquery
+                                       ->  HashAggregate
+                                             Group By Key: magic_t4.t4_a
+                                             ->  Hash Right Semi Join
+                                                   Hash Cond: (magic_set.magic_t1.t1_a = magic_t4.t4_a)
+                                                   ->  Seq Scan on magic_t1
+                                                         Filter: ((t1_b)::bigint < 10)
+                                                   ->  Hash
+                                                         ->  Seq Scan on magic_t4
+(23 rows)
+
+select t2_b from magic_t1 left join magic_t2 on (t1_a = t2_a) join magic_t3 on 
+(t2_a = t3_a and t1_d >=(select max(t4_b) from magic_t4 where t4_a = t1_a))
+where t1_b < 10 and t1_c = t2_c order by t2_b;
+ t2_b 
+------
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+(9 rows)
+
+explain(costs off)
+select t1_a from magic_t1 join (select t2_a, t2_b from magic_t2, magic_t3 where t2_a = t3_a) as AA on (t1_a = t2_a)
+where t2_a < 10 and
+t1_d >=(select max(t4_b) from magic_t4 where t4_a = t2_b);
+                                   QUERY PLAN                                   
+--------------------------------------------------------------------------------
+ Nested Loop
+   Join Filter: (magic_t2.t2_a = magic_t3.t3_a)
+   ->  Hash Join
+         Hash Cond: (magic_t1.t1_a = magic_t2.t2_a)
+         Join Filter: (magic_t1.t1_d >= (subquery.max)::bigint)
+         ->  Seq Scan on magic_t1
+               Filter: (t1_a < 10)
+         ->  Hash
+               ->  Hash Join
+                     Hash Cond: ((magic_t2.t2_b)::bigint = subquery."?column?")
+                     ->  Seq Scan on magic_t2
+                           Filter: (t2_a < 10)
+                     ->  Hash
+                           ->  Subquery Scan on subquery
+                                 ->  HashAggregate
+                                       Group By Key: magic_t4.t4_a
+                                       ->  Seq Scan on magic_t4
+   ->  Seq Scan on magic_t3
+         Filter: (t3_a < 10)
+(19 rows)
+
+select t1_a from magic_t1 join (select t2_a, t2_b from magic_t2, magic_t3 where t2_a = t3_a) as AA on (t1_a = t2_a)
+where t2_a < 10 and
+t1_d >=(select max(t4_b) from magic_t4 where t4_a = t2_b) order by t1_a;
+ t1_a 
+------
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+(9 rows)
+
+explain (costs off)
+select magic_t2.* from magic_t1 join magic_t2 on (1 = 1)
+where t1_c < (select sum(t3_a) from magic_t3 where t1_a = t3_a and t1_b = t3_b) and
+t2_a > (select max(t4_a) from magic_t4 where t2_b = t4_b and t2_c = t4_c) 
+and t1_b > 100 and t1_b = t1_a and t2_a > 10 and t2_d > 20;
+                                                                                   QUERY PLAN                                                                                    
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop
+   Join Filter: ((magic_set.magic_t1.t1_c < (sum(magic_t3.t3_a))) AND (magic_set.magic_t1.t1_a = magic_t3.t3_a) AND ((magic_set.magic_t1.t1_b)::text = ((magic_t3.t3_b)::text)))
+   ->  Nested Loop
+         ->  Hash Join
+               Hash Cond: (((magic_set.magic_t2.t2_b)::text = subquery."?column?") AND (magic_set.magic_t2.t2_c = subquery."?column?"))
+               Join Filter: (magic_set.magic_t2.t2_a > subquery.max)
+               ->  Seq Scan on magic_t2
+                     Filter: ((t2_a > 10) AND (t2_d > 20))
+               ->  Hash
+                     ->  Subquery Scan on subquery
+                           ->  HashAggregate
+                                 Group By Key: (magic_t4.t4_b)::text, magic_t4.t4_c
+                                 ->  Hash Semi Join
+                                       Hash Cond: (((magic_t4.t4_b)::text = (magic_set.magic_t2.t2_b)::text) AND (magic_t4.t4_c = magic_set.magic_t2.t2_c))
+                                       ->  Seq Scan on magic_t4
+                                       ->  Hash
+                                             ->  Seq Scan on magic_t2
+                                                   Filter: ((t2_a > 10) AND (t2_d > 20))
+         ->  Seq Scan on magic_t1
+               Filter: ((t1_a > 100) AND ((t1_b)::bigint > 100) AND (t1_a = (t1_b)::bigint))
+   ->  HashAggregate
+         Group By Key: magic_t3.t3_a, (magic_t3.t3_b)::text
+         ->  Nested Loop Semi Join
+               Join Filter: ((magic_t3.t3_a = magic_set.magic_t1.t1_a) AND ((magic_t3.t3_b)::text = (magic_set.magic_t1.t1_b)::text))
+               ->  Seq Scan on magic_t3
+                     Filter: (t3_a > 100)
+               ->  Seq Scan on magic_t1
+                     Filter: ((t1_a > 100) AND ((t1_b)::bigint > 100) AND ((t1_b)::bigint = t1_a))
+(28 rows)
+
+select magic_t2.* from magic_t1 join magic_t2 on (1 = 1)
+where t1_c < (select sum(t3_a) from magic_t3 where t1_a = t3_a and t1_b = t3_b) and
+t2_a > (select max(t4_a) from magic_t4 where t2_b = t4_b and t2_c = t4_c) 
+and t1_b > 100 and t1_b = t1_a and t2_a > 10 and t2_d > 20;
+ t2_a | t2_b | t2_c | t2_d 
+------+------+------+------
+(0 rows)
+
+explain (costs off)
+select magic_t2.* from magic_t1, magic_t2 where t1_a = t2_a and
+t1_b = 10 and t2_b = 10 and t1_a = 10 and
+t1_c < (select sum(t3_c) from magic_t3 where t1_a = t3_a and t2_a = t3_a);
+                                QUERY PLAN                                 
+---------------------------------------------------------------------------
+ Nested Loop
+   Join Filter: (magic_set.magic_t1.t1_c < (sum(magic_t3.t3_c)))
+   ->  Nested Loop
+         ->  Seq Scan on magic_t1
+               Filter: ((t1_a = 10) AND ((t1_b)::bigint = 10))
+         ->  Seq Scan on magic_t2
+               Filter: ((t2_a = 10) AND ((t2_b)::bigint = 10))
+   ->  GroupAggregate
+         Group By Key: magic_t3.t3_a, magic_t3.t3_a
+         ->  Nested Loop Semi Join
+               ->  Nested Loop Semi Join
+                     ->  Seq Scan on magic_t3
+                           Filter: (t3_a = 10)
+                     ->  Seq Scan on magic_t1
+                           Filter: ((t1_a = 10) AND ((t1_b)::bigint = 10))
+               ->  Seq Scan on magic_t2
+                     Filter: ((t2_a = 10) AND ((t2_b)::bigint = 10))
+(17 rows)
+
+select magic_t2.* from magic_t1, magic_t2 where t1_a = t2_a and
+t1_b = 10 and t2_b = 10 and t1_a = 10 and
+t1_c < (select sum(t3_c) from magic_t3 where t1_a = t3_a and t2_a = t3_a);
+ t2_a | t2_b | t2_c | t2_d 
+------+------+------+------
+(0 rows)
+
+explain (costs off)
+select magic_t2.* from magic_t1, magic_t2 where t1_a = t2_a and
+t1_b = 10 and t2_b = 10 and t1_a = 10 and
+t1_c < (select sum(t3_c) from magic_t3 where t1_a = t3_a + t3_b);
+                             QUERY PLAN                              
+---------------------------------------------------------------------
+ Nested Loop
+   Join Filter: (magic_set.magic_t1.t1_c < (sum(magic_t3.t3_c)))
+   ->  Nested Loop
+         ->  Seq Scan on magic_t1
+               Filter: ((t1_a = 10) AND ((t1_b)::bigint = 10))
+         ->  Seq Scan on magic_t2
+               Filter: ((t2_a = 10) AND ((t2_b)::bigint = 10))
+   ->  GroupAggregate
+         Group By Key: (magic_t3.t3_a + (magic_t3.t3_b)::bigint)
+         ->  Nested Loop Semi Join
+               ->  Seq Scan on magic_t3
+                     Filter: ((t3_a + (t3_b)::bigint) = 10)
+               ->  Seq Scan on magic_t1
+                     Filter: ((t1_a = 10) AND ((t1_b)::bigint = 10))
+(14 rows)
+
+explain (costs off)
+select magic_t2.* from magic_t1, magic_t2 where t1_a = t2_a and
+t1_b = 10 and t2_b = 10 and
+t1_c < (select sum(t3_c) from magic_t3 where t1_a = t3_a + t3_b);
+                                                                  QUERY PLAN                                                                   
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop
+   Join Filter: ((magic_set.magic_t1.t1_c < (sum(magic_t3.t3_c))) AND (magic_set.magic_t1.t1_a = ((magic_t3.t3_a + (magic_t3.t3_b)::bigint))))
+   ->  Nested Loop
+         Join Filter: (magic_set.magic_t1.t1_a = magic_t2.t2_a)
+         ->  Seq Scan on magic_t1
+               Filter: ((t1_b)::bigint = 10)
+         ->  Seq Scan on magic_t2
+               Filter: ((t2_b)::bigint = 10)
+   ->  HashAggregate
+         Group By Key: (magic_t3.t3_a + (magic_t3.t3_b)::bigint)
+         ->  Hash Semi Join
+               Hash Cond: ((magic_t3.t3_a + (magic_t3.t3_b)::bigint) = magic_set.magic_t1.t1_a)
+               ->  Seq Scan on magic_t3
+               ->  Hash
+                     ->  Seq Scan on magic_t1
+                           Filter: ((t1_b)::bigint = 10)
+(16 rows)
+
+explain (costs off)
+select magic_t2.* from magic_t1, magic_t2 where t1_a = t2_a and
+t1_b = 10 and t2_b = 10 and t1_a = 10 and
+t1_c < (select sum(t3_c) from magic_t3 where t1_a + t2_a = t3_a);
+                             QUERY PLAN                              
+---------------------------------------------------------------------
+ Hash Join
+   Hash Cond: (magic_t3.t3_a = (magic_t1.t1_a + magic_t2.t2_a))
+   Join Filter: (magic_t1.t1_c < (sum(magic_t3.t3_c)))
+   ->  HashAggregate
+         Group By Key: magic_t3.t3_a
+         ->  Seq Scan on magic_t3
+   ->  Hash
+         ->  Nested Loop
+               ->  Seq Scan on magic_t1
+                     Filter: ((t1_a = 10) AND ((t1_b)::bigint = 10))
+               ->  Seq Scan on magic_t2
+                     Filter: ((t2_a = 10) AND ((t2_b)::bigint = 10))
+(12 rows)
+
+select magic_t2.* from magic_t1, magic_t2 where t1_a = t2_a and
+t1_b = 10 and t2_b = 10 and t1_a = 10 and
+t1_c < (select sum(t3_c) from magic_t3 where t1_a + t2_a = t3_a);
+ t2_a | t2_b | t2_c | t2_d 
+------+------+------+------
+   10 | 10   |   10 |   10
+(1 row)
+
+explain(costs off)
+select 1 from magic_t1, magic_t2
+where t1_a in 
+(select max(t3_a) from magic_t3 where t3_a = t2_a 
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c));
+                                                     QUERY PLAN                                                     
+--------------------------------------------------------------------------------------------------------------------
+ Nested Loop
+   Join Filter: (SubPlan 1)
+   ->  Seq Scan on magic_t1
+   ->  Materialize
+         ->  Seq Scan on magic_t2
+   SubPlan 1
+     ->  Aggregate
+           ->  Hash Join
+                 Hash Cond: ((magic_t4.t4_c = magic_t3.t3_c) AND ((avg(magic_t4.t4_a)) = (magic_t3.t3_b)::numeric))
+                 ->  HashAggregate
+                       Group By Key: magic_t4.t4_c
+                       ->  Seq Scan on magic_t4
+                 ->  Hash
+                       ->  Seq Scan on magic_t3
+                             Filter: (t3_a = magic_t2.t2_a)
+(15 rows)
+
+select t1_a from magic_t1, magic_t2
+where t1_a in 
+(select max(t3_a) from magic_t3 where t3_a = t2_a 
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c)) order by t1_a;
+ t1_a 
+------
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+   10
+(10 rows)
+
+explain(costs off)
+select 1 from magic_t1, magic_t2
+where t1_a in
+(select max(t3_a) from magic_t3 where t3_a = t2_a
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c)
+union all 
+select max(t3_a) from magic_t3 where t3_a = t2_a and t2_a = 1
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c));
+                                                                                  QUERY PLAN                                                                                  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop
+   Join Filter: (SubPlan 1)
+   ->  Seq Scan on magic_t1
+   ->  Materialize
+         ->  Seq Scan on magic_t2
+   SubPlan 1
+     ->  Result
+           ->  Append
+                 ->  Aggregate
+                       ->  Hash Join
+                             Hash Cond: ((magic_set.magic_t4.t4_c = magic_set.magic_t3.t3_c) AND ((avg(magic_set.magic_t4.t4_a)) = (magic_set.magic_t3.t3_b)::numeric))
+                             ->  HashAggregate
+                                   Group By Key: magic_set.magic_t4.t4_c
+                                   ->  Seq Scan on magic_t4
+                             ->  Hash
+                                   ->  Seq Scan on magic_t3
+                                         Filter: (t3_a = magic_t2.t2_a)
+                 ->  Aggregate
+                       ->  Result
+                             One-Time Filter: (magic_t2.t2_a = 1)
+                             ->  Hash Join
+                                   Hash Cond: ((magic_set.magic_t4.t4_c = magic_set.magic_t3.t3_c) AND ((avg(magic_set.magic_t4.t4_a)) = (magic_set.magic_t3.t3_b)::numeric))
+                                   ->  HashAggregate
+                                         Group By Key: magic_set.magic_t4.t4_c
+                                         ->  Seq Scan on magic_t4
+                                   ->  Hash
+                                         ->  Seq Scan on magic_t3
+                                               Filter: (t3_a = magic_t2.t2_a)
+(28 rows)
+
+select t1_a from magic_t1, magic_t2
+where t1_a in
+(select max(t3_a) from magic_t3 where t3_a = t2_a
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c)
+union all 
+select max(t3_a) from magic_t3 where t3_a = t2_a and t2_a = 1
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c))
+order by t1_a;
+ t1_a 
+------
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+   10
+(10 rows)
+
+explain(costs off)
+select 1 from magic_t1 join magic_t2 on(1 = 1)
+where t1_a in
+(select max(t3_a) from magic_t3 where t3_a = t2_a
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c));
+                                                     QUERY PLAN                                                     
+--------------------------------------------------------------------------------------------------------------------
+ Nested Loop
+   Join Filter: (SubPlan 1)
+   ->  Seq Scan on magic_t1
+   ->  Materialize
+         ->  Seq Scan on magic_t2
+   SubPlan 1
+     ->  Aggregate
+           ->  Hash Join
+                 Hash Cond: ((magic_t4.t4_c = magic_t3.t3_c) AND ((avg(magic_t4.t4_a)) = (magic_t3.t3_b)::numeric))
+                 ->  HashAggregate
+                       Group By Key: magic_t4.t4_c
+                       ->  Seq Scan on magic_t4
+                 ->  Hash
+                       ->  Seq Scan on magic_t3
+                             Filter: (t3_a = magic_t2.t2_a)
+(15 rows)
+
+select t1_a from magic_t1 join magic_t2 on(1 = 1)
+where t1_a in
+(select max(t3_a) from magic_t3 where t3_a = t2_a
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c))
+order by t1_a;
+ t1_a 
+------
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+   10
+(10 rows)
+
+explain(costs off)
+select 1 from magic_t1 join magic_t2 on(1 = 1)
+where t1_a in
+(select max(t3_a) from magic_t3 where t3_a = t2_a and t3_b < 100
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c));
+                                                                QUERY PLAN                                                                
+------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop
+   Join Filter: (SubPlan 1)
+   ->  Seq Scan on magic_t1
+   ->  Materialize
+         ->  Seq Scan on magic_t2
+   SubPlan 1
+     ->  Aggregate
+           ->  Nested Loop
+                 Join Filter: ((magic_set.magic_t3.t3_c = magic_t4.t4_c) AND ((magic_set.magic_t3.t3_b)::numeric = (avg(magic_t4.t4_a))))
+                 ->  Seq Scan on magic_t3
+                       Filter: ((t3_a = magic_t2.t2_a) AND ((t3_b)::bigint < 100))
+                 ->  HashAggregate
+                       Group By Key: magic_t4.t4_c
+                       ->  Hash Semi Join
+                             Hash Cond: (magic_t4.t4_c = magic_set.magic_t3.t3_c)
+                             ->  Seq Scan on magic_t4
+                             ->  Hash
+                                   ->  Seq Scan on magic_t3
+                                         Filter: ((t3_b)::bigint < 100)
+(19 rows)
+
+select t1_a from magic_t1 join magic_t2 on(1 = 1)
+where t1_a in
+(select max(t3_a) from magic_t3 where t3_a = t2_a and t3_b < 100
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c))
+order by t1_a;
+ t1_a 
+------
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+   10
+(10 rows)
+
+select 1 from magic_t1, magic_t2
+where t1_a in
+(
+select max(t3_a) from magic_t3, magic_t4 where t3_a = t4_a
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c)
+union all 
+select max(t3_a) from magic_t3 where t3_a = t2_a and t2_a = 1
+and t3_b = (select avg(t4_a) from magic_t4 where t3_c = t4_c)) limit 10;
+ ?column? 
+----------
+        1
+        1
+        1
+        1
+        1
+        1
+        1
+        1
+        1
+        1
+(10 rows)
+
+drop table magic_t1;
+drop table magic_t2;
+drop table magic_t3;
+drop table magic_t4;
+drop schema magic_set cascade;

@@ -1,0 +1,85 @@
+key trace size: 120960000
+generate 120960000 keys
+generate duration 0.020505 s.
+------------------------------------------------
+Pmem:                  true
+Key type:              unsigned long
+Val type:              unsigned long
+Keys:                  8 bytes each
+Values:                8 bytes each
+Entries:               120960000
+Trace size:            120960000
+Read:                  10000000 
+Write:                 0 
+Thread:                28 
+Hash key flat:         true 
+Hash val flat:         true 
+Hash Buckets:          65536 
+Hash Cell in Bucket:   16 
+Hash Slot in Cell:     14 
+Hash init capacity:    13631488 
+Hash table size:       256 MB
+Hash loadfactor:       0.72 
+Cell Type:             CellMeta256V2 
+Report interval:       0 s
+Stats interval:        200000000 records
+benchmarks:            load,delete,readrandom
+------------------------------------------------
+create pool_id: 0, /mnt/pmem/turbohash
+[32mStart IPMWatcher for load
+[0mload         :       0.080 micros/op 11.925358 Mops/s;
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |       4802.90 |        4901.19 |    11637.19 |     12183.12 |   2.42 |   2.49 |
+  1   |       4802.17 |        4900.34 |    11679.49 |     12198.12 |   2.43 |   2.49 |
+  2   |       4802.81 |        4900.85 |    11614.65 |     12176.70 |   2.42 |   2.48 |
+  3   |       4718.94 |        4879.75 |    11426.40 |     12083.51 |   2.42 |   2.48 |
+  4   |       4719.40 |        4881.06 |    11408.56 |     12083.49 |   2.42 |   2.48 |
+  5   |       4721.83 |        4881.52 |    11414.18 |     12088.41 |   2.42 |   2.48 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R:  6680.9 MB/s, 69180.5 MB
+ User-R:  2758.9 MB/s, 28568.1 MB
+ DIMM-W:  7031.7 MB/s, 72813.4 MB
+ User-W:  2833.9 MB/s, 29344.7 MB
+   Time:    10.4 s
+[32mDestroy IPMWatcher.
+[0m
+[32mStart IPMWatcher for delete
+[0mdelete       :       0.032 micros/op 29.649849 Mops/s; (num: 4320000, deleted: 4320000)
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |       2407.98 |        1230.47 |     5018.68 |      4956.03 |   2.08 |   4.03 |
+  1   |       2408.13 |        1230.46 |     5030.02 |      4960.58 |   2.09 |   4.03 |
+  2   |       2408.27 |        1230.53 |     5001.72 |      4949.60 |   2.08 |   4.02 |
+  3   |       2407.58 |        1230.47 |     5017.34 |      4955.33 |   2.08 |   4.03 |
+  4   |       2407.56 |        1230.43 |     5011.70 |      4954.54 |   2.08 |   4.03 |
+  5   |       2407.81 |        1230.54 |     4984.98 |      4941.37 |   2.07 |   4.02 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R:  6547.1 MB/s, 30064.4 MB
+ User-R:  3146.2 MB/s, 14447.3 MB
+ DIMM-W:  6471.6 MB/s, 29717.5 MB
+ User-W:  1607.8 MB/s,  7382.9 MB
+   Time:     4.6 s
+[32mDestroy IPMWatcher.
+[0m
+[32mStart IPMWatcher for readrandom
+[0mreadrandom   :       0.008 micros/op 118.660221 Mops/s; (num: 10000000, not find: 10000000)
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |       2304.92 |           0.01 |     9203.24 |         4.40 |   3.99 | 298.17 |
+  1   |       2304.96 |           0.01 |     9203.31 |         4.41 |   3.99 | 298.58 |
+  2   |       2304.70 |           0.01 |     9201.92 |         4.22 |   3.99 | 285.74 |
+  3   |       2305.58 |           0.01 |     9205.61 |         4.33 |   3.99 | 292.88 |
+  4   |       2305.24 |           0.01 |     9204.13 |         4.37 |   3.99 | 295.88 |
+  5   |       2305.75 |           0.01 |     9205.77 |         4.14 |   3.99 | 280.23 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R: 18783.7 MB/s, 55224.0 MB
+ User-R:  4704.5 MB/s, 13831.1 MB
+ DIMM-W:     8.8 MB/s,    25.9 MB
+ User-W:     0.0 MB/s,     0.1 MB
+   Time:     2.9 s
+[32mDestroy IPMWatcher.
+[0m

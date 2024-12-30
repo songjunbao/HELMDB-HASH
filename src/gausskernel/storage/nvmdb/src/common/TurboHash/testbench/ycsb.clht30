@@ -1,0 +1,134 @@
+CLHT n_buckets = 4194304
+Initialization done.
+Initial capacity 12582912
+key trace size: 1209600
+generate 1209600 keys
+generate duration 0.050085 s.
+------------------------------------------------
+HashType:              CLHT
+Init Capacity:         12582912
+Key Size:              15
+Val Size:              15
+Entries:               1209600
+Trace size:            1209600
+Read:                  100000 
+Write:                 1000000 
+Thread:                16 
+Report interval:       0 s
+Stats interval:        10000000 records
+benchmarks:            load,ycsbd,ycsba,ycsbb,ycsbc,ycsbf
+------------------------------------------------
+[32mStart IPMWatcher for load
+[0mload         :       0.718 micros/op 1.327872 Mops/s;
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |        568.00 |         589.02 |      792.62 |      1346.04 |   1.40 |   2.29 |
+  1   |          0.03 |           0.01 |        0.05 |         0.73 |   1.65 |  82.56 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R:   777.1 MB/s,   792.7 MB
+ User-R:   556.9 MB/s,   568.0 MB
+ DIMM-W:  1320.4 MB/s,  1346.8 MB
+ User-W:   577.5 MB/s,   589.0 MB
+   Time:     1.0 s
+[32mDestroy IPMWatcher.
+[0m
+[32mStart IPMWatcher for ycsbd
+[0mthread 15, between 1194480 - 1209600
+thread  1, between 136080 - 151200
+thread  2, between 211680 - 226800
+thread  4, between 362880 - 378000
+thread  5, between 438480 - 453600
+thread  6, between 514080 - 529200
+thread  8, between 665280 - 680400
+thread  0, between 60480 - 75600
+thread  9, between 740880 - 756000
+thread 10, between 816480 - 831600
+thread 11, between 892080 - 907200
+thread  7, between 589680 - 604800
+thread 12, between 967680 - 982800
+thread 13, between 1043280 - 1058400
+thread 14, between 1118880 - 1134000
+thread  3, between 287280 - 302400
+ycsbd        :       0.079 micros/op 12.023185 Mops/s; (insert: 0, read: 15120)
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |         46.09 |           1.99 |      108.15 |         8.01 |   2.35 |   4.02 |
+  1   |          0.03 |           0.01 |        0.01 |         0.07 |   0.24 |   7.86 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R:   693.3 MB/s,   108.2 MB
+ User-R:   295.6 MB/s,    46.1 MB
+ DIMM-W:    51.8 MB/s,     8.1 MB
+ User-W:    12.8 MB/s,     2.0 MB
+   Time:     0.2 s
+[32mDestroy IPMWatcher.
+[0m
+randomize 1209600 keys
+randomize duration 0.004170 s.
+[32mStart IPMWatcher for ycsba
+[0mycsba        :       0.396 micros/op 2.411196 Mops/s; (insert: 37714, read: 37886)
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |        386.98 |         297.35 |      786.81 |       663.19 |   2.03 |   2.23 |
+  1   |          0.03 |           0.01 |        0.03 |         0.42 |   0.87 |  47.81 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R:  1269.1 MB/s,   786.8 MB
+ User-R:   624.2 MB/s,   387.0 MB
+ DIMM-W:  1070.3 MB/s,   663.6 MB
+ User-W:   479.6 MB/s,   297.4 MB
+   Time:     0.6 s
+[32mDestroy IPMWatcher.
+[0m
+randomize 1209600 keys
+randomize duration 0.005986 s.
+[32mStart IPMWatcher for ycsbb
+[0mycsbb        :       0.116 micros/op 8.208495 Mops/s; (insert: 3721, read: 71879)
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |        262.42 |          23.03 |      824.64 |        28.47 |   3.14 |   1.24 |
+  1   |          0.03 |           0.01 |        0.01 |         0.16 |   0.38 |  18.44 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R:  2924.3 MB/s,   824.6 MB
+ User-R:   930.7 MB/s,   262.5 MB
+ DIMM-W:   101.5 MB/s,    28.6 MB
+ User-W:    81.7 MB/s,    23.0 MB
+   Time:     0.3 s
+[32mDestroy IPMWatcher.
+[0m
+randomize 1209600 keys
+randomize duration 0.003847 s.
+[32mStart IPMWatcher for ycsbc
+[0mycsbc        :       0.101 micros/op 9.428706 Mops/s; (insert: 0, read: 75600)
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |        249.05 |           0.02 |      813.63 |         0.38 |   3.27 |  16.15 |
+  1   |          0.03 |           0.01 |        0.01 |         0.15 |   0.31 |  16.69 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R:  3105.5 MB/s,   813.6 MB
+ User-R:   950.7 MB/s,   249.1 MB
+ DIMM-W:     2.0 MB/s,     0.5 MB
+ User-W:     0.1 MB/s,     0.0 MB
+   Time:     0.3 s
+[32mDestroy IPMWatcher.
+[0m
+randomize 1209600 keys
+randomize duration 0.003756 s.
+[32mStart IPMWatcher for ycsbf
+[0mycsbf        :       0.269 micros/op 3.544521 Mops/s; (read_modify: 37691, read: 37909)
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |        379.11 |         221.13 |      941.43 |       272.79 |   2.48 |   1.23 |
+  1   |          0.03 |           0.01 |        0.02 |         0.30 |   0.67 |  34.61 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R:  2011.7 MB/s,   941.5 MB
+ User-R:   810.1 MB/s,   379.1 MB
+ DIMM-W:   583.5 MB/s,   273.1 MB
+ User-W:   472.5 MB/s,   221.1 MB
+   Time:     0.5 s
+[32mDestroy IPMWatcher.
+[0m

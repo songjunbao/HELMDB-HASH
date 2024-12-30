@@ -1,0 +1,379 @@
+[  2%] Built target gflags_nothreads_static
+[  5%] Built target absl_log_severity
+[  5%] Built target absl_strerror
+[  5%] Built target absl_spinlock_wait
+[  7%] Built target absl_exponential_biased
+[  7%] Built target absl_dynamic_annotations
+[  8%] Built target absl_leak_check_disable
+[ 10%] Built target absl_civil_time
+[ 10%] Built target absl_int128
+[ 11%] Built target absl_random_internal_platform
+[ 12%] Built target absl_leak_check
+[ 13%] Generating libPCM.a
+[ 16%] Built target absl_city
+[ 16%] Built target absl_random_seed_gen_exception
+[ 20%] Built target absl_time_zone
+[ 21%] Built target absl_raw_logging_internal
+[ 22%] Built target absl_periodic_sampler
+[ 23%] Built target absl_random_internal_randen_hwaes_impl
+[ 24%] Built target absl_random_internal_randen_slow
+[ 24%] Built target pcm
+[ 25%] Built target absl_scoped_set_env
+[ 27%] Built target absl_bad_optional_access
+[ 27%] Built target absl_throw_delegate
+[ 30%] Built target absl_bad_variant_access
+[ 30%] Built target absl_debugging_internal
+[ 32%] Built target absl_strings_internal
+[ 34%] Built target absl_bad_any_cast_impl
+[ 35%] Built target absl_base
+[ 36%] Built target absl_random_internal_randen_hwaes
+[ 43%] Built target util
+[ 43%] Built target absl_stacktrace
+[ 44%] Built target absl_demangle_internal
+[ 44%] Built target absl_malloc_internal
+[ 45%] Built target absl_random_internal_randen
+[ 52%] Built target absl_strings
+[ 53%] Built target absl_symbolize
+[ 54%] Built target absl_graphcycles_internal
+[ 55%] Built target absl_hash
+[ 57%] Built target absl_random_distributions
+[ 58%] Built target absl_random_internal_seed_material
+[ 59%] Built target absl_cord
+[ 62%] Built target absl_time
+[ 65%] Built target absl_str_format_internal
+[ 66%] Built target absl_examine_stack
+[ 67%] Built target absl_random_internal_pool_urbg
+[ 68%] Built target absl_flags_marshalling
+[ 69%] Built target absl_random_internal_distribution_test_util
+[ 71%] Built target absl_status
+[ 74%] Built target absl_synchronization
+[ 75%] Built target absl_failure_signal_handler
+[ 76%] Built target absl_random_seed_sequences
+[ 77%] Built target absl_flags_handle
+[ 78%] Built target absl_flags_program_name
+[ 80%] Built target absl_hashtablez_sampler
+[ 81%] Built target absl_flags_private_handle_accessor
+[ 81%] Built target absl_flags_config
+[ 82%] Built target absl_raw_hash_set
+[ 84%] Built target absl_flags_registry
+Scanning dependencies of target motivation
+[ 90%] Built target test_trace_test
+[ 87%] Built target test_spinlock_test
+[ 87%] Built target test_loadfactor_probe_dis
+[ 87%] Built target test_hash_test
+[ 91%] Built target turbo_hash_test
+[ 91%] Built target test_ralloc_test
+[ 91%] Built target mem_bench
+[ 91%] Built target test_bitset_test
+[ 93%] Built target test_pmem_hash_recover_test
+[ 93%] Built target test_hello_libpmem
+[ 94%] Built target test_pmem_hash_test
+[ 95%] Built target hash_bench_old
+[ 96%] Built target hash_bench
+[ 96%] Building CXX object src/test/CMakeFiles/motivation.dir/motivation.cc.o
+[ 97%] Built target absl_flags_internal
+[ 98%] Built target absl_flags
+[ 98%] Built target absl_flags_usage_internal
+[ 99%] Built target absl_flags_usage
+[100%] Built target absl_flags_parse
+[100%] Linking CXX executable ../../motivation
+[100%] Built target motivation
+ ========= 1 ======= 
+PCM Metrics: rnd_read
+	DRAM Read  (bytes): 866444608
+	DRAM Write (bytes): 92753216
+	PMEM Read  (bytes): 0
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 4127.69 MB/s
+	DRAM Write   Speed: 441.871 MB/s
+	PMEM Read    Speed: 0 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.200186 s
+PCM Metrics: seq_read
+	DRAM Read  (bytes): 661360192
+	DRAM Write (bytes): 14115456
+	PMEM Read  (bytes): 0
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 2847.56 MB/s
+	DRAM Write   Speed: 60.7756 MB/s
+	PMEM Read    Speed: 0 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.221496 s
+PCM Metrics: rnd_write
+	DRAM Read  (bytes): 683238784
+	DRAM Write (bytes): 657024704
+	PMEM Read  (bytes): 0
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 3251.81 MB/s
+	DRAM Write   Speed: 3127.04 MB/s
+	PMEM Read    Speed: 0 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.200377 s
+PCM Metrics: seq_write
+	DRAM Read  (bytes): 659278720
+	DRAM Write (bytes): 653491520
+	PMEM Read  (bytes): 0
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 3120.7 MB/s
+	DRAM Write   Speed: 3093.31 MB/s
+	PMEM Read    Speed: 0 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.201473 s
+jump perf.data.2021010514040230
+---------- size 1 result ----------
+---------- size 1 result ----------
+---------- size 1 result ----------
+---------- size 1 result ----------
+ ========= 2 ======= 
+PCM Metrics: rnd_read
+	DRAM Read  (bytes): 1303590400
+	DRAM Write (bytes): 38141760
+	PMEM Read  (bytes): 0
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 4181.2 MB/s
+	DRAM Write   Speed: 122.338 MB/s
+	PMEM Read    Speed: 0 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.297331 s
+PCM Metrics: seq_read
+	DRAM Read  (bytes): 1435292352
+	DRAM Write (bytes): 119331136
+	PMEM Read  (bytes): 64
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 5173.61 MB/s
+	DRAM Write   Speed: 430.137 MB/s
+	PMEM Read    Speed: 0.000230692 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.264574 s
+PCM Metrics: rnd_write
+	DRAM Read  (bytes): 1410166784
+	DRAM Write (bytes): 1384117952
+	PMEM Read  (bytes): 0
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 4126.1 MB/s
+	DRAM Write   Speed: 4049.88 MB/s
+	PMEM Read    Speed: 0 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.325935 s
+PCM Metrics: seq_write
+	DRAM Read  (bytes): 1351137856
+	DRAM Write (bytes): 1322738304
+	PMEM Read  (bytes): 0
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 5185.96 MB/s
+	DRAM Write   Speed: 5076.96 MB/s
+	PMEM Read    Speed: 0 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.248468 s
+jump perf.data.2021010514040673
+---------- size 2 result ----------
+---------- size 2 result ----------
+---------- size 2 result ----------
+---------- size 2 result ----------
+ ========= 4 ======= 
+PCM Metrics: rnd_read
+	DRAM Read  (bytes): 2798977088
+	DRAM Write (bytes): 203230272
+	PMEM Read  (bytes): 128
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 4824.31 MB/s
+	DRAM Write   Speed: 350.288 MB/s
+	PMEM Read    Speed: 0.000220621 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.553304 s
+PCM Metrics: seq_read
+	DRAM Read  (bytes): 2683192128
+	DRAM Write (bytes): 40352896
+	PMEM Read  (bytes): 128
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 6307.57 MB/s
+	DRAM Write   Speed: 94.8604 MB/s
+	PMEM Read    Speed: 0.000300899 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.405686 s
+PCM Metrics: rnd_write
+	DRAM Read  (bytes): 2617497984
+	DRAM Write (bytes): 2577920512
+	PMEM Read  (bytes): 64
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 3984.32 MB/s
+	DRAM Write   Speed: 3924.08 MB/s
+	PMEM Read    Speed: 9.74199e-05 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.626516 s
+PCM Metrics: seq_write
+	DRAM Read  (bytes): 2706841792
+	DRAM Write (bytes): 2604777920
+	PMEM Read  (bytes): 0
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 6008.22 MB/s
+	DRAM Write   Speed: 5781.68 MB/s
+	PMEM Read    Speed: 0 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.429652 s
+jump perf.data.2021010514041212
+---------- size 4 result ----------
+---------- size 4 result ----------
+---------- size 4 result ----------
+---------- size 4 result ----------
+ ========= 8 ======= 
+PCM Metrics: rnd_read
+	DRAM Read  (bytes): 5177990848
+	DRAM Write (bytes): 74035584
+	PMEM Read  (bytes): 0
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 4656.07 MB/s
+	DRAM Write   Speed: 66.573 MB/s
+	PMEM Read    Speed: 0 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 1.06058 s
+PCM Metrics: seq_read
+	DRAM Read  (bytes): 5401739904
+	DRAM Write (bytes): 102200384
+	PMEM Read  (bytes): 192
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 6484.33 MB/s
+	DRAM Write   Speed: 122.683 MB/s
+	PMEM Read    Speed: 0.00023048 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.794454 s
+PCM Metrics: rnd_write
+	DRAM Read  (bytes): 5178038912
+	DRAM Write (bytes): 5126110720
+	PMEM Read  (bytes): 64
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 3959.96 MB/s
+	DRAM Write   Speed: 3920.25 MB/s
+	PMEM Read    Speed: 4.89447e-05 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 1.24702 s
+PCM Metrics: seq_write
+	DRAM Read  (bytes): 5596609408
+	DRAM Write (bytes): 5342357952
+	PMEM Read  (bytes): 256
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 6430.32 MB/s
+	DRAM Write   Speed: 6138.2 MB/s
+	PMEM Read    Speed: 0.000294136 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 0.830027 s
+jump perf.data.2021010514041855
+---------- size 8 result ----------
+---------- size 8 result ----------
+---------- size 8 result ----------
+---------- size 8 result ----------
+ ========= 16 ======= 
+PCM Metrics: rnd_read
+	DRAM Read  (bytes): 10591729664
+	DRAM Write (bytes): 283410176
+	PMEM Read  (bytes): 256
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 4347.94 MB/s
+	DRAM Write   Speed: 116.341 MB/s
+	PMEM Read    Speed: 0.000105089 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 2.32319 s
+PCM Metrics: seq_read
+	DRAM Read  (bytes): 18383442432
+	DRAM Write (bytes): 124547136
+	PMEM Read  (bytes): 320
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 12475.8 MB/s
+	DRAM Write   Speed: 84.5232 MB/s
+	PMEM Read    Speed: 0.000217166 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 1.40526 s
+PCM Metrics: rnd_write
+	DRAM Read  (bytes): 10542824832
+	DRAM Write (bytes): 10386051904
+	PMEM Read  (bytes): 64
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 3616.9 MB/s
+	DRAM Write   Speed: 3563.12 MB/s
+	PMEM Read    Speed: 2.19563e-05 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 2.77984 s
+PCM Metrics: seq_write
+	DRAM Read  (bytes): 19063624256
+	DRAM Write (bytes): 10331715840
+	PMEM Read  (bytes): 128
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 12024.6 MB/s
+	DRAM Write   Speed: 6516.82 MB/s
+	PMEM Read    Speed: 8.07372e-05 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 1.51195 s
+jump perf.data.2021010514042693
+---------- size 16 result ----------
+---------- size 16 result ----------
+---------- size 16 result ----------
+---------- size 16 result ----------
+ ========= 32 ======= 
+PCM Metrics: rnd_read
+	DRAM Read  (bytes): 21175289664
+	DRAM Write (bytes): 443565376
+	PMEM Read  (bytes): 192
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 3841.7 MB/s
+	DRAM Write   Speed: 80.4733 MB/s
+	PMEM Read    Speed: 3.48333e-05 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 5.25662 s
+PCM Metrics: seq_read
+	DRAM Read  (bytes): 28664709696
+	DRAM Write (bytes): 131946304
+	PMEM Read  (bytes): 0
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 12052.5 MB/s
+	DRAM Write   Speed: 55.4789 MB/s
+	PMEM Read    Speed: 0 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 2.26814 s
+PCM Metrics: rnd_write
+	DRAM Read  (bytes): 22165908224
+	DRAM Write (bytes): 20946489984
+	PMEM Read  (bytes): 320
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 3164.89 MB/s
+	DRAM Write   Speed: 2990.78 MB/s
+	PMEM Read    Speed: 4.56902e-05 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 6.67924 s
+PCM Metrics: seq_write
+	DRAM Read  (bytes): 28152249216
+	DRAM Write (bytes): 20593163200
+	PMEM Read  (bytes): 128
+	PMEM Write (bytes): 0
+	DRAM Read    Speed: 11289 MB/s
+	DRAM Write   Speed: 8257.85 MB/s
+	PMEM Read    Speed: 5.13279e-05 MB/s
+	PMEM Write   Speed: 0 MB/s
+	Duration: 2.37824 s
+jump perf.data.2021010514043939
+---------- size 32 result ----------
+---------- size 32 result ----------
+---------- size 32 result ----------
+---------- size 32 result ----------
+access_size            int64
+rnd_read_latency     float64
+seq_read_latency     float64
+rnd_write_latency    float64
+seq_write_latency    float64
+rnd_r_l1_load          int64
+rnd_r_l1_miss          int64
+rnd_r_tlb_load         int64
+rnd_r_tlb_miss         int64
+seq_r_l1_load          int64
+seq_r_l1_miss          int64
+seq_r_tlb_load         int64
+seq_r_tlb_miss         int64
+rnd_w_l1_load          int64
+rnd_w_l1_miss          int64
+rnd_w_tlb_load         int64
+rnd_w_tlb_miss         int64
+seq_w_l1_load          int64
+seq_w_l1_miss          int64
+seq_w_tlb_load         int64
+seq_w_tlb_miss         int64
+Unnamed: 21          float64
+dtype: object

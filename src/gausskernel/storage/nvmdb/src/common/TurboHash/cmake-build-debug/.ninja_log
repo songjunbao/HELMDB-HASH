@@ -1,0 +1,9 @@
+# ninja log v6
+2	456	1733370896398595569	lib/gflags/CMakeFiles/gflags_nothreads_static.dir/src/gflags_reporting.cc.o	15f33d7dbed833b3
+2	618	1733370896398595569	lib/gflags/CMakeFiles/gflags_nothreads_static.dir/src/gflags_completions.cc.o	96ab5e15816eaad2
+2	1160	1733370896398595569	lib/gflags/CMakeFiles/gflags_nothreads_static.dir/src/gflags.cc.o	af5f996068583984
+1160	1200	1733370897556621088	lib/gflags/libgflags_nothreads_debug.a	ff39b2ec7e15306d
+2	1888	1733370896398595569	src/test/CMakeFiles/example.dir/example.cc.o	6ea9ca1670f88fc2
+3	6515	1733371424106233765	src/test/CMakeFiles/hash_bench_pmdk.dir/hash_bench_pmdk.cc.o	b3b76be031786ecc
+1888	1966	1733370898284637131	example	b023cb48f2ce7b48
+6515	6726	1733371430618377204	hash_bench_pmdk	d05e7f909ac875e4

@@ -1,0 +1,126 @@
+<refentry id="SQL-ALTER_TABLE">
+<refmeta>
+<refentrytitle>ALTER TABLE</refentrytitle>
+<manvolnum>7</manvolnum>
+<refmiscinfo>SQL - Language Statements</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>ALTER TABLE</refname>
+<refpurpose>change the definition of a table</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis>
+ALTER TABLE [ IF EXISTS ] { table_name  [*] | ONLY table_name | ONLY ( table_name  )}
+    action [, ... ];
+ALTER TABLE [ IF EXISTS ] table_name
+    ADD ( { column_name data_type [ compress_mode ] [ COLLATE collation ] [ column_constraint [ ... ] ]} [, ...] );
+ALTER TABLE [ IF EXISTS ] table_name
+    MODIFY ( { column_name data_type | column_name [ CONSTRAINT constraint_name ] NOT NULL [ ENABLE ] | column_name [ CONSTRAINT constraint_name ] NULL } [, ...] );
+ALTER TABLE [ IF EXISTS ] table_name
+    RENAME TO new_table_name;
+ALTER TABLE [ IF EXISTS ] { table_name  [*] | ONLY table_name | ONLY ( table_name  )}
+    RENAME [ COLUMN ] column_name TO new_column_name;
+ALTER TABLE [ IF EXISTS ] { table_name  [*] | ONLY table_name | ONLY ( table_name  )}
+    RENAME CONSTRAINT constraint_name TO new_constraint_name;
+ALTER TABLE [ IF EXISTS ] table_name
+    SET SCHEMA new_schema;
+
+where action can be:
+column_clause 
+    | ADD table_constraint [ NOT VALID ]
+    | ADD table_constraint_using_index
+    | VALIDATE CONSTRAINT constraint_name
+    | DROP CONSTRAINT [ IF EXISTS ]  constraint_name [ RESTRICT | CASCADE ]
+    | CLUSTER ON index_name
+    | SET WITHOUT CLUSTER
+    | SET ( {storage_parameter = value} [, ... ] )
+    | RESET ( storage_parameter [, ... ] )
+    | OWNER TO new_owner
+    | SET TABLESPACE new_tablespace
+    | SET {COMPRESS|NOCOMPRESS}
+    | TO { GROUP groupname | NODE ( nodename [, ... ] ) }
+    | ADD NODE ( nodename [, ... ] )
+    | DELETE NODE ( nodename [, ... ] )
+    | UPDATE SLICE LIKE table_name
+    | DISABLE TRIGGER [ trigger_name | ALL | USER ]
+    | ENABLE TRIGGER [ trigger_name | ALL | USER ]
+    | ENABLE REPLICA TRIGGER trigger_name
+    | ENABLE ALWAYS TRIGGER trigger_name
+    | ENABLE ROW LEVEL SECURITY
+    | DISABLE ROW LEVEL SECURITY
+    | FORCE ROW LEVEL SECURITY
+    | NO FORCE ROW LEVEL SECURITY
+    | ENCRYPTION KEY ROTATION
+    | AUTO_INCREMENT [ = ] value
+    | ALTER INDEX index_name [ VISBLE | INVISIBLE ]
+    | [ [ DEFAULT ] CHARACTER SET | CHARSET [ = ] default_charset ] [ [ DEFAULT ] COLLATE [ = ] default_collation ]
+    | CONVERT TO CHARACTER SET | CHARSET charset [ COLLATE collation ]
+NOTICE: '[ CHARACTER SET | CHARSET ]' is only available in CENTRALIZED mode and B-format database!
+NOTICE: '[ COLLATE ]' is only available in CENTRALIZED mode and B-format database!
+where column_clause can be:
+ADD [ COLUMN ] column_name data_type [ CHARACTER SET | CHARSET charset ] [ compress_mode ] [ COLLATE collation ] [ column_constraint [ ... ] ] [ FIRST | AFTER column_name ]
+    | MODIFY column_name data_type
+    | MODIFY column_name [ CONSTRAINT constraint_name ] NOT NULL [ ENABLE ]
+    | MODIFY column_name [ CONSTRAINT constraint_name ] NULL
+    | MODIFY [ COLUMN ] column_name data_type [ CHARACTER SET | CHARSET charset ] [ COLLATE collation ] [ column_constraint [ ... ] ] [COMMENT 'string'] [FIRST | AFTER column_name]
+    | CHANGE [ COLUMN ] column_name new_column_name data_type [ CHARACTER SET | CHARSET charset ] [ COLLATE collation ] [ column_constraint [ ... ] ] [COMMENT 'string'] [FIRST | AFTER column_name]
+    | DROP [ COLUMN ] [ IF EXISTS ] column_name [ RESTRICT | CASCADE ]
+    | ALTER [ COLUMN ] column_name [ SET DATA ] TYPE data_type [ COLLATE collation ] [ USING expression ]
+    | ALTER [ COLUMN ] column_name { SET DEFAULT expression | DROP DEFAULT }
+    | ALTER [ COLUMN ] column_name { SET | DROP } NOT NULL
+    | ALTER [ COLUMN ] column_name SET STATISTICS [PERCENT] integer
+    | ADD STATISTICS (( column_1_name, column_2_name [, ...] ))
+    | DELETE STATISTICS (( column_1_name, column_2_name [, ...] ))
+    | ALTER [ COLUMN ] column_name SET ( {attribute_option = value} [, ... ] )
+    | ALTER [ COLUMN ] column_name RESET ( attribute_option [, ... ] )
+    | ALTER [ COLUMN ] column_name SET STORAGE { PLAIN | EXTERNAL | EXTENDED | MAIN }
+NOTICE: 'MODIFY [ COLUMN ] ...' action is only available in CENTRALIZED mode and B-format database!
+NOTICE: 'CHANGE [ COLUMN ] ...' action is only available in CENTRALIZED mode and B-format database!
+where column_constraint can be:
+[ CONSTRAINT constraint_name ]
+    { NOT NULL |
+      NULL |
+      CHECK ( expression ) |
+      DEFAULT default_expr |
+      GENERATED ALWAYS AS ( generation_expr ) [STORED] |
+      AUTO_INCREMENT |
+      UNIQUE [KEY] index_parameters |
+      PRIMARY KEY index_parameters |
+      ENCRYPTED WITH ( COLUMN_ENCRYPTION_KEY = column_encryption_key, ENCRYPTION_TYPE = encryption_type_value ) |
+      REFERENCES reftable [ ( refcolumn ) ] [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ]
+        [ ON DELETE action ] [ ON UPDATE action ] }
+    [ DEFERRABLE | NOT DEFERRABLE | INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+NOTICE: 'UNIQUE KEY' in table_constraint is only available in CENTRALIZED mode and B-format database!
+where compress_mode can be:
+{ DELTA | PREFIX | DICTIONARY | NUMSTR | NOCOMPRESS }
+where table_constraint can be:
+[ CONSTRAINT [ constraint_name ] ]
+    { CHECK ( expression ) |
+      UNIQUE [ idx_name ] [ USING method ] ( { { column_name [ ( length ) ] | ( expression ) } [ ASC | DESC ] } [, ... ] ) index_parameters [ VISIBLE | INVISIBLE ] |
+      PRIMARY KEY [ USING method ] ( { column_name [ ASC | DESC ] }[, ... ] ) index_parameters [ VISIBLE | INVISIBLE ] |
+      PARTIAL CLUSTER KEY ( column_name [, ... ] ) |
+      FOREIGN KEY [ idx_name ] ( column_name [, ... ] ) REFERENCES reftable [ ( refcolumn [, ... ] ) ]
+        [ MATCH FULL | MATCH PARTIAL | MATCH SIMPLE ] [ ON DELETE action ] [ ON UPDATE action ] }
+    [ DEFERRABLE | NOT DEFERRABLE | INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+where index_parameters can be:
+[ WITH ( {storage_parameter = value} [, ... ] ) ]
+    [ USING INDEX TABLESPACE tablespace_name ]
+where table_constraint_using_index can be:
+[ CONSTRAINT constraint_name ]
+    { UNIQUE | PRIMARY KEY } USING INDEX index_name
+    [ DEFERRABLE | NOT DEFERRABLE | INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+NOTICE: '[ constraint_name ]' in table_constraint is optional in CENTRALIZED mode and B-format database, it is mandatory in other scenarios.
+NOTICE: '[ index_name ]' in table_constraint is only available in CENTRALIZED mode and B-format database!
+NOTICE: '[ USING method ]' in table_constraint is only available in CENTRALIZED mode and B-format database!
+NOTICE: '[ ASC | DESC ]' in table_constraint is only available in CENTRALIZED mode and B-format database!
+NOTICE: 'column_name ( length )' in 'UNIQUE' clause of table_constraint is only available in CENTRALIZED mode and B-format database!
+NOTICE: '( expression )' in 'UNIQUE' clause of table_constraint is only available in CENTRALIZED mode and B-format database!
+NOTICE: 'AUTO_INCREMENT' is only available in CENTRALIZED mode and B-format database!
+NOTICE: '[ FIRST | AFTER column_name ]' clause is only available in CENTRALIZED mode!
+NOTICE: '[ FIRST | AFTER column_name ]' in 'MODIFY | CHANGE [ COLUMN ] ...' clause is only available in B-format database!
+NOTICE: '[ CHARACTER SET | CHARSET charset ]' is only available in CENTRALIZED mode and B-format database!
+NOTICE: '[ VISIBLE | INVISIBLE ]' is only avaliable in CENTRALIZED mode and B-format database!
+</synopsis>
+</refsynopsisdiv>
+</refentry>

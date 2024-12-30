@@ -1,0 +1,2944 @@
+-- b compatibility case
+drop database if exists b_cmpt_db;
+NOTICE:  database "b_cmpt_db" does not exist, skipping
+create database b_cmpt_db dbcompatibility 'b';
+--------------------concat--------------------
+-- concat case in a compatibility
+\c regression
+select concat('','A');
+ concat 
+--------
+ A
+(1 row)
+
+select concat(null,'A');
+ concat 
+--------
+ A
+(1 row)
+
+select concat_ws(',', 'A', null);
+ concat_ws 
+-----------
+ A
+(1 row)
+
+select concat_ws(',', 'A', '');
+ concat_ws 
+-----------
+ A
+(1 row)
+
+create table text1 (a char(10));
+insert into text1 values (concat('A',''));
+insert into text1 values (concat('A',null));
+select * from text1 where a is null;
+ a 
+---
+(0 rows)
+
+drop table text1;
+-- concat case in b compatibility
+\c b_cmpt_db
+select concat('','A');
+ concat 
+--------
+ A
+(1 row)
+
+select concat(null,'A');
+ concat 
+--------
+ 
+(1 row)
+
+select concat_ws(',', 'A', null);
+ concat_ws 
+-----------
+ A
+(1 row)
+
+select concat_ws(',', 'A', '');
+ concat_ws 
+-----------
+ A,
+(1 row)
+
+create table text1 (a char(10));
+insert into text1 values (concat('A',''));
+insert into text1 values (concat('A',null));
+select * from text1 where a is null;
+ a 
+---
+ 
+(1 row)
+
+drop table text1;
+-----------null is not equal to ''---------
+-- null case in postgresql
+\c regression
+create table text2 (a char(10));
+insert into text2 values('');
+insert into text2 values (null);
+select * from text2 where a is null;
+ a 
+---
+ 
+ 
+(2 rows)
+
+select * from text2 where a='';
+ a 
+---
+(0 rows)
+
+select * from text2 where a is not null;
+ a 
+---
+(0 rows)
+
+drop table text2;
+-- null case in b
+\c b_cmpt_db
+create table text2 (a char(10));
+insert into text2 values('');
+insert into text2 values (null);
+select * from text2 where a is null;
+ a 
+---
+ 
+(1 row)
+
+select * from text2 where a='';
+     a      
+------------
+           
+(1 row)
+
+select * from text2 where a is not null;
+     a      
+------------
+           
+(1 row)
+
+drop table text2;
+-- test int8 int1in int2in int4in
+\c regression
+select '-'::int8;
+ERROR:  invalid input syntax for type bigint: "-"
+LINE 1: select '-'::int8;
+               ^
+CONTEXT:  referenced column: int8
+select int1in('');
+ int1in 
+--------
+ 
+(1 row)
+
+select int1in('.1');
+ERROR:  invalid input syntax for integer: ".1"
+CONTEXT:  referenced column: int1in
+select int2in('s');
+ERROR:  invalid input syntax for integer: "s"
+CONTEXT:  referenced column: int2in
+select int4in('s');
+ERROR:  invalid input syntax for integer: "s"
+CONTEXT:  referenced column: int4in
+\c b_cmpt_db
+select '-'::int8;
+ int8 
+------
+    0
+(1 row)
+
+select int1in('');
+ int1in 
+--------
+ 0
+(1 row)
+
+select int1in('.1');
+ int1in 
+--------
+ 0
+(1 row)
+
+select int2in('s');
+ int2in 
+--------
+      0
+(1 row)
+
+select int4in('s');
+ int4in 
+--------
+      0
+(1 row)
+
+-- test substr
+select substr(9, 2) + 1;
+ ?column? 
+----------
+        1
+(1 row)
+
+select substr(9, 2) + 1.2;
+ ?column? 
+----------
+      1.2
+(1 row)
+
+select substr(9, 2) + '1';
+ ?column? 
+----------
+        1
+(1 row)
+
+select substr(9, 2) + '1.2';
+ ?column? 
+----------
+      1.2
+(1 row)
+
+select substr(9, 2) + 'a';
+ ?column? 
+----------
+        0
+(1 row)
+
+select substr(1.2, 1, 3) + '1.2';
+ ?column? 
+----------
+      2.4
+(1 row)
+
+select 'a' + 1;
+ ?column? 
+----------
+        1
+(1 row)
+
+select 'a' + 1.2;
+ ?column? 
+----------
+      1.2
+(1 row)
+
+select 'a' + '1';
+ ?column? 
+----------
+        1
+(1 row)
+
+select 'a' + '1.2';
+ ?column? 
+----------
+      1.2
+(1 row)
+
+select 'a' + 'b';
+ ?column? 
+----------
+        0
+(1 row)
+
+select cast('.1' as int);
+ int4 
+------
+    0
+(1 row)
+
+select cast('' as int);
+ int4 
+------
+    0
+(1 row)
+
+select cast('1.1' as int);
+ int4 
+------
+    1
+(1 row)
+
+select cast('s' as int);
+ int4 
+------
+    0
+(1 row)
+
+--------------- limit #,#-------------------
+-- limit case in postgresql
+\c regression
+create table test_limit(a int);
+insert into test_limit values (1),(2),(3),(4),(5);
+select * from test_limit order by 1 limit 2,3;
+ a 
+---
+ 3
+ 4
+ 5
+(3 rows)
+
+select * from test_limit order by 1 limit 2,6;
+ a 
+---
+ 3
+ 4
+ 5
+(3 rows)
+
+select * from test_limit order by 1 limit 6,2;
+ a 
+---
+(0 rows)
+
+drop table test_limit;
+-- limit case in b
+\c b_cmpt_db
+create table test_limit(a int);
+insert into test_limit values (1),(2),(3),(4),(5);
+select * from test_limit order by 1 limit 2,3;
+ a 
+---
+ 3
+ 4
+ 5
+(3 rows)
+
+select * from test_limit order by 1 limit 2,6;
+ a 
+---
+ 3
+ 4
+ 5
+(3 rows)
+
+select * from test_limit order by 1 limit 6,2;
+ a 
+---
+(0 rows)
+
+drop table test_limit;
+--------------timestampdiff-----------------
+-- timestamp with time zone
+-- timestamp1 > timestamp2
+\c b_cmpt_db
+select timestampdiff(year, '2018-01-01 01:01:01.000001', '2019-02-02 02:02:02.000002');
+ timestamp_diff 
+----------------
+              1
+(1 row)
+
+select timestampdiff(quarter, '2018-01-01 01:01:01.000001', '2019-02-02 02:02:02.000002');
+ timestamp_diff 
+----------------
+              4
+(1 row)
+
+select timestampdiff(week, '2018-01-01 01:01:01.000001', '2019-02-02 02:02:02.000002');
+ timestamp_diff 
+----------------
+             56
+(1 row)
+
+select timestampdiff(month, '2018-01-01 01:01:01.000001', '2019-02-02 02:02:02.000002');
+ timestamp_diff 
+----------------
+             13
+(1 row)
+
+select timestampdiff(day, '2018-01-01 01:01:01.000001', '2019-02-02 02:02:02.000002');
+ timestamp_diff 
+----------------
+            397
+(1 row)
+
+select timestampdiff(hour, '2018-01-01 01:01:01.000001', '2019-02-02 02:02:02.000002');
+ timestamp_diff 
+----------------
+           9529
+(1 row)
+
+select timestampdiff(minute, '2018-01-01 01:01:01.000001', '2019-02-02 02:02:02.000002');
+ timestamp_diff 
+----------------
+         571741
+(1 row)
+
+select timestampdiff(second, '2018-01-01 01:01:01.000001', '2019-02-02 02:02:02.000002');
+ timestamp_diff 
+----------------
+       34304461
+(1 row)
+
+select timestampdiff(microsecond, '2018-01-01 01:01:01.000001', '2019-02-02 02:02:02.000002');
+ timestamp_diff 
+----------------
+ 34304461000001
+(1 row)
+
+-- timestamp2 > timestamp1
+select timestampdiff(year, '2019-02-02 02:02:02.000002', '2018-01-01 01:01:01.000001');
+ timestamp_diff 
+----------------
+             -1
+(1 row)
+
+select timestampdiff(quarter, '2019-02-02 02:02:02.000002', '2018-01-01 01:01:01.000001');
+ timestamp_diff 
+----------------
+             -4
+(1 row)
+
+select timestampdiff(week, '2019-02-02 02:02:02.000002', '2018-01-01 01:01:01.000001');
+ timestamp_diff 
+----------------
+            -56
+(1 row)
+
+select timestampdiff(month, '2019-02-02 02:02:02.000002', '2018-01-01 01:01:01.000001');
+ timestamp_diff 
+----------------
+            -13
+(1 row)
+
+select timestampdiff(day, '2019-02-02 02:02:02.000002', '2018-01-01 01:01:01.000001');
+ timestamp_diff 
+----------------
+           -397
+(1 row)
+
+select timestampdiff(hour, '2019-02-02 02:02:02.000002', '2018-01-01 01:01:01.000001');
+ timestamp_diff 
+----------------
+          -9529
+(1 row)
+
+select timestampdiff(minute, '2019-02-02 02:02:02.000002', '2018-01-01 01:01:01.000001');
+ timestamp_diff 
+----------------
+        -571741
+(1 row)
+
+select timestampdiff(second, '2019-02-02 02:02:02.000002', '2018-01-01 01:01:01.000001');
+ timestamp_diff 
+----------------
+      -34304461
+(1 row)
+
+select timestampdiff(microsecond, '2019-02-02 02:02:02.000002', '2018-01-01 01:01:01.000001');
+ timestamp_diff  
+-----------------
+ -34304461000001
+(1 row)
+
+-- LEAP YEAR LEAP MONTH
+select timestampdiff(day, '2016-01-01', '2017-01-01');
+ timestamp_diff 
+----------------
+            366
+(1 row)
+
+select timestampdiff(day, '2017-01-01', '2018-01-01');
+ timestamp_diff 
+----------------
+            365
+(1 row)
+
+select timestampdiff(day, '2016-01-01', '2016-02-01');
+ timestamp_diff 
+----------------
+             31
+(1 row)
+
+select timestampdiff(day, '2016-02-01', '2016-03-01');
+ timestamp_diff 
+----------------
+             29
+(1 row)
+
+select timestampdiff(day, '2016-03-01', '2016-04-01');
+ timestamp_diff 
+----------------
+             31
+(1 row)
+
+select timestampdiff(day, '2016-04-01', '2016-05-01');
+ timestamp_diff 
+----------------
+             30
+(1 row)
+
+select timestampdiff(day, '2016-05-01', '2016-06-01');
+ timestamp_diff 
+----------------
+             31
+(1 row)
+
+select timestampdiff(day, '2016-06-01', '2016-07-01');
+ timestamp_diff 
+----------------
+             30
+(1 row)
+
+select timestampdiff(day, '2016-07-01', '2016-08-01');
+ timestamp_diff 
+----------------
+             31
+(1 row)
+
+select timestampdiff(day, '2016-08-01', '2016-09-01');
+ timestamp_diff 
+----------------
+             31
+(1 row)
+
+select timestampdiff(day, '2016-09-01', '2016-10-01');
+ timestamp_diff 
+----------------
+             30
+(1 row)
+
+select timestampdiff(day, '2016-10-01', '2016-11-01');
+ timestamp_diff 
+----------------
+             31
+(1 row)
+
+select timestampdiff(day, '2016-11-01', '2016-12-01');
+ timestamp_diff 
+----------------
+             30
+(1 row)
+
+select timestampdiff(day, '2016-12-01', '2017-01-01');
+ timestamp_diff 
+----------------
+             31
+(1 row)
+
+select timestampdiff(day, '2000-02-01', '2000-03-01');
+ timestamp_diff 
+----------------
+             29
+(1 row)
+
+select timestampdiff(day, '1900-02-01', '1900-03-01');
+ timestamp_diff 
+----------------
+             28
+(1 row)
+
+-- timestamp without time zone
+select timestampdiff(year, '2018-01-01 01:01:01.000001'::timestamp, '2019-02-02 02:02:02.000002'::timestamp);
+ timestamp_diff 
+----------------
+              1
+(1 row)
+
+select timestampdiff(quarter, '2018-01-01 01:01:01.000001'::timestamp, '2019-02-02 02:02:02.000002'::timestamp);
+ timestamp_diff 
+----------------
+              4
+(1 row)
+
+select timestampdiff(week, '2018-01-01 01:01:01.000001'::timestamp, '2019-02-02 02:02:02.000002'::timestamp);
+ timestamp_diff 
+----------------
+             56
+(1 row)
+
+select timestampdiff(month, '2018-01-01 01:01:01.000001'::timestamp, '2019-02-02 02:02:02.000002'::timestamp);
+ timestamp_diff 
+----------------
+             13
+(1 row)
+
+select timestampdiff(day, '2018-01-01 01:01:01.000001'::timestamp, '2019-02-02 02:02:02.000002'::timestamp);
+ timestamp_diff 
+----------------
+            397
+(1 row)
+
+select timestampdiff(hour, '2018-01-01 01:01:01.000001'::timestamp, '2019-02-02 02:02:02.000002'::timestamp);
+ timestamp_diff 
+----------------
+           9529
+(1 row)
+
+select timestampdiff(minute, '2018-01-01 01:01:01.000001'::timestamp, '2019-02-02 02:02:02.000002'::timestamp);
+ timestamp_diff 
+----------------
+         571741
+(1 row)
+
+select timestampdiff(second, '2018-01-01 01:01:01.000001'::timestamp, '2019-02-02 02:02:02.000002'::timestamp);
+ timestamp_diff 
+----------------
+       34304461
+(1 row)
+
+select timestampdiff(microsecond, '2018-01-01 01:01:01.000001'::timestamp, '2019-02-02 02:02:02.000002'::timestamp);
+ timestamp_diff 
+----------------
+ 34304461000001
+(1 row)
+
+-- now()
+select timestampdiff(year, '2018-01-01', now());
+ timestamp_diff 
+----------------
+--?.*
+(1 row)
+
+select timestampdiff(quarter, '2018-01-01', now());
+ timestamp_diff 
+----------------
+--?.*
+(1 row)
+
+select timestampdiff(week, '2018-01-01', now());
+ timestamp_diff 
+----------------
+--?.*
+(1 row)
+
+select timestampdiff(month, '2018-01-01', now());
+ timestamp_diff 
+----------------
+--?.*
+(1 row)
+
+select timestampdiff(day, '2018-01-01', now());
+ timestamp_diff 
+----------------
+--?.*
+(1 row)
+
+select timestampdiff(hour, '2018-01-01', now());
+ timestamp_diff 
+----------------
+--?.*
+(1 row)
+
+select timestampdiff(minute, '2018-01-01', now());
+ timestamp_diff 
+----------------
+--?.*
+(1 row)
+
+select timestampdiff(second, '2018-01-01', now());
+ timestamp_diff 
+----------------
+--?.*
+(1 row)
+
+select timestampdiff(microsecond, '2018-01-01', now());
+ timestamp_diff  
+-----------------
+--?.*
+(1 row)
+
+-- current_timestamp
+select timestampdiff(year,'2018-01-01', current_timestamp);
+ timestamp_diff 
+----------------
+--?.*
+(1 row)
+
+-- test error
+select timestampdiff(yearss, '2018-01-01', now());
+ERROR:  timestamp with time zone units "yearss" not recognized
+CONTEXT:  referenced column: timestamp_diff
+select timestampdiff(century, '2018-01-01', now());
+ERROR:  timestamp units "century" not supported
+CONTEXT:  referenced column: timestamp_diff
+select timestampdiff(year, '-0001-01-01', '2019-01-01');
+ERROR:  invalid input syntax for type timestamp with time zone: "-0001-01-01"
+LINE 1: select timestampdiff(year, '-0001-01-01', '2019-01-01');
+                                   ^
+CONTEXT:  referenced column: timestamp_diff
+select timestampdiff(microsecond, '0001-01-01', '293000-12-31');
+ERROR:  The result of timestampdiff out of range.
+CONTEXT:  referenced column: timestamp_diff
+select timestampdiff(microsecond, '2018-13-01', '2019-12-31');
+ERROR:  date/time field value out of range: "2018-13-01"
+LINE 1: select timestampdiff(microsecond, '2018-13-01', '2019-12-31'...
+                                          ^
+HINT:  Perhaps you need a different "datestyle" setting.
+CONTEXT:  referenced column: timestamp_diff
+select timestampdiff(microsecond, '2018-01-01', '2019-12-32');
+ERROR:  date/time field value out of range: "2019-12-32"
+LINE 1: select timestampdiff(microsecond, '2018-01-01', '2019-12-32'...
+                                                        ^
+HINT:  Perhaps you need a different "datestyle" setting.
+CONTEXT:  referenced column: timestamp_diff
+-- test table ref
+create table timestamp(a timestamp, b timestamp with time zone);
+insert into timestamp values('2018-01-01 01:01:01.000001', '2019-02-02 02:02:02.000002');
+select timestampdiff(year, '2018-01-01 01:01:01.000001', b) from timestamp;
+ timestamp_diff 
+----------------
+              1
+(1 row)
+
+select timestampdiff(quarter, '2018-01-01 01:01:01.000001', b) from timestamp;
+ timestamp_diff 
+----------------
+              4
+(1 row)
+
+select timestampdiff(week, '2018-01-01 01:01:01.000001', b) from timestamp;;
+ timestamp_diff 
+----------------
+             56
+(1 row)
+
+select timestampdiff(month, '2018-01-01 01:01:01.000001', b) from timestamp;;
+ timestamp_diff 
+----------------
+             13
+(1 row)
+
+select timestampdiff(day, '2018-01-01 01:01:01.000001', b) from timestamp;;
+ timestamp_diff 
+----------------
+            397
+(1 row)
+
+select timestampdiff(hour, '2018-01-01 01:01:01.000001', b) from timestamp;;
+ timestamp_diff 
+----------------
+           9529
+(1 row)
+
+select timestampdiff(minute, '2018-01-01 01:01:01.000001',b) from timestamp;;
+ timestamp_diff 
+----------------
+         571741
+(1 row)
+
+select timestampdiff(second, '2018-01-01 01:01:01.000001', b) from timestamp;
+ timestamp_diff 
+----------------
+       34304461
+(1 row)
+
+select timestampdiff(microsecond, '2018-01-01 01:01:01.000001', b) from timestamp;
+ timestamp_diff 
+----------------
+ 34304461000001
+(1 row)
+
+drop table timestamp;
+-- test char/varchar length
+create table char_test(a char(10),b varchar(10));
+insert into char_test values('零一二三四五六七八九','零一二三四五六七八九');
+insert into char_test values('零1二3四5六7八9','零1二3四5六7八9');
+insert into char_test values('零1二3四5六7八9','零1二3四5六7八90');
+ERROR:  value too long for type character varying(10)
+CONTEXT:  referenced column: b
+insert into char_test values('零1二3四5六7八90','零1二3四5六7八9');
+ERROR:  value too long for type character(10)
+CONTEXT:  referenced column: a
+insert into char_test values('零0','零1二3');
+insert into char_test values('零0  ','零1二3');
+insert into char_test values('零0','零1二3  ');
+insert into char_test values('','');
+insert into char_test values(null,null);
+insert into char_test values('0','0');
+select length(a),length(b) from char_test;
+ length | length 
+--------+--------
+     10 |     10
+     10 |     10
+      2 |      4
+      2 |      4
+      2 |      6
+      0 |      0
+        |       
+      1 |      1
+(8 rows)
+
+select lengthb(a),lengthb(b) from char_test;
+ lengthb | lengthb 
+---------+---------
+      30 |      30
+      20 |      20
+      10 |       8
+      10 |       8
+      10 |      10
+      10 |       0
+         |        
+      10 |       1
+(8 rows)
+
+select bit_length(a),bit_length(b) from char_test;
+ bit_length | bit_length 
+------------+------------
+        240 |        240
+        160 |        160
+         32 |         64
+         32 |         64
+         32 |         80
+          0 |          0
+            |           
+          8 |          8
+(8 rows)
+
+select 'ni啊shaeskeeee'::char(3);
+ bpchar 
+--------
+ ni啊
+(1 row)
+
+create index a on char_test(a);
+create index b on char_test(b);
+set enable_seqscan to off;
+select * from char_test where a = '零0';
+     a     |    b     
+-----------+----------
+ 零0       | 零1二3
+ 零0       | 零1二3
+ 零0       | 零1二3  
+(3 rows)
+
+select * from char_test where b = '零1二3';
+     a     |   b    
+-----------+--------
+ 零0       | 零1二3
+ 零0       | 零1二3
+(2 rows)
+
+drop table char_test;
+-- Testing the behavior of CREATE VIEW statement permissions in B-compatibility mode
+CREATE SCHEMA test_schema;
+CREATE SCHEMA view_schema;
+CREATE TABLE test_schema.test_table (a int);
+CREATE VIEW test_schema.test_view AS SELECT ascii('a');
+CREATE FUNCTION test_schema.bit2float8 (bit) RETURNS float8 AS
+$$
+BEGIN
+    RETURN (SELECT int8($1));
+END;
+$$
+LANGUAGE plpgsql;
+CREATE USER test_c WITH PASSWORD 'openGauss@123';
+CREATE USER test_d WITH PASSWORD 'openGauss@123';
+GRANT USAGE ON SCHEMA test_schema TO test_d;
+GRANT CREATE ON SCHEMA view_schema TO test_d;
+GRANT USAGE ON SCHEMA test_schema TO test_c;
+GRANT CREATE ON SCHEMA view_schema TO test_c;
+REVOKE EXECUTE ON FUNCTION test_schema.bit2float8(bit) FROM public;
+SET ROLE test_c PASSWORD 'openGauss@123';
+CREATE DEFINER=test_d VIEW view_schema.new_view1 AS SELECT * FROM test_schema.test_table;
+ERROR:  must be owner of relation new_view1
+DETAIL:  N/A
+CREATE DEFINER=test_d VIEW view_schema.new_view2 AS SELECT * FROM test_schema.test_view;
+ERROR:  must be owner of relation new_view2
+DETAIL:  N/A
+CREATE DEFINER=test_d VIEW view_schema.new_view3 AS SELECT * FROM test_schema.bit2float8(b'1111');
+ERROR:  must be owner of relation new_view3
+DETAIL:  N/A
+RESET ROLE;
+GRANT test_d TO test_c;
+SET ROLE test_c PASSWORD 'openGauss@123';
+CREATE DEFINER=test_d VIEW view_schema.new_view1 AS SELECT * FROM test_schema.test_table;
+CREATE DEFINER=test_d VIEW view_schema.new_view2 AS SELECT * FROM test_schema.test_view;
+CREATE DEFINER=test_d VIEW view_schema.new_view3 AS SELECT * FROM test_schema.bit2float8(b'1111');
+SELECT * FROM view_schema.new_view1;
+ERROR:  permission denied for schema view_schema
+LINE 1: SELECT * FROM view_schema.new_view1;
+                      ^
+DETAIL:  N/A
+SELECT * FROM view_schema.new_view2;
+ERROR:  permission denied for schema view_schema
+LINE 1: SELECT * FROM view_schema.new_view2;
+                      ^
+DETAIL:  N/A
+SELECT * FROM view_schema.new_view3;
+ERROR:  permission denied for schema view_schema
+LINE 1: SELECT * FROM view_schema.new_view3;
+                      ^
+DETAIL:  N/A
+RESET ROLE;
+SET ROLE test_d PASSWORD 'openGauss@123';
+SELECT * FROM view_schema.new_view1;
+ERROR:  permission denied for schema view_schema
+LINE 1: SELECT * FROM view_schema.new_view1;
+                      ^
+DETAIL:  N/A
+SELECT * FROM view_schema.new_view2;
+ERROR:  permission denied for schema view_schema
+LINE 1: SELECT * FROM view_schema.new_view2;
+                      ^
+DETAIL:  N/A
+SELECT * FROM view_schema.new_view3;
+ERROR:  permission denied for schema view_schema
+LINE 1: SELECT * FROM view_schema.new_view3;
+                      ^
+DETAIL:  N/A
+RESET ROLE;
+GRANT SELECT ON TABLE test_schema.test_table TO test_d;
+GRANT SELECT ON TABLE test_schema.test_view TO test_d;
+GRANT EXECUTE ON FUNCTION test_schema.bit2float8(bit) TO test_d;
+GRANT USAGE ON SCHEMA view_schema TO test_d;
+SET ROLE test_d PASSWORD 'openGauss@123';
+SELECT * FROM view_schema.new_view1;
+ a 
+---
+(0 rows)
+
+SELECT * FROM view_schema.new_view2;
+ ascii 
+-------
+    97
+(1 row)
+
+SELECT * FROM view_schema.new_view3;
+ bit2float8 
+------------
+         15
+(1 row)
+
+RESET ROLE;
+SET ROLE test_c PASSWORD 'openGauss@123';
+SELECT * FROM view_schema.new_view1;
+ a 
+---
+(0 rows)
+
+SELECT * FROM view_schema.new_view2;
+ ascii 
+-------
+    97
+(1 row)
+
+SELECT * FROM view_schema.new_view3;
+ bit2float8 
+------------
+         15
+(1 row)
+
+RESET ROLE;
+\c regression
+-- test label:loop
+--error
+create or replace procedure doiterate(p1 int)
+as
+begin
+label1: loop
+p1 := p1+1;
+if p1 < 10 then
+iterate label1;
+end if;
+leave label1;
+end loop label1;
+raise notice 'p1:%',p1;
+end;
+/
+ERROR:  'label:' is only supported in database which dbcompatibility='B'.
+CONTEXT:  compilation of PL/pgSQL function "doiterate" near line 1
+--error
+create or replace procedure doiterate(p1 int)
+as
+begin
+<<label1>> loop
+p1 := p1+1;
+if p1 < 10 then
+iterate label1;
+end if;
+leave label1;
+end loop label1;
+raise notice 'p1:%',p1;
+end;
+/
+ERROR:  'ITERATE label' is only in database which dbcompatibility='B'.
+CONTEXT:  compilation of PL/pgSQL function "doiterate" near line 3
+--error
+create or replace procedure doiterate(p1 int)
+as
+begin
+<<label1>> loop
+p1 := p1+1;
+if p1 < 10 then
+continue label1;
+end if;
+leave label1;
+end loop label1;
+raise notice 'p1:%',p1;
+end;
+/
+ERROR:  'LEAVE label' is only in database which dbcompatibility='B'.
+CONTEXT:  compilation of PL/pgSQL function "doiterate" near line 4
+--success
+create or replace procedure doiterate(p1 int)
+as
+begin
+<<label1>> loop
+p1 := p1+1;
+if p1 < 10 then
+continue label1;
+end if;
+exit label1;
+end loop label1;
+raise notice 'p1:%',p1;
+end;
+/
+call doiterate(3);
+NOTICE:  p1:10
+ doiterate 
+-----------
+ 
+(1 row)
+
+drop procedure if exists doiterate;
+\c b_cmpt_db
+--success
+create or replace procedure doiterate(p1 int)
+as
+begin
+label1   :
+loop
+p1 := p1+1;
+if p1 < 10 then
+raise notice '123';
+end if;
+exit;
+end loop label1;
+end;
+/
+call doiterate(2);
+NOTICE:  123
+ doiterate 
+-----------
+ 
+(1 row)
+
+--success
+create or replace procedure doiterate(p1 int)
+as
+begin
+LABEL1:
+loop
+p1 := p1+1;
+if p1 < 10 then
+raise notice '123';
+end if;
+exit LABEL1;
+end loop LABEL1;
+end;
+/
+call doiterate(2);
+NOTICE:  123
+ doiterate 
+-----------
+ 
+(1 row)
+
+--success
+create or replace procedure doiterate(p1 int)
+as
+begin
+LABEL1:loop
+p1 := p1+1;
+if p1 < 10 then
+raise notice '123';
+end if;
+exit LABEL1;
+end loop LABEL1;
+end;
+/
+call doiterate(2);
+NOTICE:  123
+ doiterate 
+-----------
+ 
+(1 row)
+
+--success
+create or replace procedure doiterate(p1 int)
+as
+begin
+LAbEL1:
+loop
+p1 := p1+1;
+if p1 < 10 then
+raise notice '123';
+end if;
+exit LABeL1;
+end loop LaBEL1;
+end;
+/
+call doiterate(2);
+NOTICE:  123
+ doiterate 
+-----------
+ 
+(1 row)
+
+--success
+create or replace procedure doiterate(p1 int)
+as
+begin
+label1: loop
+p1 := p1+1;
+if p1 < 10 then
+iterate label1;
+end if;
+leave label1;
+end loop label1;
+raise notice 'p1:%',p1;
+end;
+/
+call doiterate(3);
+NOTICE:  p1:10
+ doiterate 
+-----------
+ 
+(1 row)
+
+create or replace procedure doiterate(p1 int)
+as
+begin
+loop
+p1 := p1+1;
+if p1 < 10 then
+iterate;
+end if;
+leave;
+end loop;
+raise notice 'p1:%',p1;
+end;
+/
+call doiterate(3);
+NOTICE:  p1:10
+ doiterate 
+-----------
+ 
+(1 row)
+
+create or replace function labeltest(n int) return int
+as
+p int;
+i int;
+begin
+p :=2;
+label1:  loop
+if p < n then
+p := p+1;
+iterate label1;
+end if;
+leave label1;
+end loop label1;
+return p;
+end;
+/
+call labeltest(5);
+ labeltest 
+-----------
+         5
+(1 row)
+
+create or replace function labeltest(n int) return int
+as
+p int;
+i int;
+begin
+p :=2;
+LABEL1:  loop
+if p < n then
+p := p+1;
+iterate LABEL1;
+end if;
+leave LABEL1;
+end loop LABEL1;
+return p;
+end;
+/
+call labeltest(3);
+ labeltest 
+-----------
+         3
+(1 row)
+
+create or replace function labeltest(n int) return int
+as
+p int;
+i int;
+begin
+p :=2;
+lAbel1:  loop
+if p < n then
+p := p+1;
+iterate labEl1;
+end if;
+leave LAbel1;
+end loop labEL1;
+return p;
+end;
+/
+call labeltest(7);
+ labeltest 
+-----------
+         7
+(1 row)
+
+create or replace function labeltest(n int) return int
+as
+p int;
+i int;
+begin
+p :=2;
+loop
+if p < n then
+p := p+1;
+iterate;
+end if;
+leave;
+end loop;
+return p;
+end;
+/
+call labeltest(9);
+ labeltest 
+-----------
+         9
+(1 row)
+
+create table tb_1092829(id int);
+-- failed
+create or replace procedure prc_1092829(n int)
+as
+BEGIN
+“abel1*”:
+loop
+n:=n-1;
+IF n<5 then
+LEAVE “label1”;
+END IF;
+insert into tb_1092829 values(n);
+END loop;
+END;
+/
+ERROR:  The label name can only contain letters, digits and underscores
+LINE 2: “abel1*”:
+        ^
+QUERY:   DECLARE BEGIN
+“abel1*”:
+loop
+n:=n-1;
+IF n<5 then
+LEAVE “label1”;
+END IF;
+insert into tb_1092829 values(n);
+END loop;
+END
+-- failed
+create or replace procedure prc_2_1092829(n int)
+as
+BEGIN
+label#:
+loop
+n:=n-1;
+IF n<5 then
+LEAVE label#;
+END IF;
+insert into tb_1092829 values(n);
+END loop;
+END;
+/
+ERROR:  The label name can only contain letters, digits and underscores
+LINE 2: label#:
+             ^
+QUERY:   DECLARE BEGIN
+label#:
+loop
+n:=n-1;
+IF n<5 then
+LEAVE label#;
+END IF;
+insert into tb_1092829 values(n);
+END loop;
+END
+--failed
+create or replace procedure prc_1092829(n int)
+as
+BEGIN
+测试中文:
+loop
+n:=n-1;
+IF n<5 then
+LEAVE 测试中文;
+END IF;
+insert into tb_1092829 values(n);
+END loop;
+END;
+/
+ERROR:  The label name can only contain letters, digits and underscores
+LINE 2: 测试中文:
+        ^
+QUERY:   DECLARE BEGIN
+测试中文:
+loop
+n:=n-1;
+IF n<5 then
+LEAVE 测试中文;
+END IF;
+insert into tb_1092829 values(n);
+END loop;
+END
+-- failed
+create or replace procedure prc_1092829(n int)
+as
+BEGIN
+1_hello:
+loop
+n:=n-1;
+IF n<5 then
+LEAVE 1_hello;
+END IF;
+insert into tb_1092829 values(n);
+END loop;
+END;
+/
+ERROR:  syntax error at or near "1"
+LINE 2: 1_hello:
+        ^
+QUERY:   DECLARE BEGIN
+1_hello:
+loop
+n:=n-1;
+IF n<5 then
+LEAVE 1_hello;
+END IF;
+insert into tb_1092829 values(n);
+END loop;
+END
+-- success
+create or replace procedure prc_1092829(n int)
+as
+BEGIN
+_hello:
+loop
+n:=n-1;
+IF n<5 then
+LEAVE _hello;
+END IF;
+insert into tb_1092829 values(n);
+END loop;
+END;
+/
+call prc_1092829(10);
+ prc_1092829 
+-------------
+ 
+(1 row)
+
+select * from tb_1092829;
+ id 
+----
+  9
+  8
+  7
+  6
+  5
+(5 rows)
+
+drop function prc_1092829;
+drop table tb_1092829;
+--success
+create or replace procedure proc_label(n int)
+as
+BEGIN
+label11111111111111111111111111111111111111111111111111111111112: loop
+n:=n-1;
+IF n<5 then
+LEAVE label11111111111111111111111111111111111111111111111111111111112;
+END IF;
+raise info 'number is %.',n;
+END loop;
+END;
+/
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+CONTEXT:  compilation of PL/pgSQL function "proc_label" near line 1
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+CONTEXT:  compilation of PL/pgSQL function "proc_label" near line 3
+--success
+create or replace procedure proc_label1(n int)
+as
+BEGIN
+label11111111111111111111111111111111111111111111111111111111112    : loop
+n:=n-1;
+IF n<5 then
+LEAVE label11111111111111111111111111111111111111111111111111111111112;
+END IF;
+raise info 'number is %.',n;
+END loop;
+END;
+/
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+CONTEXT:  compilation of PL/pgSQL function "proc_label1" near line 1
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+CONTEXT:  compilation of PL/pgSQL function "proc_label1" near line 3
+call proc_label(5);
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+CONTEXT:  compilation of PL/pgSQL function "proc_label" near line 1
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+CONTEXT:  compilation of PL/pgSQL function "proc_label" near line 3
+ proc_label 
+------------
+ 
+(1 row)
+
+call proc_label1(5);
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+CONTEXT:  compilation of PL/pgSQL function "proc_label1" near line 1
+NOTICE:  identifier "label11111111111111111111111111111111111111111111111111111111112" will be truncated to "label1111111111111111111111111111111111111111111111111111111111"
+CONTEXT:  compilation of PL/pgSQL function "proc_label1" near line 3
+ proc_label1 
+-------------
+ 
+(1 row)
+
+drop procedure if exists doiterate;
+drop function if exists labeltest;
+drop function if exists proc_label;
+drop function if exists proc_label1;
+\c regression
+create or replace procedure func_zzm(num1 in int, num2 inout int, res out int)
+as begin
+num2 := num2 + 1;
+res := num1 + 1;
+end;
+/
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+func_zzm(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+--error
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call func_zzm(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+ERROR:  query has no destination for result data
+HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+CONTEXT:  PL/pgSQL function inline_code_block line 6 at SQL statement
+CREATE OR REPLACE FUNCTION func1(num1 in int, num2 inout int, res out int) RETURNS record
+AS $$
+DECLARE
+BEGIN
+num2 := num2 + 1;
+res := num1 + 1;
+return;
+END
+$$
+LANGUAGE plpgsql;
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+raise notice '%,%',n1,n2;
+func1(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  10,100
+NOTICE:  11,2
+--error
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+raise notice '%,%',n1,n2;
+call func1(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  10,100
+ERROR:  query has no destination for result data
+HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+CONTEXT:  PL/pgSQL function inline_code_block line 7 at SQL statement
+create or replace procedure debug(num1 in int, num2 inout int, res out int)
+as begin
+num2 := num2 + 1;
+res := num1 + 1;
+end;
+/
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+debug(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+--error
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call debug(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+ERROR:  query has no destination for result data
+HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+CONTEXT:  PL/pgSQL function inline_code_block line 6 at SQL statement
+create or replace procedure call(num1 in int, num2 inout int, res out int)
+as begin
+num2 := num2 + 1;
+res := num1 + 1;
+end;
+/
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+--error
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call call(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+ERROR:  query has no destination for result data
+HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+CONTEXT:  PL/pgSQL function inline_code_block line 6 at SQL statement
+drop procedure call;
+CREATE OR REPLACE FUNCTION call() RETURNS int
+AS $$
+DECLARE
+n int;
+BEGIN
+n := 1;
+return 1;
+END
+$$
+LANGUAGE plpgsql;
+--success
+declare
+begin
+call();
+end;
+/
+--error
+declare
+begin
+call;
+end;
+/
+ERROR:  syntax error at end of input
+LINE 2: call;
+            ^
+QUERY:  DECLARE begin
+call;
+end
+--error
+declare
+begin
+call call();
+end;
+/
+ERROR:  query has no destination for result data
+HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+CONTEXT:  PL/pgSQL function inline_code_block line 2 at SQL statement
+--error
+declare
+begin
+call call;
+end;
+/
+ERROR:  syntax error at end of input
+LINE 2: call call;
+                 ^
+QUERY:  DECLARE begin
+call call;
+end
+create schema test;
+CREATE OR REPLACE FUNCTION test.func1() RETURNS int
+AS $$
+DECLARE
+n int;
+BEGIN
+n := 1;
+return 1;
+END
+$$
+LANGUAGE plpgsql;
+--success
+declare
+begin
+test.func1();
+end;
+/
+--error
+declare
+begin
+call test.func1();
+end;
+/
+ERROR:  query has no destination for result data
+HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+CONTEXT:  PL/pgSQL function inline_code_block line 2 at SQL statement
+create or replace procedure test.debug(num1 in int, num2 inout int, res out int)
+as begin
+num2 := num2 + 1;
+res := num1 + 1;
+end;
+/
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+test.debug(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+--error
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call test.debug(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+ERROR:  query has no destination for result data
+HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+CONTEXT:  PL/pgSQL function inline_code_block line 6 at SQL statement
+create or replace procedure test.call(num1 in int, num2 inout int, res out int)
+as begin
+num2 := num2 + 1;
+res := num1 + 1;
+end;
+/
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+test.call(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+--error
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call test.call(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+ERROR:  query has no destination for result data
+HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+CONTEXT:  PL/pgSQL function inline_code_block line 6 at SQL statement
+drop procedure func_zzm;
+drop function func1;
+drop procedure debug;
+drop procedure call;
+drop schema test CASCADE;
+NOTICE:  drop cascades to 3 other objects
+DETAIL:  drop cascades to function test.func1()
+drop cascades to function test.debug(integer,integer)
+drop cascades to function test.call(integer,integer)
+\c b_cmpt_db
+create or replace procedure func_zzm(num1 in int, num2 inout int, res out int)
+as begin
+num2 := num2 + 1;
+res := num1 + 1;
+end;
+/
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+func_zzm(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call func_zzm(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+CREATE OR REPLACE FUNCTION func1(num1 in int, num2 inout int, res out int) RETURNS record
+AS $$
+DECLARE
+BEGIN
+num2 := num2 + 1;
+res := num1 + 1;
+return;
+END
+$$
+LANGUAGE plpgsql;
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+raise notice '%,%',n1,n2;
+func1(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  10,100
+NOTICE:  11,2
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+raise notice '%,%',n1,n2;
+call func1(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  10,100
+NOTICE:  11,2
+create or replace procedure debug(num1 in int, num2 inout int, res out int)
+as begin
+num2 := num2 + 1;
+res := num1 + 1;
+end;
+/
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+debug(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call debug(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+create or replace procedure call(num1 in int, num2 inout int, res out int)
+as begin
+num2 := num2 + 1;
+res := num1 + 1;
+end;
+/
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call call(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+drop procedure call;
+CREATE OR REPLACE FUNCTION call() RETURNS int
+AS $$
+DECLARE
+n int;
+BEGIN
+n := 1;
+return 1;
+END
+$$
+LANGUAGE plpgsql;
+--success
+declare
+begin
+call();
+end;
+/
+--error
+declare
+begin
+call;
+end;
+/
+ERROR:  syntax error at end of input
+LINE 2: call;
+            ^
+QUERY:  DECLARE begin
+call;
+end
+--success
+declare
+begin
+call call();
+end;
+/
+--error
+declare
+begin
+call call;
+end;
+/
+ERROR:  syntax error at end of input
+LINE 2: call call;
+                 ^
+QUERY:  DECLARE begin
+call call;
+end
+create schema test;
+CREATE OR REPLACE FUNCTION test.func1() RETURNS int
+AS $$
+DECLARE
+n int;
+BEGIN
+n := 1;
+return 1;
+END
+$$
+LANGUAGE plpgsql;
+--success
+declare
+begin
+test.func1();
+end;
+/
+--success
+declare
+begin
+call test.func1();
+end;
+/
+create or replace procedure test.debug(num1 in int, num2 inout int, res out int)
+as begin
+num2 := num2 + 1;
+res := num1 + 1;
+end;
+/
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+test.debug(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call test.debug(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+create or replace procedure test.call(num1 in int, num2 inout int, res out int)
+as begin
+num2 := num2 + 1;
+res := num1 + 1;
+end;
+/
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+test.call(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+--success
+declare
+n1 int;
+n2 int;
+begin
+n1 := 10;
+n2 := 100;
+call test.call(1,n1,n2);
+raise notice '%,%',n1,n2;
+end;
+/
+NOTICE:  11,2
+drop procedure func_zzm;
+drop function func1;
+drop procedure debug;
+drop procedure call;
+drop schema test CASCADE;
+NOTICE:  drop cascades to 3 other objects
+DETAIL:  drop cascades to function test.func1()
+drop cascades to function test.debug(integer,integer)
+drop cascades to function test.call(integer,integer)
+\c regression
+--error
+create or replace function while_test1() returns void as $$
+declare _i integer = 0; _r record;
+begin
+  raise notice '---1---';
+  while _i < 10 do
+    _i := _i + 1;
+    raise notice '%', _i;
+  end while;
+
+  raise notice '---2---';
+  <<lbl>>
+  while _i > 0 do
+    _i := _i - 1;
+    loop
+      raise notice '%', _i;
+      continue lbl when _i > 0;
+      exit lbl;
+    end loop;
+  end while;
+
+  raise notice '---3---';
+  the_while:
+  while _i < 10 do
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end while the_while;
+
+  the_while1:while _i < 10 do
+    _i := _i + 1;
+    continue the_while1 when _i % 2 = 0;
+    raise notice '%', _i;
+  end while the_while1;
+
+  raise notice '---3---';
+  _i := 1;
+  while _i <= 3 loop
+    raise notice '%', _i;
+    _i := _i + 1;
+    continue when _i = 3;
+  end loop;
+end; $$ language plpgsql;
+ERROR:  'while-do' is only supported in database which dbcompatibility='B'.
+CONTEXT:  compilation of PL/pgSQL function "while_test1" near line 4
+--error
+create or replace function while_test1() returns void as $$
+declare _i integer = 0; _r record;
+begin
+  while _i < 10 do
+    _i := _i + 1;
+    raise notice '%', _i;
+  end while the_while;
+end; $$ language plpgsql;
+ERROR:  'while-do' is only supported in database which dbcompatibility='B'.
+CONTEXT:  compilation of PL/pgSQL function "while_test1" near line 2
+--error
+create or replace function while_test1() returns void as $$
+declare _i integer = 10; _r record;
+begin
+  <<lbl>>
+  while _i > 0 do
+    _i := _i - 1;
+    loop
+      raise notice '%', _i;
+      continue lbl when _i > 0;
+      exit lbl;
+    end loop;
+  end while lbl;
+end; $$ language plpgsql;
+ERROR:  'while-do' is only supported in database which dbcompatibility='B'.
+CONTEXT:  compilation of PL/pgSQL function "while_test1" near line 2
+--error
+create or replace function while_test1() returns void as $$
+declare _i integer = 0; _r record;
+begin
+  the_while:
+  while _i < 10 do
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end while the_while;
+end; $$ language plpgsql;
+ERROR:  'label:' is only supported in database which dbcompatibility='B'.
+CONTEXT:  compilation of PL/pgSQL function "while_test1" near line 2
+--success
+create or replace function while_test1() returns void as $$
+declare _i integer = 10; _r record;
+begin
+  <<lbl>>
+  while _i > 0 loop
+    _i := _i - 1;
+    loop
+      raise notice '%', _i;
+      continue lbl when _i > 0;
+      exit lbl;
+    end loop;
+  end loop lbl;
+end; $$ language plpgsql;
+select while_test1();
+NOTICE:  9
+CONTEXT:  referenced column: while_test1
+NOTICE:  8
+CONTEXT:  referenced column: while_test1
+NOTICE:  7
+CONTEXT:  referenced column: while_test1
+NOTICE:  6
+CONTEXT:  referenced column: while_test1
+NOTICE:  5
+CONTEXT:  referenced column: while_test1
+NOTICE:  4
+CONTEXT:  referenced column: while_test1
+NOTICE:  3
+CONTEXT:  referenced column: while_test1
+NOTICE:  2
+CONTEXT:  referenced column: while_test1
+NOTICE:  1
+CONTEXT:  referenced column: while_test1
+NOTICE:  0
+CONTEXT:  referenced column: while_test1
+ while_test1 
+-------------
+ 
+(1 row)
+
+drop function while_test1;
+\c b_cmpt_db
+create or replace function while_test1() returns void as $$
+declare _i integer = 0; _r record;
+begin
+  raise notice '---1---';
+  while _i < 10 do
+    _i := _i + 1;
+    raise notice '%', _i;
+  end while;
+
+  raise notice '---2---';
+  <<lbl>>
+  while _i > 0 do
+    _i := _i - 1;
+    loop
+      raise notice '%', _i;
+      continue lbl when _i > 0;
+      exit lbl;
+    end loop;
+  end while;
+
+  raise notice '---3---';
+  the_while:
+  while _i < 10 do
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end while the_while;
+
+  the_while1:while _i < 10 do
+    _i := _i + 1;
+    continue the_while1 when _i % 2 = 0;
+    raise notice '%', _i;
+  end while the_while1;
+
+  raise notice '---3---';
+  _i := 1;
+  while _i <= 3 loop
+    raise notice '%', _i;
+    _i := _i + 1;
+    continue when _i = 3;
+  end loop;
+end; $$ language plpgsql;
+select while_test1();
+NOTICE:  ---1---
+CONTEXT:  referenced column: while_test1
+NOTICE:  1
+CONTEXT:  referenced column: while_test1
+NOTICE:  2
+CONTEXT:  referenced column: while_test1
+NOTICE:  3
+CONTEXT:  referenced column: while_test1
+NOTICE:  4
+CONTEXT:  referenced column: while_test1
+NOTICE:  5
+CONTEXT:  referenced column: while_test1
+NOTICE:  6
+CONTEXT:  referenced column: while_test1
+NOTICE:  7
+CONTEXT:  referenced column: while_test1
+NOTICE:  8
+CONTEXT:  referenced column: while_test1
+NOTICE:  9
+CONTEXT:  referenced column: while_test1
+NOTICE:  10
+CONTEXT:  referenced column: while_test1
+NOTICE:  ---2---
+CONTEXT:  referenced column: while_test1
+NOTICE:  9
+CONTEXT:  referenced column: while_test1
+NOTICE:  8
+CONTEXT:  referenced column: while_test1
+NOTICE:  7
+CONTEXT:  referenced column: while_test1
+NOTICE:  6
+CONTEXT:  referenced column: while_test1
+NOTICE:  5
+CONTEXT:  referenced column: while_test1
+NOTICE:  4
+CONTEXT:  referenced column: while_test1
+NOTICE:  3
+CONTEXT:  referenced column: while_test1
+NOTICE:  2
+CONTEXT:  referenced column: while_test1
+NOTICE:  1
+CONTEXT:  referenced column: while_test1
+NOTICE:  0
+CONTEXT:  referenced column: while_test1
+NOTICE:  ---3---
+CONTEXT:  referenced column: while_test1
+NOTICE:  1
+CONTEXT:  referenced column: while_test1
+NOTICE:  3
+CONTEXT:  referenced column: while_test1
+NOTICE:  5
+CONTEXT:  referenced column: while_test1
+NOTICE:  7
+CONTEXT:  referenced column: while_test1
+NOTICE:  9
+CONTEXT:  referenced column: while_test1
+NOTICE:  ---3---
+CONTEXT:  referenced column: while_test1
+NOTICE:  1
+CONTEXT:  referenced column: while_test1
+NOTICE:  2
+CONTEXT:  referenced column: while_test1
+NOTICE:  3
+CONTEXT:  referenced column: while_test1
+ while_test1 
+-------------
+ 
+(1 row)
+
+--error
+create or replace function while_test1() returns void as $$
+declare _i integer = 0; _r record;
+begin
+  while _i < 10 do
+    _i := _i + 1;
+    raise notice '%', _i;
+  end while the_while;
+end; $$ language plpgsql;
+ERROR:  end label "the_while" specified for unlabelled block
+LINE 7:   end while the_while;
+                    ^
+create or replace function while_test1() returns void as $$
+declare _i integer = 10; _r record;
+begin
+  <<lbl>>
+  while _i > 0 do
+    _i := _i - 1;
+    loop
+      raise notice '%', _i;
+      continue lbl when _i > 0;
+      exit lbl;
+    end loop;
+  end while lbl;
+end; $$ language plpgsql;
+select while_test1();
+NOTICE:  9
+CONTEXT:  referenced column: while_test1
+NOTICE:  8
+CONTEXT:  referenced column: while_test1
+NOTICE:  7
+CONTEXT:  referenced column: while_test1
+NOTICE:  6
+CONTEXT:  referenced column: while_test1
+NOTICE:  5
+CONTEXT:  referenced column: while_test1
+NOTICE:  4
+CONTEXT:  referenced column: while_test1
+NOTICE:  3
+CONTEXT:  referenced column: while_test1
+NOTICE:  2
+CONTEXT:  referenced column: while_test1
+NOTICE:  1
+CONTEXT:  referenced column: while_test1
+NOTICE:  0
+CONTEXT:  referenced column: while_test1
+ while_test1 
+-------------
+ 
+(1 row)
+
+create or replace function while_test1() returns void as $$
+declare _i integer = 10; _r record;
+begin
+  <<lbl>>
+  while _i > 0 loop
+    _i := _i - 1;
+    loop
+      raise notice '%', _i;
+      continue lbl when _i > 0;
+      exit lbl;
+    end loop;
+  end loop lbl;
+end; $$ language plpgsql;
+select while_test1();
+NOTICE:  9
+CONTEXT:  referenced column: while_test1
+NOTICE:  8
+CONTEXT:  referenced column: while_test1
+NOTICE:  7
+CONTEXT:  referenced column: while_test1
+NOTICE:  6
+CONTEXT:  referenced column: while_test1
+NOTICE:  5
+CONTEXT:  referenced column: while_test1
+NOTICE:  4
+CONTEXT:  referenced column: while_test1
+NOTICE:  3
+CONTEXT:  referenced column: while_test1
+NOTICE:  2
+CONTEXT:  referenced column: while_test1
+NOTICE:  1
+CONTEXT:  referenced column: while_test1
+NOTICE:  0
+CONTEXT:  referenced column: while_test1
+ while_test1 
+-------------
+ 
+(1 row)
+
+create or replace function while_test1() returns void as $$
+declare _i integer = 0; _r record;
+begin
+  the_while:
+  while _i < 10 do
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end while the_while;
+end; $$ language plpgsql;
+select while_test1();
+NOTICE:  1
+CONTEXT:  referenced column: while_test1
+NOTICE:  3
+CONTEXT:  referenced column: while_test1
+NOTICE:  5
+CONTEXT:  referenced column: while_test1
+NOTICE:  7
+CONTEXT:  referenced column: while_test1
+NOTICE:  9
+CONTEXT:  referenced column: while_test1
+ while_test1 
+-------------
+ 
+(1 row)
+
+--error
+create or replace function while_test1() returns void as $$
+declare _i integer = 0; _r record;
+begin
+  the_while:
+  while _i < 10 loop
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end while the_while;
+end; $$ language plpgsql;
+ERROR:  while-loop syntax is mixed with while-do syntax
+LINE 5:   while _i < 10 loop
+          ^
+--error
+create or replace function while_test1() returns void as $$
+declare _i integer = 0; _r record;
+begin
+  the_while:
+  while _i < 10 do
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end loop the_while;
+end; $$ language plpgsql;
+ERROR:  while-loop syntax is mixed with while-do syntax
+LINE 5:   while _i < 10 do
+          ^
+create or replace procedure while_test2()
+as 
+declare _i integer = 0;
+BEGIN
+the_while:
+  while _i < 10 do
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end while the_while;
+end; 
+/
+select while_test2();
+NOTICE:  1
+CONTEXT:  referenced column: while_test2
+NOTICE:  3
+CONTEXT:  referenced column: while_test2
+NOTICE:  5
+CONTEXT:  referenced column: while_test2
+NOTICE:  7
+CONTEXT:  referenced column: while_test2
+NOTICE:  9
+CONTEXT:  referenced column: while_test2
+ while_test2 
+-------------
+ 
+(1 row)
+
+--error
+create or replace procedure while_test2()
+as 
+declare _i integer = 0;
+BEGIN
+the_while:
+  while _i < 10 loop
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end while the_while;
+end; 
+/
+ERROR:  while-loop syntax is mixed with while-do syntax
+LINE 4:   while _i < 10 loop
+          ^
+QUERY:  declare _i integer = 0;
+BEGIN
+the_while:
+  while _i < 10 loop
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end while the_while;
+end
+--error
+create or replace procedure while_test2()
+as 
+declare _i integer = 0;
+BEGIN
+  while _i < 10 do
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end loop;
+end; 
+/
+ERROR:  while-loop syntax is mixed with while-do syntax
+LINE 3:   while _i < 10 do
+          ^
+QUERY:  declare _i integer = 0;
+BEGIN
+  while _i < 10 do
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end loop;
+end
+--error
+create or replace procedure while_test2()
+as 
+declare _i integer = 0;
+BEGIN
+  while _i < 10 loop
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end while;
+end; 
+/
+ERROR:  while-loop syntax is mixed with while-do syntax
+LINE 3:   while _i < 10 loop
+          ^
+QUERY:  declare _i integer = 0;
+BEGIN
+  while _i < 10 loop
+    _i := _i + 1;
+    continue the_while when _i % 2 = 0;
+    raise notice '%', _i;
+  end while;
+end
+drop function while_test1;
+drop procedure while_test2;
+\c regression
+--error
+CREATE or replace PROCEDURE dorepeat(p1 INT)
+as 
+declare
+i int =0;
+BEGIN
+repeat
+i = i + 1;
+until i >p1 end repeat;
+raise notice '%',i;
+end;
+/
+ERROR:  'repeat' is only supported in database which dbcompatibility='B'.
+CONTEXT:  compilation of PL/pgSQL function "dorepeat" near line 5
+--error
+CREATE or replace PROCEDURE dorepeat(p1 INT)
+as 
+declare
+i int =0;
+BEGIN
+<<label>>
+repeat
+i = i + 1;
+until i >p1 end repeat label;
+raise notice '%',i;
+end;
+/
+ERROR:  'repeat' is only supported in database which dbcompatibility='B'.
+CONTEXT:  compilation of PL/pgSQL function "dorepeat" near line 6
+--error
+CREATE or replace PROCEDURE dorepeat(p1 INT)
+as 
+declare
+i int =0;
+BEGIN
+label:
+repeat
+i = i + 1;
+until i >p1 end repeat label;
+raise notice '%',i;
+end;
+/
+ERROR:  'label:' is only supported in database which dbcompatibility='B'.
+CONTEXT:  compilation of PL/pgSQL function "dorepeat" near line 2
+drop function if exists dorepeat;
+NOTICE:  function dorepeat() does not exist, skipping
+\c b_cmpt_db
+--success
+CREATE or replace PROCEDURE dorepeat(p1 INT)
+as 
+declare
+i int =0;
+BEGIN
+repeat
+i = i + 1;
+until i >p1 end repeat;
+raise notice '%',i;
+end;
+/
+select dorepeat(5);
+NOTICE:  6
+CONTEXT:  referenced column: dorepeat
+ dorepeat 
+----------
+ 
+(1 row)
+
+--success
+CREATE or replace PROCEDURE dorepeat(p1 INT)
+as 
+declare
+i int =0;
+BEGIN
+<<label>>
+repeat
+i = i + 1;
+until i >p1 end repeat label;
+raise notice '%',i;
+end;
+/
+select dorepeat(5);
+NOTICE:  6
+CONTEXT:  referenced column: dorepeat
+ dorepeat 
+----------
+ 
+(1 row)
+
+--success
+CREATE or replace PROCEDURE dorepeat(p1 INT)
+as 
+declare
+i int =0;
+BEGIN
+label:
+repeat
+i = i + 1;
+until i >p1 end repeat label;
+raise notice '%',i;
+end;
+/
+select dorepeat(5);
+NOTICE:  6
+CONTEXT:  referenced column: dorepeat
+ dorepeat 
+----------
+ 
+(1 row)
+
+--success
+CREATE or replace PROCEDURE dorepeat(p1 INT)
+as
+declare
+i int =0;
+BEGIN
+label:repeat
+i = i + 1;
+until i >p1 end repeat label;
+raise notice '%',i;
+end;
+/
+select dorepeat(5);
+NOTICE:  6
+CONTEXT:  referenced column: dorepeat
+ dorepeat 
+----------
+ 
+(1 row)
+
+--error
+CREATE or replace PROCEDURE dorepeat(p1 INT)
+as 
+declare
+i int =0;
+BEGIN
+repeat:
+repeat
+i = i + 1;
+until i >p1 end repeat;
+raise notice '%',i;
+end;
+/
+ERROR:  The label name is invalid
+LINE 4: repeat:
+              ^
+QUERY:  declare
+i int =0;
+BEGIN
+repeat:
+repeat
+i = i + 1;
+until i >p1 end repeat;
+raise notice '%',i;
+end
+drop function if exists dorepeat;
+set behavior_compat_options='select_into_return_null';
+create table test_table_030(id int, name text);
+insert into test_table_030 values(1,'a'),(2,'b');
+CREATE OR REPLACE FUNCTION select_into_null_func(canshu varchar(16))
+returns int
+as $$
+DECLARE test_table_030a int;
+begin
+    SELECT ID into test_table_030a FROM test_table_030 WHERE NAME = canshu;
+    return test_table_030a;
+end; $$ language plpgsql;
+select select_into_null_func('aaa');
+ select_into_null_func 
+-----------------------
+                      
+(1 row)
+
+select select_into_null_func('aaa') is null;
+ ?column? 
+----------
+ t
+(1 row)
+
+drop table test_table_030;
+drop function select_into_null_func;
+reset behavior_compat_options;
+-- view sql security test
+create database db_a1144425 dbcompatibility 'B';
+\c db_a1144425;
+create user use_a_1144425 identified by 'A@123456';
+create user use_b_1144425 identified by 'A@123456';
+create table sql_security_1144425(id int,cal int);
+insert into sql_security_1144425 values(1,1);
+insert into sql_security_1144425 values(2,2);
+insert into sql_security_1144425 values(3,3);
+--user a can create view in shcema
+grant all on schema public to use_a_1144425;
+-- definer 
+create definer=use_a_1144425 sql security definer view v_1144425_2 as select * from sql_security_1144425;
+-- invoker 
+create definer=use_a_1144425 sql security invoker view v_1144425_1 as select * from sql_security_1144425;
+--user a call view shoule be failed cause table operation
+set role use_a_1144425 password 'A@123456';
+select * from sql_security_1144425 order by 1,2;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+-- call definer\invoker  view shoule be failed
+select * from v_1144425_2 order by 1,2;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+select * from v_1144425_1 order by 1,2;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+-- root user shoule success in invoker ,failed in definer
+reset role;
+select * from v_1144425_2 order by 1,2;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+select * from v_1144425_1 order by 1,2;
+ id | cal 
+----+-----
+  1 |   1
+  2 |   2
+  3 |   3
+(3 rows)
+
+--user b call view shoule filed , no view permission both
+set role use_b_1144425 password 'A@123456';
+select * from v_1144425_2 order by 1,2;
+ERROR:  permission denied for relation v_1144425_2
+DETAIL:  N/A
+select * from v_1144425_1 order by 1,2;
+ERROR:  permission denied for relation v_1144425_1
+DETAIL:  N/A
+--give user b permission of view , no table permission both
+reset role;
+grant all on table v_1144425_2 to use_b_1144425;
+grant all on table v_1144425_1 to use_b_1144425;
+set role use_b_1144425 password 'A@123456';
+select * from v_1144425_2 order by 1,2;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+select * from v_1144425_1 order by 1,2;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+-- give user b permission of table , invoker success 
+reset role;
+grant all on table sql_security_1144425 to use_b_1144425;
+set role use_b_1144425 password 'A@123456';
+select * from v_1144425_2 order by 1,2;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+select * from v_1144425_1 order by 1,2;
+ id | cal 
+----+-----
+  1 |   1
+  2 |   2
+  3 |   3
+(3 rows)
+
+-- give user a permission of table , definer  success 
+reset role;
+grant all on table sql_security_1144425 to use_a_1144425;
+set role use_b_1144425 password 'A@123456';
+select * from v_1144425_2 order by 1,2;
+ id | cal 
+----+-----
+  1 |   1
+  2 |   2
+  3 |   3
+(3 rows)
+
+-- revoke user b permision of table , definer success, invoker failed
+reset role;
+revoke all on table sql_security_1144425 from use_b_1144425;
+set role use_b_1144425 password 'A@123456';
+select * from v_1144425_2 order by 1,2;
+ id | cal 
+----+-----
+  1 |   1
+  2 |   2
+  3 |   3
+(3 rows)
+
+select * from v_1144425_1 order by 1,2;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+reset role;
+-- test auth passdown for multi view;
+--clear all 
+drop table sql_security_1144425 cascade;
+NOTICE:  drop cascades to 2 other objects
+DETAIL:  drop cascades to view v_1144425_2
+drop cascades to view v_1144425_1
+drop user use_a_1144425 cascade;
+drop user use_b_1144425 cascade;
+create user use_a_1144425 identified by 'A@123456';
+create user use_b_1144425 identified by 'A@123456';
+create table sql_security_1144425(id int,cal int);
+insert into sql_security_1144425 values(1,1);
+--user a can create view in shcema
+grant all on schema public to use_a_1144425;
+-- definer view v_d_inner
+create definer=use_a_1144425 sql security definer view v_d_inner as select * from sql_security_1144425;
+-- invoker view v_i_inner
+create definer=use_a_1144425 sql security invoker view v_i_inner as select * from sql_security_1144425;
+-- definer view v_d_d_outer
+create definer=use_a_1144425 sql security definer view v_d_d_outer as select * from v_d_inner;
+-- definer view v_d_i_outer
+create definer=use_a_1144425 sql security definer view v_d_i_outer as select * from v_i_inner;
+-- definer view v_i_d_outer
+create definer=use_a_1144425 sql security invoker view v_i_d_outer as select * from v_d_inner;
+-- definer view v_i_i_outer
+create definer=use_a_1144425 sql security invoker view v_i_i_outer as select * from v_i_inner;
+-- root could only success in vii 
+select * from v_i_i_outer;
+ id | cal 
+----+-----
+  1 |   1
+(1 row)
+
+select * from v_i_d_outer;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+select * from v_d_i_outer;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+select * from v_d_d_outer;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+-- give user b permisson of view;
+grant all on table v_i_i_outer to use_b_1144425;
+grant all on table v_i_d_outer to use_b_1144425;
+grant all on table v_d_i_outer to use_b_1144425;
+grant all on table v_d_d_outer to use_b_1144425;
+-- user b got error of table ,in vdi ,vdd. vii ,vid got view error
+set role use_b_1144425 password 'A@123456';
+select * from v_i_i_outer;
+ERROR:  permission denied for relation v_i_inner
+DETAIL:  N/A
+select * from v_i_d_outer;
+ERROR:  permission denied for relation v_d_inner
+DETAIL:  N/A
+select * from v_d_i_outer;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+select * from v_d_d_outer;
+ERROR:  permission denied for relation sql_security_1144425
+DETAIL:  N/A
+--now give user a permission of table 
+reset role;
+grant all on table sql_security_1144425 to use_a_1144425;
+-- root could  success in all 
+select * from v_i_i_outer;
+ id | cal 
+----+-----
+  1 |   1
+(1 row)
+
+select * from v_i_d_outer;
+ id | cal 
+----+-----
+  1 |   1
+(1 row)
+
+select * from v_d_i_outer;
+ id | cal 
+----+-----
+  1 |   1
+(1 row)
+
+select * from v_d_d_outer;
+ id | cal 
+----+-----
+  1 |   1
+(1 row)
+
+-- user b only success in  vdd , vdi
+set role use_b_1144425 password 'A@123456';
+select * from v_i_i_outer;
+ERROR:  permission denied for relation v_i_inner
+DETAIL:  N/A
+select * from v_i_d_outer;
+ERROR:  permission denied for relation v_d_inner
+DETAIL:  N/A
+select * from v_d_i_outer;
+ id | cal 
+----+-----
+  1 |   1
+(1 row)
+
+select * from v_d_d_outer;
+ id | cal 
+----+-----
+  1 |   1
+(1 row)
+
+reset role;
+-- coverage test
+create view v1 as select * from sql_security_1144425;
+create or replace view v1 as select * from sql_security_1144425;
+create or replace definer=use_a_1144425 view v1 as select * from sql_security_1144425;
+create sql security invoker view v2 as select * from sql_security_1144425;
+create or replace sql security invoker view v2 as select * from sql_security_1144425;
+create or replace definer=use_a_1144425 sql security invoker view v2 as select * from sql_security_1144425;
+alter view v1 as select * from sql_security_1144425;
+alter definer=use_a_1144425 view v1 as select * from sql_security_1144425;
+alter sql security definer view v2 as select * from sql_security_1144425;
+alter definer=use_a_1144425 sql security definer view v2 as select * from sql_security_1144425;
+alter sql security definer view v1 as select * from sql_security_1144425;
+alter definer=use_a_1144425 sql security definer view v1 as select * from sql_security_1144425;
+--pg_dump test 
+--see view_definer_test.source
+--clear all 
+drop table sql_security_1144425 cascade;
+NOTICE:  drop cascades to 8 other objects
+DETAIL:  drop cascades to view v_d_inner
+drop cascades to view v_d_d_outer
+drop cascades to view v_i_d_outer
+drop cascades to view v_i_inner
+drop cascades to view v_d_i_outer
+drop cascades to view v_i_i_outer
+drop cascades to view v2
+drop cascades to view v1
+drop user use_a_1144425 cascade;
+drop user use_b_1144425 cascade;
+-- sql security end 
+\c regression
+drop database b_cmpt_db;
+drop database db_a1144425;
+DROP USER test_c;
+DROP USER test_d;
+-- view sql security bugfix
+create database db_a1144877 dbcompatibility 'B';
+\c db_a1144877;
+create user use_a_1144877 identified by 'A@123456';
+create user use_b_1144877 identified by 'A@123456';
+--create
+create table sql_security_1144877(id int,cal int);
+insert into sql_security_1144877 values(1,1);
+insert into sql_security_1144877 values(2,2);
+insert into sql_security_1144877 values(3,3);
+create schema s_1144877;
+create table s_1144877.sql_security_1144877(id int,cal int);
+insert into s_1144877.sql_security_1144877 values(2,1);
+insert into s_1144877.sql_security_1144877 values(3,2);
+insert into s_1144877.sql_security_1144877 values(4,3);
+create or replace procedure p_1144877 as
+begin
+create sql security invoker view v_1144877 as select * from s_1144877.sql_security_1144877;
+
+create sql security definer view v_1144877_1 as select * from sql_security_1144877;
+end;
+/
+call p_1144877();
+ p_1144877 
+-----------
+ 
+(1 row)
+
+--root pass 
+select * from v_1144877 order by 1,2;
+ id | cal 
+----+-----
+  2 |   1
+  3 |   2
+  4 |   3
+(3 rows)
+
+select * from v_1144877_1 order by 1,2;
+ id | cal 
+----+-----
+  1 |   1
+  2 |   2
+  3 |   3
+(3 rows)
+
+--a call 
+grant select on v_1144877 to use_a_1144877;
+grant select on v_1144877_1 to use_a_1144877;
+grant all on table s_1144877.sql_security_1144877 to use_a_1144877;
+set role use_a_1144877 password 'A@123456';
+select * from v_1144877 order by 1,2;
+ERROR:  permission denied for schema s_1144877
+DETAIL:  N/A
+select * from v_1144877_1 order by 1,2;
+ id | cal 
+----+-----
+  1 |   1
+  2 |   2
+  3 |   3
+(3 rows)
+
+reset role;
+drop user use_a_1144877 cascade;
+drop user use_b_1144877 cascade;
+\c regression
+drop database db_a1144877;

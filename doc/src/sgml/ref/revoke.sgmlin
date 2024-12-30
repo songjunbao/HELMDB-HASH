@@ -1,0 +1,128 @@
+<refentry id="SQL-REVOKE">
+<refmeta>
+<refentrytitle>REVOKE</refentrytitle>
+<manvolnum>7</manvolnum>
+<refmiscinfo>SQL - Language Statements</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>REVOKE</refname>
+<refpurpose>remove access privileges</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis>
+REVOKE [ GRANT OPTION FOR ]
+    { { SELECT | INSERT | UPDATE | DELETE | TRUNCATE | REFERENCES |
+    ALTER | DROP | COMMENT | INDEX | VACUUM } [, ...] | ALL [ PRIVILEGES ] }
+    ON { [ TABLE ] table_name [, ...]
+         | ALL TABLES IN SCHEMA schema_name [, ...] }
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { {{ SELECT | INSERT | UPDATE | REFERENCES | COMMENT } ( column_name [, ...] )}
+    [, ...] | ALL [ PRIVILEGES ] ( column_name [, ...] ) }
+    ON [ TABLE ] table_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { SELECT | UPDATE | ALTER | DROP | COMMENT } [, ...]
+    | ALL [ PRIVILEGES ] }
+    ON { [ SEQUENCE ] sequence_name [, ...]
+    | ALL SEQUENCES IN SCHEMA schema_name [, ...] }
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { CREATE | CONNECT | TEMPORARY | TEMP | ALTER | DROP | COMMENT } [, ...] | ALL [ PRIVILEGES ] }
+    ON DATABASE database_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { USAGE | ALL [ PRIVILEGES ] }
+    ON DOMAIN domain_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { USAGE | DROP } [, ...] | ALL [PRIVILEGES] }
+    ON CLIENT_MASTER_KEYS client_master_keys_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { USAGE | DROP } [, ...] | ALL [PRIVILEGES]}
+    ON COLUMN_ENCRYPTION_KEYS column_encryption_keys_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { READ | WRITE | ALTER | DROP } [, ...] | ALL [ PRIVILEGES ] }
+    ON DIRECTORY directory_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { USAGE | ALL [ PRIVILEGES ] }
+    ON FOREIGN DATA WRAPPER fdw_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { USAGE | ALTER | DROP | COMMENT } [, ...] | ALL [ PRIVILEGES ] }
+    ON FOREIGN SERVER server_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { EXECUTE | ALTER | DROP | COMMENT } [, ...] | ALL [ PRIVILEGES ] }
+    ON { FUNCTION {function_name ( [ {[ argmode ] [ arg_name ] arg_type} [, ...] ] )} [, ...]
+         | ALL FUNCTIONS IN SCHEMA schema_name [, ...] }
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { USAGE | ALL [ PRIVILEGES ] }
+    ON LANGUAGE lang_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { {CREATE | USAGE | COMPUTE | ALTER | DROP } [, ...] | ALL [ PRIVILEGES ] }
+    ON NODE GROUP group_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { SELECT | UPDATE } [, ...] | ALL [ PRIVILEGES ] }
+    ON LARGE OBJECT loid [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { CREATE | USAGE | ALTER | DROP | COMMENT } [, ...] | ALL [ PRIVILEGES ] }
+    ON SCHEMA schema_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { CREATE | ALTER | DROP | COMMENT } [, ...] | ALL [ PRIVILEGES ] }
+    ON TABLESPACE tablespace_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { { USAGE | ALTER | DROP | COMMENT } [, ...] | ALL [ PRIVILEGES ] }
+    ON TYPE type_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ GRANT OPTION FOR ]
+    { USAGE | ALL [ PRIVILEGES ] }
+    ON DATA SOURCE src_name [, ...]
+    FROM { [GROUP] role_name | PUBLIC } [, ...];
+REVOKE [ GRANT OPTION FOR ]
+    { { EXECUTE | ALTER | DROP } [, ...] | ALL [ PRIVILEGES ] }
+    ON PACKAGE package_name [, ...]
+    FROM { [ GROUP ] role_name | PUBLIC } [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE [ ADMIN OPTION FOR ]
+    role_name [, ...] FROM role_name [, ...]
+    [ CASCADE | RESTRICT ];
+REVOKE ALL { PRIVILEGES | PRIVILEGE } FROM role_name;
+REVOKE [ ADMIN OPTION FOR ]
+    { CREATE ANY TABLE | ALTER ANY TABLE | DROP ANY TABLE | SELECT ANY TABLE | INSERT ANY TABLE |
+    UPDATE ANY TABLE | DELETE ANY TABLE | CREATE ANY SEQUENCE | CREATE ANY INDEX |
+    CREATE ANY FUNCTION | EXECUTE ANY FUNCTION | CREATE ANY PACKAGE |
+    EXECUTE ANY PACKAGE | CREATE ANY TYPE | ALTER ANY TYPE | DROP ANY TYPE |
+    ALTER ANY SEQUENCE | DROP ANY SEQUENCE | SELECT ANY SEQUENCE |
+    ALTER ANY INDEX | DROP ANY INDEX | CREATE ANY SYNONYM | DROP ANY SYNONYM |
+    CREATE ANY TRIGGER | ALTER ANY TRIGGER | DROP ANY TRIGGER } [, ...]
+    FROM [ GROUP ] role_name [, ...];
+</synopsis>
+</refsynopsisdiv>
+</refentry>

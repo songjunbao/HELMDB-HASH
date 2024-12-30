@@ -1,0 +1,47 @@
+name: FreeBSD clang-scan build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@446798f8213ac2e75931c1b0769676d927801858 # v2.10.0
+      with:
+        egress-policy: audit
+
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      with:
+        submodules: recursive
+    - name: clang scan build in FreeBSD VM
+      id: clang-scan-build
+      uses: cross-platform-actions/action@cdc9ee69ef84a5f2e59c9058335d9c57bcb4ac86 # v0.25.0
+      with:
+        memory: 2048
+        shell: sh
+        operating_system: freebsd
+        version: '14.1'
+        run: |
+          sudo mkdir -p /usr/local/etc/pkg/repos
+          sudo sh -c 'echo "FreeBSD: { url: \"https://pkg.FreeBSD.org/\${ABI}/quarterly\", mirror_type: \"srv\", enabled: yes }" > /usr/local/etc/pkg/repos/FreeBSD.conf'
+          sudo pkg update -f
+          sudo pkg upgrade -y
+          sudo pkg install -y curl gmake cmake devel/llvm llvm
+          pwd
+          ls -lah
+          whoami
+          env
+          freebsd-version
+          scan-build cmake -B build -DCMAKE_INSTALL_PREFIX=.
+          cd build
+          scan-build --exclude src/simdjson --status-bugs gmake

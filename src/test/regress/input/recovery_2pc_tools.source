@@ -1,0 +1,8 @@
+--
+-- check the CATALOG_VERSION_NO value which from "src/bin/catalog/catversion.h"
+-- If changed, please inform the OM tools team. The scripts of OM tools need to be modified together
+--
+--
+-- check GUC parameter
+--
+select name,vartype,unit,min_val,max_val from pg_settings where name <> 'qunit_case_number'  order by name;

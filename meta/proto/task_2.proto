@@ -1,0 +1,33 @@
+syntax="proto3";
+
+package meta;
+
+option cc_generic_services = true;
+
+// The task2 service definition
+service Task2Service {
+    rpc UpdateNodeLoadInfo(UpdateNodeLoadInfoRequest) returns (UpdateNodeLoadInfoResponse);
+}
+
+// 节点负载信息
+message NodeLoadInfo {
+    uint32 cpuUsage=1; 
+    uint32 mem_usage=2;
+    uint32 pmem_usage=3;
+    uint32 ssd_usage=4;
+}
+
+message NodeLoadInfoMap {
+    map <uint64, NodeLoadInfo> nodeLoadInfoMap = 1;
+}
+
+message UpdateNodeLoadInfoRequest {
+    uint64 id = 1;
+    uint64 timestamp= 2;
+    NodeLoadInfo nodeLoadInfo = 3;
+}
+
+message UpdateNodeLoadInfoResponse {
+    uint64 id = 1; 
+    string message = 2;
+}

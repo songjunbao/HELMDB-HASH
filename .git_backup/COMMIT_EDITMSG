@@ -1,0 +1,16 @@
+Revert "InitDB"
+
+This reverts commit b9a4b3f3188247a40a177c7f5dae48a44be6f69d.
+
+# 请为您的变更输入提交说明。以 '#' 开始的行将被忽略，而一个空的提交
+# 说明将会终止提交。
+#
+# 位于分支 main
+# 您的分支领先 'origin/main' 共 5 个提交。
+#   （使用 "git push" 来发布您的本地提交）
+#
+# 还原操作正在行中。
+#
+# 要提交的变更：
+#	修改：     .gitignore
+#

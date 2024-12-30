@@ -1,0 +1,130 @@
+--- contention
+cycles/second=1000000000
+00400000-00a07000 r-xp 00000000 00:24 725075                             /workspaces/HELMDB/meta/output/bin/Meta
+00a17000-00a30000 r--p 00607000 00:24 725075                             /workspaces/HELMDB/meta/output/bin/Meta
+00a30000-00a33000 rw-p 00620000 00:24 725075                             /workspaces/HELMDB/meta/output/bin/Meta
+00a33000-0146a000 rw-p 00000000 00:00 0 
+166ab000-16992000 rw-p 00000000 00:00 0                                  [heap]
+ffff34000000-ffff3422c000 rw-p 00000000 00:00 0 
+ffff3422c000-ffff38000000 ---p 00000000 00:00 0 
+ffff3c000000-ffff3c0ad000 rw-p 00000000 00:00 0 
+ffff3c0ad000-ffff40000000 ---p 00000000 00:00 0 
+ffff40000000-ffff40028000 rw-p 00000000 00:00 0 
+ffff40028000-ffff44000000 ---p 00000000 00:00 0 
+ffff44000000-ffff44053000 rw-p 00000000 00:00 0 
+ffff44053000-ffff48000000 ---p 00000000 00:00 0 
+ffff4aedf000-ffff4aee0000 ---p 00000000 00:00 0 
+ffff4aee0000-ffff4afe0000 rw-p 00000000 00:00 0 
+ffff4afe0000-ffff4aff0000 ---p 00000000 00:00 0 
+ffff4aff0000-ffff4b7f0000 rw-p 00000000 00:00 0 
+ffff4b7f0000-ffff4b800000 ---p 00000000 00:00 0 
+ffff4b800000-ffff4c000000 rw-p 00000000 00:00 0 
+ffff4c000000-ffff4c0ab000 rw-p 00000000 00:00 0 
+ffff4c0ab000-ffff50000000 ---p 00000000 00:00 0 
+ffff50000000-ffff50034000 rw-p 00000000 00:00 0 
+ffff50034000-ffff54000000 ---p 00000000 00:00 0 
+ffff54000000-ffff54021000 rw-p 00000000 00:00 0 
+ffff54021000-ffff58000000 ---p 00000000 00:00 0 
+ffff58000000-ffff58021000 rw-p 00000000 00:00 0 
+ffff58021000-ffff5c000000 ---p 00000000 00:00 0 
+ffff5c000000-ffff5c021000 rw-p 00000000 00:00 0 
+ffff5c021000-ffff60000000 ---p 00000000 00:00 0 
+ffff60000000-ffff60021000 rw-p 00000000 00:00 0 
+ffff60021000-ffff64000000 ---p 00000000 00:00 0 
+ffff64000000-ffff64073000 rw-p 00000000 00:00 0 
+ffff64073000-ffff68000000 ---p 00000000 00:00 0 
+ffff68000000-ffff68021000 rw-p 00000000 00:00 0 
+ffff68021000-ffff6c000000 ---p 00000000 00:00 0 
+ffff6c008000-ffff6c089000 rw-p 00000000 00:00 0 
+ffff6c089000-ffff6c08a000 ---p 00000000 00:00 0 
+ffff6c08a000-ffff6c18a000 rw-p 00000000 00:00 0 
+ffff6c18a000-ffff6c18b000 ---p 00000000 00:00 0 
+ffff6c18b000-ffff6c28b000 rw-p 00000000 00:00 0 
+ffff6c28b000-ffff6c28c000 ---p 00000000 00:00 0 
+ffff6c28c000-ffff6c38c000 rw-p 00000000 00:00 0 
+ffff6c38c000-ffff6c38d000 ---p 00000000 00:00 0 
+ffff6c38d000-ffff6c48d000 rw-p 00000000 00:00 0 
+ffff6c48d000-ffff6c48e000 ---p 00000000 00:00 0 
+ffff6c48e000-ffff6c58e000 rw-p 00000000 00:00 0 
+ffff6c58e000-ffff6c58f000 ---p 00000000 00:00 0 
+ffff6c58f000-ffff6c68f000 rw-p 00000000 00:00 0 
+ffff6c68f000-ffff6c690000 ---p 00000000 00:00 0 
+ffff6c690000-ffff6c790000 rw-p 00000000 00:00 0 
+ffff6c790000-ffff6c7a0000 ---p 00000000 00:00 0 
+ffff6c7a0000-ffff6cfa0000 rw-p 00000000 00:00 0 
+ffff6cfa0000-ffff6cfb0000 ---p 00000000 00:00 0 
+ffff6cfb0000-ffff6d7b0000 rw-p 00000000 00:00 0 
+ffff6d7b0000-ffff6d7c0000 ---p 00000000 00:00 0 
+ffff6d7c0000-ffff6dfc0000 rw-p 00000000 00:00 0 
+ffff6dfc0000-ffff6dfd0000 ---p 00000000 00:00 0 
+ffff6dfd0000-ffff6e7d0000 rw-p 00000000 00:00 0 
+ffff6e7d0000-ffff6e7e0000 ---p 00000000 00:00 0 
+ffff6e7e0000-ffff6efe0000 rw-p 00000000 00:00 0 
+ffff6efe0000-ffff6eff0000 ---p 00000000 00:00 0 
+ffff6eff0000-ffff6f7f0000 rw-p 00000000 00:00 0 
+ffff6f7f0000-ffff6f800000 ---p 00000000 00:00 0 
+ffff6f800000-ffff70000000 rw-p 00000000 00:00 0 
+ffff70000000-ffff7008a000 rw-p 00000000 00:00 0 
+ffff7008a000-ffff74000000 ---p 00000000 00:00 0 
+ffff74000000-ffff74021000 rw-p 00000000 00:00 0 
+ffff74021000-ffff78000000 ---p 00000000 00:00 0 
+ffff78000000-ffff78021000 rw-p 00000000 00:00 0 
+ffff78021000-ffff7c000000 ---p 00000000 00:00 0 
+ffff7c02b000-ffff7c3b0000 rw-p 00000000 00:00 0 
+ffff7c3b0000-ffff7c3b1000 ---p 00000000 00:00 0 
+ffff7c3b1000-ffff7c5b3000 rw-p 00000000 00:00 0 
+ffff7c5b3000-ffff7c5c3000 ---p 00000000 00:00 0 
+ffff7c5c3000-ffff7cdc3000 rw-p 00000000 00:00 0 
+ffff7cdc3000-ffff7cdd3000 ---p 00000000 00:00 0 
+ffff7cdd3000-ffff7d654000 rw-p 00000000 00:00 0 
+ffff7d654000-ffff7d664000 ---p 00000000 00:00 0 
+ffff7d664000-ffff7de64000 rw-p 00000000 00:00 0 
+ffff7de64000-ffff7de74000 ---p 00000000 00:00 0 
+ffff7de74000-ffff7e674000 rw-p 00000000 00:00 0 
+ffff7e674000-ffff7e684000 ---p 00000000 00:00 0 
+ffff7e684000-ffff7ee84000 rw-p 00000000 00:00 0 
+ffff7ee84000-ffff7ee94000 ---p 00000000 00:00 0 
+ffff7ee94000-ffff7f694000 rw-p 00000000 00:00 0 
+ffff7f694000-ffff7f6ad000 r-xp 00000000 fe:01 2623484                    /usr/lib64/libz.so.1.2.11
+ffff7f6ad000-ffff7f6c3000 ---p 00019000 fe:01 2623484                    /usr/lib64/libz.so.1.2.11
+ffff7f6c3000-ffff7f6c4000 r--p 0001f000 fe:01 2623484                    /usr/lib64/libz.so.1.2.11
+ffff7f6c4000-ffff7f6c5000 rw-p 00020000 fe:01 2623484                    /usr/lib64/libz.so.1.2.11
+ffff7f6c5000-ffff7f849000 r-xp 00000000 fe:01 2884012                    /usr/lib64/libc.so.6
+ffff7f849000-ffff7f862000 ---p 00184000 fe:01 2884012                    /usr/lib64/libc.so.6
+ffff7f862000-ffff7f865000 r--p 0018d000 fe:01 2884012                    /usr/lib64/libc.so.6
+ffff7f865000-ffff7f868000 rw-p 00190000 fe:01 2884012                    /usr/lib64/libc.so.6
+ffff7f868000-ffff7f874000 rw-p 00000000 00:00 0 
+ffff7f874000-ffff7f887000 r-xp 00000000 fe:01 2629188                    /usr/lib64/libgcc_s-10.3.1.so.1
+ffff7f887000-ffff7f8a3000 ---p 00013000 fe:01 2629188                    /usr/lib64/libgcc_s-10.3.1.so.1
+ffff7f8a3000-ffff7f8a4000 r--p 0001f000 fe:01 2629188                    /usr/lib64/libgcc_s-10.3.1.so.1
+ffff7f8a4000-ffff7f8a5000 rw-p 00020000 fe:01 2629188                    /usr/lib64/libgcc_s-10.3.1.so.1
+ffff7f8a5000-ffff7f8e1000 r-xp 00000000 fe:01 2629205                    /usr/lib64/libgomp.so.1.0.0
+ffff7f8e1000-ffff7f8f4000 ---p 0003c000 fe:01 2629205                    /usr/lib64/libgomp.so.1.0.0
+ffff7f8f4000-ffff7f8f5000 r--p 0003f000 fe:01 2629205                    /usr/lib64/libgomp.so.1.0.0
+ffff7f8f5000-ffff7f8f6000 rw-p 00040000 fe:01 2629205                    /usr/lib64/libgomp.so.1.0.0
+ffff7f8f6000-ffff7f979000 r-xp 00000000 fe:01 2884015                    /usr/lib64/libm.so.6
+ffff7f979000-ffff7f995000 ---p 00083000 fe:01 2884015                    /usr/lib64/libm.so.6
+ffff7f995000-ffff7f996000 r--p 0008f000 fe:01 2884015                    /usr/lib64/libm.so.6
+ffff7f996000-ffff7f997000 rw-p 00090000 fe:01 2884015                    /usr/lib64/libm.so.6
+ffff7f997000-ffff7fb6b000 r-xp 00000000 fe:01 2629261                    /usr/lib64/libstdc++.so.6.0.28
+ffff7fb6b000-ffff7fb7c000 ---p 001d4000 fe:01 2629261                    /usr/lib64/libstdc++.so.6.0.28
+ffff7fb7c000-ffff7fb87000 r--p 001d5000 fe:01 2629261                    /usr/lib64/libstdc++.so.6.0.28
+ffff7fb87000-ffff7fb8a000 rw-p 001e0000 fe:01 2629261                    /usr/lib64/libstdc++.so.6.0.28
+ffff7fb8a000-ffff7fb8d000 rw-p 00000000 00:00 0 
+ffff7fb8d000-ffff7fe0c000 r-xp 00000000 fe:01 2884503                    /usr/lib64/libcrypto.so.1.1.1wa
+ffff7fe0c000-ffff7fe23000 ---p 0027f000 fe:01 2884503                    /usr/lib64/libcrypto.so.1.1.1wa
+ffff7fe23000-ffff7fe4d000 r--p 00286000 fe:01 2884503                    /usr/lib64/libcrypto.so.1.1.1wa
+ffff7fe4d000-ffff7fe51000 rw-p 002b0000 fe:01 2884503                    /usr/lib64/libcrypto.so.1.1.1wa
+ffff7fe51000-ffff7fe55000 rw-p 00000000 00:00 0 
+ffff7fe55000-ffff7fedc000 r-xp 00000000 fe:01 2884505                    /usr/lib64/libssl.so.1.1.1wa
+ffff7fedc000-ffff7feeb000 ---p 00087000 fe:01 2884505                    /usr/lib64/libssl.so.1.1.1wa
+ffff7feeb000-ffff7fef5000 r--p 00086000 fe:01 2884505                    /usr/lib64/libssl.so.1.1.1wa
+ffff7fef5000-ffff7fef9000 rw-p 00090000 fe:01 2884505                    /usr/lib64/libssl.so.1.1.1wa
+ffff7fef9000-ffff7fefa000 rw-p 00000000 00:00 0 
+ffff7fefa000-ffff7ff1d000 r-xp 00000000 fe:01 2884007                    /usr/lib/ld-linux-aarch64.so.1
+ffff7ff1f000-ffff7ff31000 rw-p 00000000 00:00 0 
+ffff7ff35000-ffff7ff37000 r--p 00000000 00:00 0                          [vvar]
+ffff7ff37000-ffff7ff38000 r-xp 00000000 00:00 0                          [vdso]
+ffff7ff38000-ffff7ff3a000 r--p 0002e000 fe:01 2884007                    /usr/lib/ld-linux-aarch64.so.1
+ffff7ff3a000-ffff7ff3c000 rw-p 00030000 fe:01 2884007                    /usr/lib/ld-linux-aarch64.so.1
+ffffd9451000-ffffd9472000 rw-p 00000000 00:00 0                          [stack]

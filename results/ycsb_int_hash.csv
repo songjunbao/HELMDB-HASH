@@ -1,0 +1,57 @@
+Loaded 64000000 keys
+clht, workloada, randint, uniform, threads 16
+Throughput: load, 7.593914 ,ops/us
+Throughput: run, 27.524171 ,ops/us
+[GCOLLE-99] collected: 8   | took:    6757883956 ti = 3.218040 s
+
+
+Loaded 64000000 keys
+clht, workloadb, randint, uniform, threads 16
+Throughput: load, 4.496102 ,ops/us
+Throughput: run, 106.479617 ,ops/us
+[GCOLLE-99] collected: 9   | took:   10624272648 ti = 5.059177 s
+
+
+Loaded 64000000 keys
+clht, workloadc, randint, uniform, threads 16
+Throughput: load, 4.682829 ,ops/us
+Throughput: run, 112.572997 ,ops/us
+[GCOLLE-99] collected: 9   | took:   11610766464 ti = 5.528936 s
+
+
+Loaded 64000000 keys
+levelhash, workloada, randint, uniform, threads 16
+Throughput: load, 1.257080 ,ops/us
+Throughput: run, 4.413857 ,ops/us
+
+
+Loaded 64000000 keys
+levelhash, workloadb, randint, uniform, threads 16
+Throughput: load, 1.247186 ,ops/us
+Throughput: run, 14.318087 ,ops/us
+
+
+Loaded 64000000 keys
+levelhash, workloadc, randint, uniform, threads 16
+Throughput: load, 1.229118 ,ops/us
+Throughput: run, 22.953457 ,ops/us
+
+
+Loaded 64000000 keys
+cceh, workloada, randint, uniform, threads 16
+Throughput: load, 6.121769 ,ops/us
+Throughput: run, 9.687423 ,ops/us
+
+
+Loaded 64000000 keys
+cceh, workloadb, randint, uniform, threads 16
+Throughput: load, 6.106784 ,ops/us
+Throughput: run, 67.632401 ,ops/us
+
+
+Loaded 64000000 keys
+cceh, workloadc, randint, uniform, threads 16
+Throughput: load, 5.710063 ,ops/us
+Throughput: run, 76.763737 ,ops/us
+
+

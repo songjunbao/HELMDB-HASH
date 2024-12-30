@@ -1,0 +1,21 @@
+<refentry id="SQL-SET_TRANSACTION">
+<refmeta>
+<refentrytitle>SET TRANSACTION</refentrytitle>
+<manvolnum>7</manvolnum>
+<refmiscinfo>SQL - Language Statements</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>SET TRANSACTION</refname>
+<refpurpose>set the characteristics of the current transaction</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis>
+{SET [ LOCAL | SESSION | GLOBAL ] TRANSACTION|SET SESSION CHARACTERISTICS AS TRANSACTION}
+  { ISOLATION LEVEL { READ COMMITTED | READ UNCOMMITTED }
+  | { READ WRITE | READ ONLY | SERIALIZABLE | REPEATABLE READ }
+  } [, ...]
+SET TRANSACTION SNAPSHOT snapshot_id;
+NOTICE: SET GLOBAL TRANSACTION is only available in CENTRALIZED mode and B-format database!
+</synopsis>
+</refsynopsisdiv>
+</refentry>

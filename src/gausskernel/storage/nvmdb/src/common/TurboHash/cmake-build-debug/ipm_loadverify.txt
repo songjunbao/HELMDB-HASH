@@ -1,0 +1,2 @@
+Sorry, the ipmctl command you have attempted to execute requires root privileges.
+

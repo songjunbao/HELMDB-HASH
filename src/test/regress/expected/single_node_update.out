@@ -1,0 +1,792 @@
+--
+-- UPDATE syntax tests
+--
+CREATE TABLE update_test (
+    a   INT DEFAULT 10,
+    b   INT,
+    c   TEXT
+);
+INSERT INTO update_test VALUES (5, 10, 'foo');
+INSERT INTO update_test(b, a) VALUES (15, 10);
+SELECT * FROM update_test;
+ a  | b  |  c  
+----+----+-----
+  5 | 10 | foo
+ 10 | 15 | 
+(2 rows)
+
+UPDATE update_test SET a = DEFAULT, b = DEFAULT;
+SELECT * FROM update_test;
+ a  | b |  c  
+----+---+-----
+ 10 |   | foo
+ 10 |   | 
+(2 rows)
+
+-- aliases for the UPDATE target table
+UPDATE update_test AS t SET b = 10 WHERE t.a = 10;
+SELECT * FROM update_test;
+ a  | b  |  c  
+----+----+-----
+ 10 | 10 | foo
+ 10 | 10 | 
+(2 rows)
+
+UPDATE update_test t SET b = t.b + 10 WHERE t.a = 10;
+SELECT * FROM update_test;
+ a  | b  |  c  
+----+----+-----
+ 10 | 20 | foo
+ 10 | 20 | 
+(2 rows)
+
+--
+-- Test VALUES in FROM
+--
+UPDATE update_test SET a=v.i FROM (VALUES(100, 20)) AS v(i, j)
+  WHERE update_test.b = v.j;
+SELECT * FROM update_test;
+  a  | b  |  c  
+-----+----+-----
+ 100 | 20 | foo
+ 100 | 20 | 
+(2 rows)
+
+--
+-- Test multiple-set-clause syntax
+--
+UPDATE update_test SET (c,b,a) = ('bugle', b+11, DEFAULT) WHERE c = 'foo';
+SELECT * FROM update_test;
+  a  | b  |   c   
+-----+----+-------
+ 100 | 20 | 
+  10 | 31 | bugle
+(2 rows)
+
+UPDATE update_test SET (c,b) = ('car', a+b), a = a + 1 WHERE a = 10;
+SELECT * FROM update_test;
+  a  | b  |  c  
+-----+----+-----
+ 100 | 20 | 
+  11 | 41 | car
+(2 rows)
+
+-- fail, multi assignment to same column:
+UPDATE update_test SET (c,b) = ('car', a+b), b = a + 1 WHERE a = 10;
+ERROR:  multiple assignments to same column "b"
+-- XXX this should work, but doesn't yet:
+UPDATE update_test SET (a,b) = (select a,b FROM update_test where c = 'foo')
+  WHERE a = 10;
+-- if an alias for the target table is specified, don't allow references
+-- to the original table name
+UPDATE update_test AS t SET b = update_test.b + 10 WHERE t.a = 10;
+ERROR:  invalid reference to FROM-clause entry for table "update_test"
+LINE 1: UPDATE update_test AS t SET b = update_test.b + 10 WHERE t.a...
+                                        ^
+HINT:  Perhaps you meant to reference the table alias "t".
+CONTEXT:  referenced column: b
+-- Make sure that we can update to a TOASTed value.
+UPDATE update_test SET c = repeat('x', 10000) WHERE c = 'car';
+SELECT a, b, char_length(c) FROM update_test;
+  a  | b  | char_length 
+-----+----+-------------
+ 100 | 20 |            
+  11 | 41 |       10000
+(2 rows)
+
+DROP TABLE update_test;
+-- test update, on update current_timestamp
+create database mysql dbcompatibility 'B';
+\c mysql
+create table update_test_e(a int, b timestamp on update current_timestamp);
+insert into update_test_e values(1);
+insert into update_test_e values(2);
+select * from update_test_e;
+ a | b 
+---+---
+ 1 | 
+ 2 | 
+(2 rows)
+
+update update_test_e set a = 11 where a = 1;
+select * from update_test_e;
+--?.*
+--?.*
+  2 | 
+--?.*
+(2 rows)
+
+update update_test_e set a=1, b = now()-10 where a=11;
+select * from update_test_e;
+--?.*
+--?.*
+ 2 | 
+--?.*
+(2 rows)
+
+update update_test_e set a = 1 where a = 1;
+select * from update_test_e;
+--?.*
+--?.*
+ 2 | 
+--?.*
+(2 rows)
+
+drop table update_test_e;
+create table update_test_f(a int, b timestamp default current_timestamp on update current_timestamp);
+insert into update_test_f values(1);
+insert into update_test_f values(2);
+select * from update_test_f;
+--?.*
+--?.*
+--?.*
+--?.*
+(2 rows)
+
+update update_test_f set a = 11 where a = 1;
+select * from update_test_f;
+--?.*
+--?.*
+--?.*
+--?.*
+(2 rows)
+
+drop table update_test_f;
+create table update_test_g(a int, b timestamp default current_timestamp on update current_timestamp, c timestamp on update current_timestamp);
+insert into update_test_g values(1);
+insert into update_test_g values(2);
+select * from update_test_g;
+--?.*
+--?.*
+--?.*
+--?.*
+(2 rows)
+
+update update_test_g set a = 1 where a = 1;
+select * from update_test_g;
+--?.*
+--?.*
+--?.*
+--?.*
+(2 rows)
+
+create incremental materialized view timestamp_test AS select * from update_test_g;
+select * from timestamp_test;
+--?.*
+--?.*
+--?.*
+--?.*
+(2 rows)
+
+drop materialized view timestamp_test;
+drop table update_test_g;
+create table update_test_h(a int, b timestamp default current_timestamp on update current_timestamp);
+insert into update_test_h values(1);
+select * from update_test_h;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+with tab as (update update_test_h set a=10 where a=1 returning 1) select * from tab;
+ ?column? 
+----------
+        1
+(1 row)
+
+select * from update_test_h;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+drop table update_test_h;
+CREATE TABLE t2 (a int, b timestamp on update current_timestamp);
+INSERT INTO t2 VALUES(1);
+select * from t2;
+ a | b 
+---+---
+ 1 | 
+(1 row)
+
+PREPARE insert_reason(integer) AS UPDATE t2 SET a = $1;
+EXECUTE insert_reason(52);
+select * from t2;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+drop table t2;
+create table t1(a int, b timestamp on update current_timestamp);
+insert into t1 values(1);
+CREATE OR REPLACE FUNCTION TEST1(val integer)
+RETURNS VOID AS $$
+declare
+val int;
+begin
+update t1 set a=val;
+end;
+$$
+LANGUAGE sql;
+CREATE OR REPLACE FUNCTION TEST2(val integer)
+RETURNS integer AS $$
+update t1 set a=val;
+select 1;
+$$
+LANGUAGE sql;
+select TEST2(11);
+ test2 
+-------
+     1
+(1 row)
+
+select * from t1;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+select TEST1(2);
+ test1 
+-------
+ 
+(1 row)
+
+select * from t1;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+DROP FUNCTION TEST1;
+DROP FUNCTION TEST2;
+drop table t1;
+CREATE TABLE t1(a int, b timestamp DEFAULT current_timestamp on update current_timestamp);
+CREATE TABLE t2(a int, b timestamp DEFAULT current_timestamp, c varchar, d timestamp on update current_timestamp);
+CREATE TABLE t3(a int, b char, c timestamp on update current_timestamp, d text);
+INSERT INTO t1 VALUES(1);
+INSERT INTO t2(a,c) VALUES(1,'test');
+INSERT INTO t3(a,b,d) VALUES(1,'T','asfdsaf');
+SELECT * FROM t1;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+SELECT * FROM t2;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+SELECT * FROM t3;
+ a | b | c |    d    
+---+---+---+---------
+ 1 | T |   | asfdsaf
+(1 row)
+
+CREATE OR REPLACE FUNCTION test1(src int, dest int) RETURNS void AS $$
+  BEGIN
+    UPDATE t1 SET a = dest WHERE a = src;
+    UPDATE t2 SET a = dest WHERE a = src;
+    UPDATE t3 SET a = dest WHERE a = src;
+  END;
+$$ LANGUAGE PLPGSQL;
+SELECT test1(1,10);
+ test1 
+-------
+ 
+(1 row)
+
+SELECT * FROM t1;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+SELECT * FROM t2;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+SELECT * FROM t3;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+DROP FUNCTION test1;
+DROP TABLE t1;
+DROP TABLE t2;
+DROP TABLE t3;
+CREATE TABLE t1(a int, b timestamp on update current_timestamp);
+CREATE TABLE t2(a int, b timestamp on update current_timestamp);
+INSERT INTO t1 VALUES(1);
+INSERT INTO t2 VALUES(2);
+SELECT * FROM t1;
+ a | b 
+---+---
+ 1 | 
+(1 row)
+
+SELECT * FROM t2;
+ a | b 
+---+---
+ 2 | 
+(1 row)
+
+with a as (update t1 set a=a+10 returning 1), b as (update t2 set a=a+10 returning 1) select * from a,b;
+ ?column? | ?column? 
+----------+----------
+        1 |        1
+(1 row)
+
+SELECT * FROM t1;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+SELECT * FROM t2;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+with a as (update t1 set a=a+10), b as (update t2 set a=a+10) select 1;
+ ?column? 
+----------
+        1
+(1 row)
+
+SELECT * FROM t1;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+SELECT * FROM t2;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+DROP TABLE t1;
+DROP TABLE t2;
+CREATE TABLE t4(a int, b timestamp);
+\d t4
+                Table "public.t4"
+ Column |            Type             | Modifiers 
+--------+-----------------------------+-----------
+ a      | integer                     | 
+ b      | timestamp without time zone | 
+
+alter table t4 modify b timestamp on update current_timestamp;
+\d t4
+                         Table "public.t4"
+ Column |            Type             |          Modifiers          
+--------+-----------------------------+-----------------------------
+ a      | integer                     | 
+ b      | timestamp without time zone | on update pg_systimestamp()
+
+alter table t4 modify b timestamp;
+\d t4
+                Table "public.t4"
+ Column |            Type             | Modifiers 
+--------+-----------------------------+-----------
+ a      | integer                     | 
+ b      | timestamp without time zone | 
+
+alter table t4 alter b set default now();
+\d t4
+                  Table "public.t4"
+ Column |            Type             |   Modifiers   
+--------+-----------------------------+---------------
+ a      | integer                     | 
+ b      | timestamp without time zone | default now()
+
+alter table t4 alter b drop default;
+\d t4
+                Table "public.t4"
+ Column |            Type             | Modifiers 
+--------+-----------------------------+-----------
+ a      | integer                     | 
+ b      | timestamp without time zone | 
+
+alter table t4 alter b set default now();
+\d t4
+                  Table "public.t4"
+ Column |            Type             |   Modifiers   
+--------+-----------------------------+---------------
+ a      | integer                     | 
+ b      | timestamp without time zone | default now()
+
+alter table t4 modify b timestamp on update current_timestamp;
+\d t4
+                         Table "public.t4"
+ Column |            Type             |          Modifiers          
+--------+-----------------------------+-----------------------------
+ a      | integer                     | 
+ b      | timestamp without time zone | on update pg_systimestamp()
+
+alter table t4 alter b drop default;
+\d t4
+                         Table "public.t4"
+ Column |            Type             |          Modifiers          
+--------+-----------------------------+-----------------------------
+ a      | integer                     | 
+ b      | timestamp without time zone | on update pg_systimestamp()
+
+alter table t4 modify b timestamp;
+\d t4
+                Table "public.t4"
+ Column |            Type             | Modifiers 
+--------+-----------------------------+-----------
+ a      | integer                     | 
+ b      | timestamp without time zone | 
+
+alter table t4 modify b timestamp on update current_timestamp;
+\d t4
+                         Table "public.t4"
+ Column |            Type             |          Modifiers          
+--------+-----------------------------+-----------------------------
+ a      | integer                     | 
+ b      | timestamp without time zone | on update pg_systimestamp()
+
+alter table t4 alter b set default now();
+\d t4;
+                                Table "public.t4"
+ Column |            Type             |                 Modifiers                 
+--------+-----------------------------+-------------------------------------------
+ a      | integer                     | 
+ b      | timestamp without time zone | default now() on update pg_systimestamp()
+
+alter table t4 modify b timestamp;
+\d t4
+                  Table "public.t4"
+ Column |            Type             |   Modifiers   
+--------+-----------------------------+---------------
+ a      | integer                     | 
+ b      | timestamp without time zone | default now()
+
+alter table t4 alter b drop default;
+\d t4
+                Table "public.t4"
+ Column |            Type             | Modifiers 
+--------+-----------------------------+-----------
+ a      | integer                     | 
+ b      | timestamp without time zone | 
+
+alter table t4 modify b not null;
+alter table t4 modify b timestamp on update current_timestamp;
+\d t4
+                         Table "public.t4"
+ Column |            Type             |          Modifiers          
+--------+-----------------------------+-----------------------------
+ a      | integer                     | 
+ b      | timestamp without time zone | on update pg_systimestamp()
+
+alter table t4 modify b null;
+alter table t4 modify b timestamp;
+\d t4
+                Table "public.t4"
+ Column |            Type             | Modifiers 
+--------+-----------------------------+-----------
+ a      | integer                     | 
+ b      | timestamp without time zone | 
+
+alter table t4 modify b timestamp on update current_timestamp;
+\d t4
+                         Table "public.t4"
+ Column |            Type             |          Modifiers          
+--------+-----------------------------+-----------------------------
+ a      | integer                     | 
+ b      | timestamp without time zone | on update pg_systimestamp()
+
+alter table t4 modify b timestamp on update localtimestamp;
+\d t4
+                                      Table "public.t4"
+ Column |            Type             |                      Modifiers                       
+--------+-----------------------------+------------------------------------------------------
+ a      | integer                     | 
+ b      | timestamp without time zone | on update ('now'::text)::timestamp without time zone
+
+alter table t4 alter b set default now();
+\d t4;
+                                             Table "public.t4"
+ Column |            Type             |                             Modifiers                              
+--------+-----------------------------+--------------------------------------------------------------------
+ a      | integer                     | 
+ b      | timestamp without time zone | default now() on update ('now'::text)::timestamp without time zone
+
+alter table t4 change b b1 timestamp on update current_timestamp;
+\d t4
+                         Table "public.t4"
+ Column |            Type             |          Modifiers          
+--------+-----------------------------+-----------------------------
+ a      | integer                     | 
+ b1     | timestamp without time zone | on update pg_systimestamp()
+
+alter table t4 change b1 b2 timestamp not null default now() on update localtimestamp;
+\d t4
+                                                 Table "public.t4"
+ Column |            Type             |                                  Modifiers                                  
+--------+-----------------------------+-----------------------------------------------------------------------------
+ a      | integer                     | 
+ b2     | timestamp without time zone | not null default now() on update ('now'::text)::timestamp without time zone
+
+CREATE TABLE t5(id int, a timestamp default now() on update current_timestamp, b timestamp on update current_timestamp, c timestamp default now());
+\d t5
+                                Table "public.t5"
+ Column |            Type             |                 Modifiers                 
+--------+-----------------------------+-------------------------------------------
+ id     | integer                     | 
+ a      | timestamp without time zone | default now() on update pg_systimestamp()
+ b      | timestamp without time zone | on update pg_systimestamp()
+ c      | timestamp without time zone | default now()
+
+create table t6 (like t5 including defaults);
+\d t6
+                                Table "public.t6"
+ Column |            Type             |                 Modifiers                 
+--------+-----------------------------+-------------------------------------------
+ id     | integer                     | 
+ a      | timestamp without time zone | default now() on update pg_systimestamp()
+ b      | timestamp without time zone | on update pg_systimestamp()
+ c      | timestamp without time zone | default now()
+
+alter table t6 modify b timestamp on update localtimestamp;
+\d t6
+                                      Table "public.t6"
+ Column |            Type             |                      Modifiers                       
+--------+-----------------------------+------------------------------------------------------
+ id     | integer                     | 
+ a      | timestamp without time zone | default now() on update pg_systimestamp()
+ b      | timestamp without time zone | on update ('now'::text)::timestamp without time zone
+ c      | timestamp without time zone | default now()
+
+alter table t6 modify b timestamp;
+\d t6
+                                Table "public.t6"
+ Column |            Type             |                 Modifiers                 
+--------+-----------------------------+-------------------------------------------
+ id     | integer                     | 
+ a      | timestamp without time zone | default now() on update pg_systimestamp()
+ b      | timestamp without time zone | 
+ c      | timestamp without time zone | default now()
+
+CREATE TABLE goodscheck (
+goodsid bigint,
+goodscode varchar(20) DEFAULT NULL::varchar,
+status integer,
+isdelete integer,
+introduce varchar(150) DEFAULT NULL::varchar,
+createtime timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
+createby varchar(20) DEFAULT NULL::varchar,
+updatetime timestamp(0) without time zone DEFAULT NULL::timestamp without time zone ON UPDATE CURRENT_TIMESTAMP,
+updateby varchar(20) DEFAULT NULL::varchar
+);
+ALTER TABLE goodscheck ADD CONSTRAINT goodscheck_pkey PRIMARY KEY (goodsid);
+NOTICE:  ALTER TABLE / ADD PRIMARY KEY will create implicit index "goodscheck_pkey" for table "goodscheck"
+CREATE FUNCTION update_timestamp()
+RETURNS trigger
+LANGUAGE plpgsql
+AUTHID DEFINER NOT FENCED NOT SHIPPABLE
+AS $function$
+BEGIN
+NEW.updateTime = now();
+RETURN NEW;
+END;
+$function$;
+CREATE TRIGGER goodscheck_updatetime_trriger
+BEFORE UPDATE OF updatetime ON goodscheck
+FOR EACH ROW
+EXECUTE PROCEDURE update_timestamp();
+INSERT INTO goodscheck(goodsid,goodscode,status,isdelete,introduce,createtime,createby,updatetime,updateby)
+VALUES (322,'1673994937684815874',3,0,'fff','2023-07-14 10:24:51',null,'2023-08-23 10:11:30','wangjun');
+update goodscheck
+set goodsId = 888,
+status = 2,
+introduce = 'test',
+updateTime = current_timestamp,
+updateBy = 'zljtest'
+WHERE 1=1
+AND goodsId=322;
+drop table goodscheck;
+drop function update_timestamp();
+-- \! @abs_bindir@/gs_dump mysql -p @portstring@ -f @abs_bindir@/dump_type.sql -F p >/dev/null 2>&1;
+-- create table test_feature(a int, b timestamp on update current_timestamp);
+-- insert into test_feature values (1);
+-- update test_feature set a=2 where a=1;
+-- select * from test_feature;
+-- \! @abs_bindir@/gsql -d mysql -p @portstring@ -c "update test_feature set a=3;" >/dev/null 2>&1;
+-- select * from test_feature;
+CREATE TABLE t_dmpportal_common_intent (
+id bigserial NOT NULL,
+intent_name character varying(120) NOT NULL,
+upt_time timestamp ON UPDATE CURRENT_TIMESTAMP);
+NOTICE:  CREATE TABLE will create implicit sequence "t_dmpportal_common_intent_id_seq" for serial column "t_dmpportal_common_intent.id"
+ALTER TABLE t_dmpportal_common_intent ADD CONSTRAINT pk_t_dmpportal_common_intent_1675307617_0 PRIMARY KEY USING btree (id);
+NOTICE:  ALTER TABLE / ADD PRIMARY KEY will create implicit index "pk_t_dmpportal_common_intent_1675307617_0" for table "t_dmpportal_common_intent"
+insert into t_dmpportal_common_intent values(1,'1',current_timestamp), (2,'2',current_timestamp), (3,'3',current_timestamp);
+select * from t_dmpportal_common_intent;
+--?.*
+--?.*
+--?.*
+--?.*
+--?.*
+(3 rows)
+
+select count(upt_time) from t_dmpportal_common_intent group by upt_time order by upt_time;
+ count 
+-------
+     3
+(1 row)
+
+set enable_opfusion to on;
+explain (costs off) update t_dmpportal_common_intent set intent_name='update_2' where id=2;
+                                          QUERY PLAN                                           
+-----------------------------------------------------------------------------------------------
+ [Bypass]
+ Update on t_dmpportal_common_intent
+   ->  Index Scan using pk_t_dmpportal_common_intent_1675307617_0 on t_dmpportal_common_intent
+         Index Cond: (id = 2)
+(4 rows)
+
+update t_dmpportal_common_intent set intent_name='update_2' where id=2;
+select count(upt_time) from t_dmpportal_common_intent group by upt_time order by upt_time;
+ count 
+-------
+     2
+     1
+(2 rows)
+
+select * from t_dmpportal_common_intent;
+--?.*
+--?.*
+--?.*
+--?.*
+--?.*
+(3 rows)
+
+set enable_opfusion to off;
+update t_dmpportal_common_intent set intent_name='update_2' where id=2;
+select count(upt_time) from t_dmpportal_common_intent group by upt_time order by upt_time;
+ count 
+-------
+     2
+     1
+(2 rows)
+
+select * from t_dmpportal_common_intent;
+--?.*
+--?.*
+--?.*
+--?.*
+--?.*
+(3 rows)
+
+update t_dmpportal_common_intent set intent_name='2' where id=2;
+select count(upt_time) from t_dmpportal_common_intent group by upt_time order by upt_time;
+ count 
+-------
+     2
+     1
+(2 rows)
+
+select * from t_dmpportal_common_intent;
+--?.*
+--?.*
+--?.*
+--?.*
+--?.*
+(3 rows)
+
+show sql_beta_feature;
+ sql_beta_feature 
+------------------
+ a_style_coerce
+(1 row)
+
+show enable_partition_opfusion;
+ enable_partition_opfusion 
+---------------------------
+ off
+(1 row)
+
+show enable_opfusion;
+ enable_opfusion 
+-----------------
+ off
+(1 row)
+
+set sql_beta_feature = 'a_style_coerce, partition_opfusion';
+set enable_partition_opfusion = on;
+set enable_opfusion = on;
+create table bypass_pt_update (
+    a serial primary key,
+    b int default 1
+) partition by range(a) (
+    partition p1 values less than (5),
+    partition p2 values less than (maxvalue)
+);
+NOTICE:  CREATE TABLE will create implicit sequence "bypass_pt_update_a_seq" for serial column "bypass_pt_update.a"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "bypass_pt_update_pkey" for table "bypass_pt_update"
+insert into bypass_pt_update(b) select generate_series(1,8);
+select * from bypass_pt_update order by a;
+ a | b 
+---+---
+ 1 | 1
+ 2 | 2
+ 3 | 3
+ 4 | 4
+ 5 | 5
+ 6 | 6
+ 7 | 7
+ 8 | 8
+(8 rows)
+
+explain (verbose on, costs off) update bypass_pt_update set b = 2 where a = 1;
+                                     QUERY PLAN                                      
+-------------------------------------------------------------------------------------
+ [Bypass]
+ Update on public.bypass_pt_update
+   ->  Partitioned Index Scan using bypass_pt_update_pkey on public.bypass_pt_update
+         Output: a, 2, ctid, tableoid
+         Index Cond: (bypass_pt_update.a = 1)
+         Selected Partitions:  1
+(6 rows)
+
+update bypass_pt_update set b = 2 where a = 1;
+explain (verbose on, costs off) update bypass_pt_update set a = 9 where a = 2;
+                                     QUERY PLAN                                      
+-------------------------------------------------------------------------------------
+ Update on public.bypass_pt_update
+   ->  Partitioned Index Scan using bypass_pt_update_pkey on public.bypass_pt_update
+         Output: 9, b, ctid, tableoid
+         Index Cond: (bypass_pt_update.a = 2)
+         Selected Partitions:  1
+(5 rows)
+
+update bypass_pt_update set a = 9 where a = 2;
+select * from bypass_pt_update order by a;
+ a | b 
+---+---
+ 1 | 2
+ 3 | 3
+ 4 | 4
+ 5 | 5
+ 6 | 6
+ 7 | 7
+ 8 | 8
+ 9 | 2
+(8 rows)
+
+drop table bypass_pt_update;
+set sql_beta_feature='a_style_coerce';
+set enable_partition_opfusion = off;
+set enable_opfusion = off;
+\c regression
+DROP database mysql;

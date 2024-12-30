@@ -1,0 +1,211 @@
+Loaded 64000000 keys
+art, workloada, string, uniform, threads 16
+Throughput: load, 10.248909 ,ops/us
+Throughput: run, 12.560565 ,ops/us
+
+
+Loaded 64000000 keys
+art, workloadb, string, uniform, threads 16
+Throughput: load, 9.926864 ,ops/us
+Throughput: run, 17.078312 ,ops/us
+
+
+Loaded 64000000 keys
+art, workloadc, string, uniform, threads 16
+Throughput: load, 9.822827 ,ops/us
+Throughput: run, 18.405952 ,ops/us
+
+
+Loaded 64000000 keys
+art, workloade, string, uniform, threads 16
+Throughput: load, 10.032947 ,ops/us
+Throughput: run, 2.476288 ,ops/us
+
+
+Loaded 64000000 keys
+bwtree, workloada, string, uniform, threads 16
+Throughput: load, 3.120036 ,ops/us
+Throughput: run, 3.159278 ,ops/us
+
+
+Loaded 64000000 keys
+bwtree, workloadb, string, uniform, threads 16
+Throughput: load, 3.046074 ,ops/us
+Throughput: run, 3.875092 ,ops/us
+
+
+Loaded 64000000 keys
+bwtree, workloadc, string, uniform, threads 16
+Throughput: load, 3.019042 ,ops/us
+Throughput: run, 3.987396 ,ops/us
+
+
+Loaded 64000000 keys
+bwtree, workloade, string, uniform, threads 16
+Throughput: load, 3.100510 ,ops/us
+Throughput: run, 2.670059 ,ops/us
+
+
+Loaded 64000000 keys
+masstree, workloada, string, uniform, threads 16
+Throughput: load, 7.861365 ,ops/us
+Throughput: run, 9.491714 ,ops/us
+
+
+Loaded 64000000 keys
+masstree, workloadb, string, uniform, threads 16
+Throughput: load, 7.947253 ,ops/us
+Throughput: run, 15.630236 ,ops/us
+
+
+Loaded 64000000 keys
+masstree, workloadc, string, uniform, threads 16
+Throughput: load, 7.896638 ,ops/us
+Throughput: run, 17.533478 ,ops/us
+
+
+Loaded 64000000 keys
+masstree, workloade, string, uniform, threads 16
+Throughput: load, 7.919949 ,ops/us
+Throughput: run, 5.886668 ,ops/us
+
+
+Loaded 64000000 keys
+hot, workloada, string, uniform, threads 16
+Throughput: load, 8.083645 ,ops/us
+Throughput: run, 11.089746 ,ops/us
+
+
+Loaded 64000000 keys
+hot, workloadb, string, uniform, threads 16
+Throughput: load, 8.289755 ,ops/us
+Throughput: run, 23.233863 ,ops/us
+
+
+Loaded 64000000 keys
+hot, workloadc, string, uniform, threads 16
+Throughput: load, 8.159388 ,ops/us
+Throughput: run, 27.943010 ,ops/us
+
+
+Loaded 64000000 keys
+hot, workloade, string, uniform, threads 16
+Throughput: load, 8.068784 ,ops/us
+Throughput: run, 6.705232 ,ops/us
+
+
+scripts/ycsb_str_tree.sh: line 38: ./build/ycsb: No such file or directory
+
+
+scripts/ycsb_str_tree.sh: line 38: ./build/ycsb: No such file or directory
+
+
+scripts/ycsb_str_tree.sh: line 38: ./build/ycsb: No such file or directory
+
+
+scripts/ycsb_str_tree.sh: line 38: ./build/ycsb: No such file or directory
+
+
+Loaded 64000000 keys
+
+
+Loaded 64000000 keys
+
+
+Loaded 64000000 keys
+fastfair, workloadc, string, uniform, threads 16
+Throughput: load, 2.736594 ,ops/us
+Throughput: run, 5.453820 ,ops/us
+
+
+Loaded 64000000 keys
+fastfair, workloade, string, uniform, threads 16
+Throughput: load, 2.694642 ,ops/us
+Throughput: run, 1.906263 ,ops/us
+
+
+Loaded 64000000 keys
+
+
+Loaded 64000000 keys
+fastfair, workloadb, string, uniform, threads 16
+Throughput: load, 2.726322 ,ops/us
+Throughput: run, 5.065739 ,ops/us
+
+
+Loaded 64000000 keys
+Loaded 64000000 keys
+fastfair, workloada, string, uniform, threads 16
+Throughput: load, 2.729034 ,ops/us
+Throughput: run, 3.309373 ,ops/us
+
+
+Loaded 64000000 keys
+woart, workloada, string, uniform, threads 16
+Throughput: load, 0.173715 ,ops/us
+Throughput: run, 0.229959 ,ops/us
+
+
+Loaded 64000000 keys
+woart, workloadb, string, uniform, threads 16
+Throughput: load, 0.184105 ,ops/us
+Throughput: run, 0.861004 ,ops/us
+
+
+Loaded 64000000 keys
+woart, workloadc, string, uniform, threads 16
+Throughput: load, 0.186093 ,ops/us
+Throughput: run, 2.536985 ,ops/us
+
+
+
+
+Loaded 0 keys
+I20241221 21:48:18.844781 33879 pactree_impl.cpp:189] Init PACTree.
+成功插入
+成功执行操作
+art, workloadb, string, uniform, threads 16
+Throughput: load, 0.556365 ,ops/us
+Throughput: run, 0.650453 ,ops/us
+
+
+STRINGKEY
+Loaded 0 keys
+I20241221 21:50:13.598723 37632 pactree_impl.cpp:189] Init PACTree.
+成功插入
+成功执行操作
+art, workloadb, string, uniform, threads 16
+Throughput: load, 0.534040 ,ops/us
+Throughput: run, 0.608395 ,ops/us
+
+
+STRINGKEY11111111
+Loaded 0 keys
+I20241221 23:08:00.517098 31055 pactree_impl.cpp:189] Init PACTree.
+
+
+STRINGKEY11111111
+Loaded 100000 keys
+I20241221 23:15:35.801043 43617 pactree_impl.cpp:189] Init PACTree.
+
+
+STRINGKEY11111111
+Loaded 100000 keys
+I20241221 23:21:43.917963 51646 pactree_impl.cpp:189] Init PACTree.
+key len > 5
+成功执行操作
+art, workloadb, string, uniform, threads 16
+Throughput: load, 0.602544 ,ops/us
+Throughput: run, 3.329782 ,ops/us
+
+
+STRINGKEY11111111
+Loaded 100000 keys
+I20241221 23:23:52.525512 55615 pactree_impl.cpp:189] Init PACTree.
+key len > 5:94888 
+成功执行操作
+art, workloadb, string, uniform, threads 16
+Throughput: load, 0.670340 ,ops/us
+Throughput: run, 3.306988 ,ops/us
+
+

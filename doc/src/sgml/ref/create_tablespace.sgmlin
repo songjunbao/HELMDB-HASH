@@ -1,0 +1,30 @@
+<refentry id="SQL-CREATE_TABLESPACE">
+<refmeta>
+<refentrytitle>CREATE TABLESPACE</refentrytitle>
+<manvolnum>7</manvolnum>
+<refmiscinfo>SQL - Language Statements</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>CREATE TABLESPACE</refname>
+<refpurpose>define a new tablespace</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis>
+CREATE TABLESPACE tablespace_name
+    {[ OWNER user_name ]  [ RELATIVE ]  LOCATION 'directory' [ MAXSIZE 'space_size' ]
+    [with_option_clause]} |
+    {[LOGGING | NOLOGGING] DATAFILE 'directory' [SIZE space_size space_size_unit] [REUSE]
+    [AUTOEXTEND ON [NEXT next_size next_size_unit] [MAXSIZE 'autoextend_size'] | AUTOEXTEND OFF]} |
+    {DATAFILE 'directory' [SIZE space_size space_size_unit] [REUSE]
+    [AUTOEXTEND ON [NEXT next_size next_size_unit] [MAXSIZE 'autoextend_size'] | AUTOEXTEND OFF] {LOGGING | NOLOGGING}};
+
+where option_clause can be:
+WITH ({filesystem = {'general' | "general" | general} |
+    address = {'ip:port[,...]'} |
+    cfgpath = {'path'} |
+    storepath = {'rootpath'} |
+    random_page_cost = {'value' | value} |
+    seq_page_cost = {'value' | value}}[,...])
+</synopsis>
+</refsynopsisdiv>
+</refentry>

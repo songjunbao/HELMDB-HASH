@@ -1,0 +1,862 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake:233 (message)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      The system is: Linux - 3.10.0-1160.119.1.el7.x86_64 - x86_64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /opt/rh/devtoolset-11/root/usr/bin/cc 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+      
+      The C compiler identification is GNU, found in:
+        /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/3.28.1/CompilerIdC/a.out
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /opt/rh/devtoolset-11/root/usr/bin/c++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is GNU, found in:
+        /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/3.28.1/CompilerIdCXX/a.out
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-YkhQU4"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-YkhQU4"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-YkhQU4'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_3e5bf
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/cc   -fdiagnostics-color=always   -v -o CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o -c /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCCompilerABI.c
+        Using built-in specs.
+        COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/cc
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+        Thread model: posix
+        Supported LTO compression algorithms: zlib
+        gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) 
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3e5bf.dir/'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/cc1 -quiet -v /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_3e5bf.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fdiagnostics-color=always -o /tmp/ccUpiKE3.s
+        GNU C17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)
+        	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1, isl version isl-0.18-GMP
+        
+        warning: GMP header version 6.0.0 differs from library version 6.1.0.
+        warning: MPFR header version 3.1.1 differs from library version 3.1.4.
+        warning: MPC header version 1.0.1 differs from library version 1.0.3.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include-fixed"
+        ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../x86_64-redhat-linux/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include
+         /usr/local/include
+         /opt/rh/devtoolset-11/root/usr/include
+         /usr/include
+        End of search list.
+        GNU C17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)
+        	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1, isl version isl-0.18-GMP
+        
+        warning: GMP header version 6.0.0 differs from library version 6.1.0.
+        warning: MPFR header version 3.1.1 differs from library version 3.1.4.
+        warning: MPC header version 1.0.1 differs from library version 1.0.3.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: fcd9572df254446d5004a010508b613e
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3e5bf.dir/'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/as -v --64 -o CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o /tmp/ccUpiKE3.s
+        GNU assembler version 2.36.1 (x86_64-redhat-linux) using BFD version version 2.36.1-1.el7.2
+        COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.'
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/cc  -v CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o -o cmTC_3e5bf   && :
+        Using built-in specs.
+        COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/cc
+        COLLECT_LTO_WRAPPER=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+        Thread model: posix
+        Supported LTO compression algorithms: zlib
+        gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) 
+        COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3e5bf' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_3e5bf.'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2 -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccRwlIB6.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_3e5bf /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3e5bf' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_3e5bf.'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+          add: [/usr/local/include]
+          add: [/opt/rh/devtoolset-11/root/usr/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include] ==> [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/include] ==> [/opt/rh/devtoolset-11/root/usr/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include;/usr/local/include;/opt/rh/devtoolset-11/root/usr/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:159 (message)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-YkhQU4']
+        ignore line: []
+        ignore line: [Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_3e5bf]
+        ignore line: [[1/2] /opt/rh/devtoolset-11/root/usr/bin/cc   -fdiagnostics-color=always   -v -o CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o -c /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCCompilerABI.c]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/cc]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib]
+        ignore line: [gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3e5bf.dir/']
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/cc1 -quiet -v /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_3e5bf.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -fdiagnostics-color=always -o /tmp/ccUpiKE3.s]
+        ignore line: [GNU C17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9)  GMP version 6.0.0  MPFR version 3.1.1  MPC version 1.0.1  isl version isl-0.18-GMP]
+        ignore line: []
+        ignore line: [warning: GMP header version 6.0.0 differs from library version 6.1.0.]
+        ignore line: [warning: MPFR header version 3.1.1 differs from library version 3.1.4.]
+        ignore line: [warning: MPC header version 1.0.1 differs from library version 1.0.3.]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../x86_64-redhat-linux/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9)  GMP version 6.0.0  MPFR version 3.1.1  MPC version 1.0.1  isl version isl-0.18-GMP]
+        ignore line: []
+        ignore line: [warning: GMP header version 6.0.0 differs from library version 6.1.0.]
+        ignore line: [warning: MPFR header version 3.1.1 differs from library version 3.1.4.]
+        ignore line: [warning: MPC header version 1.0.1 differs from library version 1.0.3.]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: fcd9572df254446d5004a010508b613e]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3e5bf.dir/']
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/as -v --64 -o CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o /tmp/ccUpiKE3.s]
+        ignore line: [GNU assembler version 2.36.1 (x86_64-redhat-linux) using BFD version version 2.36.1-1.el7.2]
+        ignore line: [COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.']
+        ignore line: [[2/2] : && /opt/rh/devtoolset-11/root/usr/bin/cc  -v CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o -o cmTC_3e5bf   && :]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/cc]
+        ignore line: [COLLECT_LTO_WRAPPER=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib]
+        ignore line: [gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) ]
+        ignore line: [COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3e5bf' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_3e5bf.']
+        link line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2 -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccRwlIB6.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_3e5bf /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o]
+          arg [/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccRwlIB6.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_3e5bf] ==> ignore
+          arg [/lib/../lib64/crt1.o] ==> obj [/lib/../lib64/crt1.o]
+          arg [/lib/../lib64/crti.o] ==> obj [/lib/../lib64/crti.o]
+          arg [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o] ==> obj [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..]
+          arg [CMakeFiles/cmTC_3e5bf.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [-lc] ==> lib [c]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o] ==> obj [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o]
+          arg [/lib/../lib64/crtn.o] ==> obj [/lib/../lib64/crtn.o]
+        collapse obj [/lib/../lib64/crt1.o] ==> [/lib64/crt1.o]
+        collapse obj [/lib/../lib64/crti.o] ==> [/lib64/crti.o]
+        collapse obj [/lib/../lib64/crtn.o] ==> [/lib64/crtn.o]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11] ==> [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64] ==> [/opt/rh/devtoolset-11/root/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..] ==> [/opt/rh/devtoolset-11/root/usr/lib]
+        implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+        implicit objs: [/lib64/crt1.o;/lib64/crti.o;/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o;/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o;/lib64/crtn.o]
+        implicit dirs: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11;/opt/rh/devtoolset-11/root/usr/lib64;/lib64;/usr/lib64;/opt/rh/devtoolset-11/root/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-HgMEx8"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-HgMEx8"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-HgMEx8'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_a6be1
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always   -v -o CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o -c /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp
+        Using built-in specs.
+        COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/c++
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+        Thread model: posix
+        Supported LTO compression algorithms: zlib
+        gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) 
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_a6be1.dir/'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/cc1plus -quiet -v -D_GNU_SOURCE /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_a6be1.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fdiagnostics-color=always -o /tmp/ccbYi60a.s
+        GNU C++17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)
+        	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1, isl version isl-0.18-GMP
+        
+        warning: GMP header version 6.0.0 differs from library version 6.1.0.
+        warning: MPFR header version 3.1.1 differs from library version 3.1.4.
+        warning: MPC header version 1.0.1 differs from library version 1.0.3.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include-fixed"
+        ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../x86_64-redhat-linux/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11
+         /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/x86_64-redhat-linux
+         /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/backward
+         /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include
+         /usr/local/include
+         /opt/rh/devtoolset-11/root/usr/include
+         /usr/include
+        End of search list.
+        GNU C++17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)
+        	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1, isl version isl-0.18-GMP
+        
+        warning: GMP header version 6.0.0 differs from library version 6.1.0.
+        warning: MPFR header version 3.1.1 differs from library version 3.1.4.
+        warning: MPC header version 1.0.1 differs from library version 1.0.3.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: 4d912b14bce339cc8a41b2b0d103bc14
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_a6be1.dir/'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/as -v --64 -o CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccbYi60a.s
+        GNU assembler version 2.36.1 (x86_64-redhat-linux) using BFD version version 2.36.1-1.el7.2
+        COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.'
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -v CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_a6be1   && :
+        Using built-in specs.
+        COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/c++
+        COLLECT_LTO_WRAPPER=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+        Thread model: posix
+        Supported LTO compression algorithms: zlib
+        gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) 
+        COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_a6be1' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_a6be1.'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2 -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccGEJSTd.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_a6be1 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_a6be1' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_a6be1.'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11]
+          add: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/x86_64-redhat-linux]
+          add: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/backward]
+          add: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+          add: [/usr/local/include]
+          add: [/opt/rh/devtoolset-11/root/usr/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11] ==> [/opt/rh/devtoolset-11/root/usr/include/c++/11]
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/x86_64-redhat-linux] ==> [/opt/rh/devtoolset-11/root/usr/include/c++/11/x86_64-redhat-linux]
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/backward] ==> [/opt/rh/devtoolset-11/root/usr/include/c++/11/backward]
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include] ==> [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/include] ==> [/opt/rh/devtoolset-11/root/usr/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/opt/rh/devtoolset-11/root/usr/include/c++/11;/opt/rh/devtoolset-11/root/usr/include/c++/11/x86_64-redhat-linux;/opt/rh/devtoolset-11/root/usr/include/c++/11/backward;/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include;/usr/local/include;/opt/rh/devtoolset-11/root/usr/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:159 (message)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-HgMEx8']
+        ignore line: []
+        ignore line: [Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_a6be1]
+        ignore line: [[1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always   -v -o CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o -c /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/c++]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib]
+        ignore line: [gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_a6be1.dir/']
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/cc1plus -quiet -v -D_GNU_SOURCE /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_a6be1.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -fdiagnostics-color=always -o /tmp/ccbYi60a.s]
+        ignore line: [GNU C++17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9)  GMP version 6.0.0  MPFR version 3.1.1  MPC version 1.0.1  isl version isl-0.18-GMP]
+        ignore line: []
+        ignore line: [warning: GMP header version 6.0.0 differs from library version 6.1.0.]
+        ignore line: [warning: MPFR header version 3.1.1 differs from library version 3.1.4.]
+        ignore line: [warning: MPC header version 1.0.1 differs from library version 1.0.3.]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../x86_64-redhat-linux/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/x86_64-redhat-linux]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/backward]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C++17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9)  GMP version 6.0.0  MPFR version 3.1.1  MPC version 1.0.1  isl version isl-0.18-GMP]
+        ignore line: []
+        ignore line: [warning: GMP header version 6.0.0 differs from library version 6.1.0.]
+        ignore line: [warning: MPFR header version 3.1.1 differs from library version 3.1.4.]
+        ignore line: [warning: MPC header version 1.0.1 differs from library version 1.0.3.]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: 4d912b14bce339cc8a41b2b0d103bc14]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_a6be1.dir/']
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/as -v --64 -o CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccbYi60a.s]
+        ignore line: [GNU assembler version 2.36.1 (x86_64-redhat-linux) using BFD version version 2.36.1-1.el7.2]
+        ignore line: [COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-fdiagnostics-color=always' '-v' '-o' 'CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [[2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -v CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_a6be1   && :]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/c++]
+        ignore line: [COLLECT_LTO_WRAPPER=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib]
+        ignore line: [gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) ]
+        ignore line: [COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_a6be1' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_a6be1.']
+        link line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2 -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccGEJSTd.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_a6be1 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o]
+          arg [/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccGEJSTd.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_a6be1] ==> ignore
+          arg [/lib/../lib64/crt1.o] ==> obj [/lib/../lib64/crt1.o]
+          arg [/lib/../lib64/crti.o] ==> obj [/lib/../lib64/crti.o]
+          arg [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o] ==> obj [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..]
+          arg [CMakeFiles/cmTC_a6be1.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o] ==> obj [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o]
+          arg [/lib/../lib64/crtn.o] ==> obj [/lib/../lib64/crtn.o]
+        collapse obj [/lib/../lib64/crt1.o] ==> [/lib64/crt1.o]
+        collapse obj [/lib/../lib64/crti.o] ==> [/lib64/crti.o]
+        collapse obj [/lib/../lib64/crtn.o] ==> [/lib64/crtn.o]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11] ==> [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64] ==> [/opt/rh/devtoolset-11/root/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..] ==> [/opt/rh/devtoolset-11/root/usr/lib]
+        implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+        implicit objs: [/lib64/crt1.o;/lib64/crti.o;/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o;/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o;/lib64/crtn.o]
+        implicit dirs: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11;/opt/rh/devtoolset-11/root/usr/lib64;/lib64;/usr/lib64;/opt/rh/devtoolset-11/root/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include unistd.h"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-SpYjrc"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-SpYjrc"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_UNISTD_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-SpYjrc'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_b24f7
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always -o CMakeFiles/cmTC_b24f7.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-SpYjrc/CheckIncludeFile.cxx
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -rdynamic CMakeFiles/cmTC_b24f7.dir/CheckIncludeFile.cxx.o -o cmTC_b24f7   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include stdint.h"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-vYM9yg"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-vYM9yg"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_STDINT_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-vYM9yg'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_879c6
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always -o CMakeFiles/cmTC_879c6.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-vYM9yg/CheckIncludeFile.cxx
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -rdynamic CMakeFiles/cmTC_879c6.dir/CheckIncludeFile.cxx.o -o cmTC_879c6   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include inttypes.h"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-65sHYk"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-65sHYk"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_INTTYPES_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-65sHYk'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_5f357
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always -o CMakeFiles/cmTC_5f357.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-65sHYk/CheckIncludeFile.cxx
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -rdynamic CMakeFiles/cmTC_5f357.dir/CheckIncludeFile.cxx.o -o cmTC_5f357   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include sys/types.h"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-TpkVFp"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-TpkVFp"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_SYS_TYPES_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-TpkVFp'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_b7852
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always -o CMakeFiles/cmTC_b7852.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-TpkVFp/CheckIncludeFile.cxx
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -rdynamic CMakeFiles/cmTC_b7852.dir/CheckIncludeFile.cxx.o -o cmTC_b7852   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include sys/stat.h"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-g8HHFu"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-g8HHFu"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_SYS_STAT_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-g8HHFu'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_c3a18
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always -o CMakeFiles/cmTC_c3a18.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-g8HHFu/CheckIncludeFile.cxx
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -rdynamic CMakeFiles/cmTC_c3a18.dir/CheckIncludeFile.cxx.o -o cmTC_c3a18   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include fnmatch.h"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-H70iXz"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-H70iXz"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_FNMATCH_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-H70iXz'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_0628a
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always -o CMakeFiles/cmTC_0628a.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-H70iXz/CheckIncludeFile.cxx
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -rdynamic CMakeFiles/cmTC_0628a.dir/CheckIncludeFile.cxx.o -o cmTC_0628a   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckTypeSize.cmake:260 (check_include_file_cxx)"
+      - "lib/gflags/CMakeLists.txt:279 (check_type_size)"
+    checks:
+      - "Looking for C++ include stddef.h"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-WdB1sF"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-WdB1sF"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_STDDEF_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-WdB1sF'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_b4541
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always -o CMakeFiles/cmTC_b4541.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-WdB1sF/CheckIncludeFile.cxx
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -rdynamic CMakeFiles/cmTC_b4541.dir/CheckIncludeFile.cxx.o -o cmTC_b4541   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckTypeSize.cmake:146 (try_compile)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckTypeSize.cmake:271 (__check_type_size_impl)"
+      - "lib/gflags/CMakeLists.txt:279 (check_type_size)"
+    checks:
+      - "Check size of uint32_t"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-1cCPcL"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-1cCPcL"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_uint32_t"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-1cCPcL'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_f3de7
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always -o CMakeFiles/cmTC_f3de7.dir/uint32_t.cpp.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-1cCPcL/uint32_t.cpp
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -rdynamic CMakeFiles/cmTC_f3de7.dir/uint32_t.cpp.o -o cmTC_f3de7   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckSymbolExists.cmake:140 (try_compile)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckCXXSymbolExists.cmake:72 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "lib/gflags/CMakeLists.txt:314 (check_cxx_symbol_exists)"
+    checks:
+      - "Looking for strtoll"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-mtUY8Q"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-mtUY8Q"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_STRTOLL"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-mtUY8Q'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_61e4b
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++   -fdiagnostics-color=always -o CMakeFiles/cmTC_61e4b.dir/CheckSymbolExists.cxx.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-mtUY8Q/CheckSymbolExists.cxx
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++  -rdynamic CMakeFiles/cmTC_61e4b.dir/CheckSymbolExists.cxx.o -o cmTC_61e4b   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckCXXCompilerFlag.cmake:34 (cmake_check_compiler_flag)"
+      - "CMakeLists.txt:41 (CHECK_CXX_COMPILER_FLAG)"
+    checks:
+      - "Performing Test COMPILER_SUPPORTS_MARCH_NATIVE"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-3WEulX"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-3WEulX"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "COMPILER_SUPPORTS_MARCH_NATIVE"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-3WEulX'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_611b4
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/c++ -DCOMPILER_SUPPORTS_MARCH_NATIVE  -std=gnu++17 -fdiagnostics-color=always   -march=native -o CMakeFiles/cmTC_611b4.dir/src.cxx.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-3WEulX/src.cxx
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/c++   CMakeFiles/cmTC_611b4.dir/src.cxx.o -o cmTC_611b4   && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckCSourceCompiles.cmake:52 (cmake_check_source_compiles)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindThreads.cmake:97 (CHECK_C_SOURCE_COMPILES)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "CMakeLists.txt:51 (find_package)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-eQCIJ3"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-eQCIJ3"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-eQCIJ3'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_d6e60
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -fdiagnostics-color=always -o CMakeFiles/cmTC_d6e60.dir/src.c.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-eQCIJ3/src.c
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/cc   CMakeFiles/cmTC_d6e60.dir/src.c.o -o cmTC_d6e60   && :
+        FAILED: cmTC_d6e60 
+        : && /opt/rh/devtoolset-11/root/usr/bin/cc   CMakeFiles/cmTC_d6e60.dir/src.c.o -o cmTC_d6e60   && :
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: CMakeFiles/cmTC_d6e60.dir/src.c.o: in function `main':
+        src.c:(.text+0x2d): undefined reference to `pthread_create'
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: src.c:(.text+0x39): undefined reference to `pthread_detach'
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: src.c:(.text+0x45): undefined reference to `pthread_cancel'
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: src.c:(.text+0x56): undefined reference to `pthread_join'
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: src.c:(.text+0x6a): undefined reference to `pthread_atfork'
+        collect2: error: ld returned 1 exit status
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckLibraryExists.cmake:69 (try_compile)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindThreads.cmake:112 (CHECK_LIBRARY_EXISTS)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindThreads.cmake:175 (_threads_check_lib)"
+      - "CMakeLists.txt:51 (find_package)"
+    checks:
+      - "Looking for pthread_create in pthreads"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rFBTga"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rFBTga"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREADS_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rFBTga'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_231da
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -fdiagnostics-color=always -o CMakeFiles/cmTC_231da.dir/CheckFunctionExists.c.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rFBTga/CheckFunctionExists.c
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/cc -DCHECK_FUNCTION_EXISTS=pthread_create  CMakeFiles/cmTC_231da.dir/CheckFunctionExists.c.o -o cmTC_231da  -lpthreads && :
+        FAILED: cmTC_231da 
+        : && /opt/rh/devtoolset-11/root/usr/bin/cc -DCHECK_FUNCTION_EXISTS=pthread_create  CMakeFiles/cmTC_231da.dir/CheckFunctionExists.c.o -o cmTC_231da  -lpthreads && :
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: 找不到 -lpthreads
+        collect2: error: ld returned 1 exit status
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckLibraryExists.cmake:69 (try_compile)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindThreads.cmake:112 (CHECK_LIBRARY_EXISTS)"
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/FindThreads.cmake:176 (_threads_check_lib)"
+      - "CMakeLists.txt:51 (find_package)"
+    checks:
+      - "Looking for pthread_create in pthread"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-68IuUg"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-68IuUg"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREAD_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-68IuUg'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_2c9cd
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -fdiagnostics-color=always -o CMakeFiles/cmTC_2c9cd.dir/CheckFunctionExists.c.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-68IuUg/CheckFunctionExists.c
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/cc -DCHECK_FUNCTION_EXISTS=pthread_create  CMakeFiles/cmTC_2c9cd.dir/CheckFunctionExists.c.o -o cmTC_2c9cd  -lpthread && :
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/cmake/linux/x64/share/cmake-3.28/Modules/CheckIncludeFile.cmake:90 (try_compile)"
+      - "CMakeLists.txt:60 (check_include_file)"
+    checks:
+      - "Looking for jemalloc/jemalloc.h"
+    directories:
+      source: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-XSByHn"
+      binary: "/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-XSByHn"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+    buildResult:
+      variable: "HAVE_JEMALLOC"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-XSByHn'
+        
+        Run Build Command(s): /home/song/.cache/JetBrains/RemoteDev/dist/4c7a0de431e93_CLion-2024.1.4/bin/ninja/linux/x64/ninja -v cmTC_9d610
+        [1/2] /opt/rh/devtoolset-11/root/usr/bin/cc   -fdiagnostics-color=always -o CMakeFiles/cmTC_9d610.dir/CheckIncludeFile.c.o -c /home/song/nvm/pactree/lib/TurboHash/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-XSByHn/CheckIncludeFile.c
+        [2/2] : && /opt/rh/devtoolset-11/root/usr/bin/cc  -rdynamic CMakeFiles/cmTC_9d610.dir/CheckIncludeFile.c.o -o cmTC_9d610   && :
+        
+      exitCode: 0
+...

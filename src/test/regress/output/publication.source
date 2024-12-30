@@ -1,0 +1,308 @@
+--
+-- PUBLICATION
+--
+-- check help
+\h CREATE PUBLICATION
+Command:     CREATE PUBLICATION
+Description: define a new publication
+Syntax:
+CREATE PUBLICATION name
+    [ FOR TABLE table_name [, ...]
+      | FOR ALL TABLES ]
+    [ WITH ( publication_parameter [= value] [, ... ] ) ]
+
+\h ALTER PUBLICATION
+Command:     ALTER PUBLICATION
+Description: change the definition of a publication
+Syntax:
+ALTER PUBLICATION name ADD TABLE table_name [, ...]
+ALTER PUBLICATION name SET TABLE table_name [, ...]
+ALTER PUBLICATION name DROP TABLE table_name [, ...]
+ALTER PUBLICATION name SET ( publication_parameter [= value] [, ... ] )
+ALTER PUBLICATION name OWNER TO new_owner
+ALTER PUBLICATION name RENAME TO new_name
+
+\h DROP PUBLICATION
+Command:     DROP PUBLICATION
+Description: remove a publication
+Syntax:
+DROP PUBLICATION [ IF EXISTS ] name [, ...] [ CASCADE | RESTRICT ]
+
+--clear audit log
+SELECT pg_delete_audit('1012-11-10', '3012-11-11');
+ pg_delete_audit 
+-----------------
+ 
+(1 row)
+
+--enable publication and subscription audit
+\! @abs_bindir@/gs_guc reload -D @abs_srcdir@/tmp_check/datanode1/ -c "audit_system_object=16777215" > /dev/null 2>&1
+--enable recyclebin for depency test when drop table
+\! @abs_bindir@/gs_guc reload -D @abs_srcdir@/tmp_check/datanode1/ -c "enable_recyclebin=on" > /dev/null 2>&1
+select pg_sleep(1);
+ pg_sleep 
+----------
+ 
+(1 row)
+
+--- prepare
+CREATE ROLE regress_publication_user LOGIN SYSADMIN PASSWORD 'Abcdef@123';
+CREATE ROLE regress_publication_user2 LOGIN SYSADMIN PASSWORD 'Abcdef@123';
+SET SESSION AUTHORIZATION 'regress_publication_user' PASSWORD 'Abcdef@123';
+CREATE TABLE testpub_tbl1 (id int primary key, data text);
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "testpub_tbl1_pkey" for table "testpub_tbl1"
+CREATE TABLE testpub_tbl2 (id int primary key, data text);
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "testpub_tbl2_pkey" for table "testpub_tbl2"
+CREATE TABLE testpub_tbl3 (id int primary key, data text);
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "testpub_tbl3_pkey" for table "testpub_tbl3"
+CREATE TABLE testpub_tbl_col(id int) WITH (orientation=column);
+CREATE TABLE testpub_ustore (id int primary key, data text) with (storage_type=ustore);
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "testpub_ustore_pkey" for table "testpub_ustore"
+--- create publication with ustore
+CREATE PUBLICATION testpub_with_ustore_table FOR TABLE testpub_ustore;
+--- drop table, it will be in recyclebin
+DROP TABLE testpub_ustore;
+select count(*) from gs_recyclebin where rcyoriginname='testpub_ustore';
+ count 
+-------
+     1
+(1 row)
+
+DROP PUBLICATION testpub_with_ustore_table;
+purge table testpub_ustore;
+--- create publication
+CREATE PUBLICATION testpub_default;
+------ for all tables
+CREATE PUBLICATION testpub_foralltables FOR ALL TABLES;
+------ after create all table publication, do IUD to non-pk column table, should ok
+INSERT INTO testpub_tbl_col values(1);
+UPDATE testpub_tbl_col set id = 66 where id = 1;
+DELETE FROM testpub_tbl_col;
+CREATE TABLE testpub_tbl4 (id int primary key, data text);
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "testpub_tbl4_pkey" for table "testpub_tbl4"
+select pubname, tablename from pg_publication_tables where pubname='testpub_foralltables' AND tablename like 'testpub_%' order by tablename;
+       pubname        |  tablename   
+----------------------+--------------
+ testpub_foralltables | testpub_tbl1
+ testpub_foralltables | testpub_tbl2
+ testpub_foralltables | testpub_tbl3
+ testpub_foralltables | testpub_tbl4
+(4 rows)
+
+------ for only table testpub_tbl1
+CREATE PUBLICATION testpub_only_tbl1 FOR TABLE ONLY testpub_tbl1;
+select pubname, tablename from pg_publication_tables where pubname='testpub_only_tbl1';
+      pubname      |  tablename   
+-------------------+--------------
+ testpub_only_tbl1 | testpub_tbl1
+(1 row)
+
+-- fail - already added
+CREATE PUBLICATION testpub_only_tbl1 FOR TABLE testpub_tbl1;
+ERROR:  publication "testpub_only_tbl1" already exists
+------ publish multi tables
+CREATE PUBLICATION testpub_multitbls FOR TABLE testpub_tbl2, testpub_tbl3;
+select pubname, tablename from pg_publication_tables where pubname='testpub_multitbls' order by tablename;
+      pubname      |  tablename   
+-------------------+--------------
+ testpub_multitbls | testpub_tbl2
+ testpub_multitbls | testpub_tbl3
+(2 rows)
+
+------ only insert
+CREATE PUBLICATION testpub_only_insert with (publish='insert');
+select pubname, puballtables, pubinsert, pubupdate, pubdelete from pg_publication where pubname='testpub_only_insert';
+       pubname       | puballtables | pubinsert | pubupdate | pubdelete 
+---------------------+--------------+-----------+-----------+-----------
+ testpub_only_insert | f            | t         | f         | f
+(1 row)
+
+-- fail - view
+CREATE VIEW testpub_view AS SELECT 1;
+CREATE PUBLICATION testpub_pubview FOR TABLE testpub_view;
+ERROR:  "testpub_view" is not a table
+DETAIL:  Only tables can be added to publications.
+------ cascade
+------ CREATE PUBLICATION testpub_cascade_tbl1 FOR TABLE testpub_tbl1 *;
+------ CREATE TABLE testpub_tbl1cas (num int, id int REFERENCES testpub_tbl1(id));
+------ select relname from pg_class where oid in (select pg_get_publication_tables('testpub_cascade_tbl1'));
+------ select pubname, tablename from pg_publication_tables where pubname='testpub_cascade_tbl1';
+--- alter publication
+------ add table
+ALTER PUBLICATION testpub_default ADD TABLE testpub_tbl1;
+select pubname, tablename from pg_publication_tables where pubname='testpub_default';
+     pubname     |  tablename   
+-----------------+--------------
+ testpub_default | testpub_tbl1
+(1 row)
+
+-- fail - already added
+ALTER PUBLICATION testpub_only_tbl1 ADD TABLE testpub_tbl1;
+ERROR:  relation "testpub_tbl1" is already member of publication "testpub_only_tbl1"
+------ set table
+ALTER PUBLICATION testpub_default SET TABLE testpub_tbl2;
+select pubname, tablename from pg_publication_tables where pubname='testpub_default';
+     pubname     |  tablename   
+-----------------+--------------
+ testpub_default | testpub_tbl2
+(1 row)
+
+------ drop table
+ALTER PUBLICATION testpub_multitbls DROP TABLE ONLY testpub_tbl2;
+------ fail - add column table
+ALTER PUBLICATION testpub_multitbls ADD TABLE testpub_tbl_col;
+ERROR:  "testpub_tbl_col" is not a row table
+DETAIL:  Only row tables can be added to publications.
+------ fail - add internal schema table
+ALTER PUBLICATION testpub_multitbls ADD TABLE db4ai.snapshot;
+ERROR:  "snapshot" is in internal schema
+DETAIL:  "db4ai" is a internal schema, table in this schema cannot be replicated.
+ALTER PUBLICATION testpub_multitbls ADD TABLE dbe_pldeveloper.gs_source;
+ERROR:  "gs_source" is in internal schema
+DETAIL:  "dbe_pldeveloper" is a internal schema, table in this schema cannot be replicated.
+select pubname, tablename from pg_publication_tables where pubname='testpub_multitbls';
+      pubname      |  tablename   
+-------------------+--------------
+ testpub_multitbls | testpub_tbl3
+(1 row)
+
+------ SET (parameter xxx)
+ALTER PUBLICATION testpub_default SET (publish='insert, delete');
+SELECT pubname, puballtables, pubinsert, pubupdate, pubdelete FROM pg_publication WHERE pubname='testpub_default';
+     pubname     | puballtables | pubinsert | pubupdate | pubdelete 
+-----------------+--------------+-----------+-----------+-----------
+ testpub_default | f            | t         | f         | t
+(1 row)
+
+-- fail - can't add to for all tables publication
+ALTER PUBLICATION testpub_foralltables ADD TABLE testpub_tbl2;
+ERROR:  publication "testpub_foralltables" is defined as FOR ALL TABLES
+DETAIL:  Tables cannot be added to or dropped from FOR ALL TABLES publications.
+-- fail - can't drop from all tables publication
+ALTER PUBLICATION testpub_foralltables DROP TABLE testpub_tbl2;
+ERROR:  publication "testpub_foralltables" is defined as FOR ALL TABLES
+DETAIL:  Tables cannot be added to or dropped from FOR ALL TABLES publications.
+-- fail - can't add to for all tables publication
+ALTER PUBLICATION testpub_foralltables SET TABLE pub_test.testpub_nopk;
+ERROR:  publication "testpub_foralltables" is defined as FOR ALL TABLES
+DETAIL:  Tables cannot be added to or dropped from FOR ALL TABLES publications.
+-- alter owner
+ALTER PUBLICATION testpub_foralltables OWNER TO regress_publication_user2;
+-- rename
+ALTER PUBLICATION testpub_foralltables rename to testpub_foralltables_rename;
+--- drop testpub_tbl1
+DROP TABLE testpub_tbl1;
+select pubname, tablename from pg_publication_tables where tablename='testpub_tbl1';
+ pubname | tablename 
+---------+-----------
+(0 rows)
+
+--- drop publication
+DROP PUBLICATION testpub_foralltables_rename;
+select * from pg_publication where pubname='testpub_foralltables_rename';
+ pubname | pubowner | puballtables | pubinsert | pubupdate | pubdelete | pubddl 
+---------+----------+--------------+-----------+-----------+-----------+--------
+(0 rows)
+
+DROP PUBLICATION IF EXISTS testpub_nonexists;
+NOTICE:  publication "testpub_nonexists" does not exist, skipping, skipping
+--- clean
+DROP TABLE testpub_tbl2;
+DROP TABLE testpub_tbl3;
+DROP TABLE testpub_tbl4;
+DROP TABLE testpub_tbl_col;
+DROP VIEW testpub_view;
+DROP PUBLICATION IF EXISTS testpub_default;
+DROP PUBLICATION IF EXISTS testpub_only_tbl1;
+DROP PUBLICATION IF EXISTS testpub_only_insert;
+DROP PUBLICATION IF EXISTS testpub_multitbls;
+--- DROP PUBLICATION IF EXISTS testpub_cascade_tbl1;
+RESET SESSION AUTHORIZATION;
+DROP ROLE regress_publication_user;
+DROP ROLE regress_publication_user2;
+--- permission
+CREATE ROLE regress_publication_user LOGIN SYSADMIN PASSWORD 'Abcdef@123';
+SET SESSION AUTHORIZATION 'regress_publication_user' PASSWORD 'Abcdef@123';
+CREATE PUBLICATION testpub FOR ALL TABLES;
+CREATE ROLE normal_user LOGIN PASSWORD 'Abcdef@123';
+SET SESSION AUTHORIZATION 'normal_user' PASSWORD 'Abcdef@123';
+--- fail permission denied
+create publication p1;
+ERROR:  permission denied for database regression
+DETAIL:  N/A
+ALTER PUBLICATION testpub RENAME TO testpub1;
+ERROR:  must be owner of publication testpub
+DETAIL:  N/A
+SET SESSION AUTHORIZATION 'regress_publication_user' PASSWORD 'Abcdef@123';
+DROP PUBLICATION testpub;
+RESET SESSION AUTHORIZATION;
+DROP ROLE regress_publication_user;
+DROP ROLE normal_user;
+SELECT object_name,detail_info FROM pg_query_audit('2022-01-13 9:30:00', '2031-12-12 22:00:00') where type = 'ddl_publication_subscription';
+         object_name         |                                  detail_info                                  
+-----------------------------+-------------------------------------------------------------------------------
+ testpub_with_ustore_table   | CREATE PUBLICATION testpub_with_ustore_table FOR TABLE testpub_ustore;
+ testpub_with_ustore_table   | DROP PUBLICATION testpub_with_ustore_table;
+ testpub_default             | CREATE PUBLICATION testpub_default;
+ testpub_foralltables        | CREATE PUBLICATION testpub_foralltables FOR ALL TABLES;
+ testpub_only_tbl1           | CREATE PUBLICATION testpub_only_tbl1 FOR TABLE ONLY testpub_tbl1;
+ testpub_multitbls           | CREATE PUBLICATION testpub_multitbls FOR TABLE testpub_tbl2, testpub_tbl3;
+ testpub_only_insert         | CREATE PUBLICATION testpub_only_insert with (publish='insert');
+ testpub_default             | ALTER PUBLICATION testpub_default ADD TABLE testpub_tbl1;
+ testpub_default             | ALTER PUBLICATION testpub_default SET TABLE testpub_tbl2;
+ testpub_multitbls           | ALTER PUBLICATION testpub_multitbls DROP TABLE ONLY testpub_tbl2;
+ testpub_default             | ALTER PUBLICATION testpub_default SET (publish='insert, delete');
+ testpub_foralltables        | ALTER PUBLICATION testpub_foralltables OWNER TO regress_publication_user2;
+ testpub_foralltables        | ALTER PUBLICATION testpub_foralltables rename to testpub_foralltables_rename;
+ testpub_foralltables_rename | DROP PUBLICATION testpub_foralltables_rename;
+ testpub_nonexists           | DROP PUBLICATION IF EXISTS testpub_nonexists;
+ testpub_default             | DROP PUBLICATION IF EXISTS testpub_default;
+ testpub_only_tbl1           | DROP PUBLICATION IF EXISTS testpub_only_tbl1;
+ testpub_only_insert         | DROP PUBLICATION IF EXISTS testpub_only_insert;
+ testpub_multitbls           | DROP PUBLICATION IF EXISTS testpub_multitbls;
+ testpub                     | CREATE PUBLICATION testpub FOR ALL TABLES;
+ testpub                     | DROP PUBLICATION testpub;
+(21 rows)
+
+--clear audit log
+SELECT pg_delete_audit('1012-11-10', '3012-11-11');
+ pg_delete_audit 
+-----------------
+ 
+(1 row)
+
+create table replica_test (a int primary key, b int);
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "replica_test_pkey" for table "replica_test"
+select pg_get_replica_identity_index('replica_test');
+ pg_get_replica_identity_index 
+-------------------------------
+ replica_test_pkey
+(1 row)
+
+drop table replica_test;
+\! @abs_bindir@/gs_guc reload -D @abs_srcdir@/tmp_check/datanode1/ -c "audit_system_object" > /dev/null 2>&1
+-- skip recycle object
+\! @abs_bindir@/gs_guc reload -D @abs_srcdir@/tmp_check/datanode1/ -c "enable_recyclebin = on" > /dev/null 2>&1
+select pg_sleep(1);
+ pg_sleep 
+----------
+ 
+(1 row)
+
+create table t_ustore_test1(a int) with (storage_type = ustore);
+drop table t_ustore_test1;
+select count(*) from pg_class where relname like 'BIN$%';
+ count 
+-------
+     1
+(1 row)
+
+create publication pub_test for all tables;
+select * from pg_publication_tables where tablename like 'BIN$%';
+ pubname | schemaname | tablename 
+---------+------------+-----------
+(0 rows)
+
+purge table t_ustore_test1;
+drop publication pub_test;
+\! @abs_bindir@/gs_guc reload -D @abs_srcdir@/tmp_check/datanode1/ -c "enable_recyclebin = off" > /dev/null 2>&1

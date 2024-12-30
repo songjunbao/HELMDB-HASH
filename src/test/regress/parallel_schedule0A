@@ -1,0 +1,482 @@
+
+# ----------
+# src/test/regress/parallel_schedule
+#
+# By convention, we put no more than twenty tests in any one parallel group;
+# this limits the number of connections needed to run the tests.
+# ----------
+
+# This test case is used to monitor GUC parameter information.
+# If the GUC parameter is changed, please modify the Code/src/bin/gs_guc/cluster_guc.conf and Code/src/test/regress/output/recovery_2pc_tools.source files.
+#test: recovery_2pc_tools recovery_2pc_tools02
+#test: recovery_2pc_tools
+# --------------------------
+# usecases for improving coverage 
+# these use cases may affect other usecases, please keep these usecases unique in their parallel groups
+# --------------------------
+test: timecapsule_partition_ustore_test_1
+test: timecapsule_partition_ustore_test_2
+test: ddl
+test: ustore_subpartition_vacuum_partition
+test: test_ustore_undo_tool
+test: privileges
+test: AMHeap_logical_scan
+test: copy
+
+test: sqlbypass_partition
+test: sqlpatch_base
+test: sqlpatch_func
+
+test: extract_pushdown_or_clause
+
+#wlm
+test: workload_manager
+
+test: spm_adaptive_gplan
+test: smp
+test: alter_hw_package
+test: hw_grant_package gsc_func gsc_db
+#test: uppercase_attribute_name
+test: decode_compatible_with_o outerjoin_bugfix
+test: replace_func_with_two_args trunc_func_for_date nlssort_pinyin updatable_views dependent_view
+
+# test multiple statistics
+test: functional_dependency record_slow_sql_in_proc
+test: pg_proc_test test_row_type_in_proc exec_result_test
+
+# test fdw
+# NOTICE: In the "fdw_prepare", we copy the fdw test to be used from contrib into regress sql set.
+test: fdw_prepare
+#test: postgres_fdw postgres_fdw_cstore postgres_fdw_partition
+
+# parse xlog and page
+#test: parse_page
+#test: parse_xlog
+
+#test user_defined_variable
+test: set_user_defined_variables_test
+test: set_system_variables_test
+
+# test for set [session | global] transaction
+test: set_transaction_test
+
+# test select into statement
+test: select_into_user_defined_variables
+test: select_into_file
+
+test: trigger_dump
+test: out_param_func
+#test: sqlcode_cursor
+#test: gs_dump_tableconstraint gs_dump_package
+
+# test AI4DB
+test: plpgsql_override_out test_plsql_core
+test: plpgsql_sql_with_proc_keyword
+test: plsql_show_all_error b_pg_plsql_show_all_error
+test: pldeveloper_gs_source
+test: index_advisor
+#test: pl_debugger_server pl_debugger_client
+test: update_for_wait_s1 update_for_wait_s2
+#test: plan_hint_set plan_hint_iud view_definer_test gs_dump_sequence
+test: plan_hint plan_hint_no_expand null_test_opt deserialize_func
+test: large_sequence int16 
+test: gs_dump_tableof view_definer_permission_test
+test: analyze_commands
+#test: single_node_job
+test: single_node_ddl
+test: single_node_sqlbypass
+test: median deferrable
+test: array_funcs first_last_agg
+
+test: hw_pwd_encryption_sm3
+
+test: sync_standy_names
+
+#test event
+test: event
+test: event_dump_audit
+
+#test sha func
+test: single_node_sha
+
+#test b format collation
+#test: test_b_format_collate charset_b_format test_b_format_collate2
+test: test_b_format_collate2
+
+# test subpartition
+test: hw_subpartition_createtable hw_subpartition_scan hw_subpartition_select hw_subpartition_split hw_subpartition_truncate hw_subpartition_update hw_subpartition_gpi hw_subpartition_analyze_vacuum hw_subpartition_alter_table hw_subpartition_index hw_subpartition_add_drop_partition hw_subpartition_tablespace hw_subpartition_ddl_index hw_subpartition_size
+test: hw_subpartition_vacuum_partition hw_subpartition_tablespace_global
+#test: gs_dump_subpartition
+test: partition_dml_operations partition_minmax partition_pruning hw_partitionno hw_partition_parallel
+test: partition_param_path hw_subpartition_add_drop_partition_1 null_in_partition
+#test: partition_cost_model
+test: row_partition_iterator_elimination col_partition_iterator_elimination
+
+# test subpartition with segment=on
+test: segment_subpartition_createtable segment_subpartition_scan segment_subpartition_select segment_subpartition_split segment_subpartition_truncate segment_subpartition_update segment_subpartition_gpi segment_subpartition_analyze_vacuum segment_subpartition_alter_table segment_subpartition_add_drop_partition segment_subpartition_tablespace segment_subpartition_ddl_index
+test: segment_subpartition_vacuum_partition segment_subpartition_select_1
+
+test: get_instr_unique_sql
+
+# run tablespace by itself, and first, because it forces a checkpoint;
+# we'd prefer not to have checkpoints later in the tests because that
+# interferes with crash-recovery testing.
+test: single_node_tablespace
+
+#test startwith...connect by
+test: sw_prepare
+test: sw_basic sw_icbc sw_siblings sw_bugfix-1 sw_bugfix-2 sw_by_rownum_level
+test: sw_clearup
+
+# test customer base environment hint
+test: hw_cbt_hint_prep
+test: hw_cbt_hint
+test: hw_cbt_hint_drop
+
+#--------------
+# any privilege
+# -------------
+test: pri_alter_any_table pri_create_any_function pri_create_any_index pri_create_any_sequence pri_create_any_type pri_dml_any_table pri_execute_any_function pri_indepent_any pri_any_package pri_samenew_schema
+# ----------
+# The first group of parallel tests
+# ----------
+test: single_node_boolean single_node_char single_node_name single_node_varchar single_node_text single_node_int2 single_node_int4 single_node_int8 single_node_oid single_node_float4 single_node_float8 single_node_bit single_node_numeric single_node_txid single_node_uuid single_node_enum single_node_money single_node_nvarchar
+
+# Depends on things setup during char, varchar and text
+#test: single_node_strings
+# Depends on int2, int4, int8, float4, float8
+test: single_node_numerology
+
+# ----------
+# The second group of parallel tests
+# ----------
+test: single_node_point single_node_lseg single_node_box single_node_path single_node_polygon single_node_circle single_node_date single_node_time single_node_timetz single_node_timestamp single_node_timestamptz 
+#test: single_node_interval 
+test: single_node_abstime single_node_reltime 
+#test: single_node_tinterval 
+test: single_node_inet single_node_macaddr single_node_tstypes single_node_comments
+
+# ----------
+# Another group of parallel tests
+# geometry depends on point, lseg, box, path, polygon and circle
+# horology depends on interval, timetz, timestamp, timestamptz, reltime and abstime
+# ----------
+#test: single_node_geometry single_node_horology 
+#test: single_node_regex
+test: single_node_regex_temp 
+test: single_node_oidjoins single_node_type_sanity
+
+# ----------
+# These four each depend on the previous one
+# ----------
+test: single_node_insert xc_rownum
+test: single_node_temple
+test: single_node_create_function_1
+#test: single_node_create_type
+#test: single_node_create_table
+#test: single_node_create_function_2
+
+# ----------
+# Load huge amounts of data
+# We should split the data files into single files and then
+# execute two copy tests parallel, to check that copy itself
+# is concurrent safe.
+# ----------
+#test: single_node_copy single_node_copyselect
+
+# pre-Read test
+test: preread_test
+
+# ----------
+# More groups of parallel tests
+# ----------
+#test: single_node_create_misc 
+#test: single_node_create_operator
+# These depend on the above two
+#test: single_node_create_index 
+#test: single_node_create_view
+test: single_node_test_null_operator
+# ----------
+# Another group of parallel tests
+# ----------
+test: single_node_create_aggregate test_cast_in_operator
+#test: single_node_create_function_3 single_node_create_cast
+#test: single_node_constraints single_node_triggers single_node_inherit single_node_create_table_like single_node_typed_table
+test: single_node_vacuum
+#test: single_node_drop_if_exists
+
+# ----------
+# sanity_check does a vacuum, affecting the sort order of SELECT *
+# results. So it should not run parallel to other tests.
+# ----------
+#test: single_node_sanity_check
+
+# ----------
+# Believe it or not, select creates a table, subsequent
+# tests need.
+# ----------
+#test: single_node_errors
+#test: single_node_select
+ignore: single_node_random
+
+# ----------
+# Another group of parallel tests
+# ----------
+#test: single_node_select_into single_node_select_distinct 
+#test: single_node_select_distinct_on single_node_select_implicit single_node_select_having 
+test: single_node_select_implicit single_node_select_having 
+#test: single_node_subselect
+test: single_node_union
+#test: single_node_case single_node_join single_node_aggregates 
+#test: single_node_transactions 
+test: single_node_random transactions_test autocommit_test
+#test: single_node_portals
+#test: single_node_arrays 
+#test: single_node_btree_index single_node_hash_index single_node_update 
+
+test: prefixkey_index invisible_index
+test: hash_index_001
+test: hash_index_002
+test: single_node_update 
+#test single_node_namespace
+#test: single_node_prepared_xacts 
+#test: single_node_delete
+
+# ----------
+# Another group of parallel tests
+# ----------
+#test: single_node_privileges 
+#test: single_node_security_label single_node_collate
+
+#test: single_node_misc
+# rules cannot run concurrently with any test that creates a view
+#test: single_node_rules
+
+# ----------
+# Another group of parallel tests
+# ----------
+#test: single_node_select_views 
+#test: single_node_portals_p2 
+test: single_node_foreign_key
+#test: single_node_foreign_key single_node_cluster single_node_dependency
+#test: single_node_guc 
+test: single_node_bitmapops single_node_combocid 
+#test: single_node_tsearch
+#test: single_node_tsdicts 
+#test: single_node_foreign_data 
+#single_node_window
+#test: single_node_xmlmap 
+#test: single_node_functional_deps single_node_advisory_lock single_node_json single_node_equivclass
+test: xml
+
+# ----------
+# Another group of parallel tests
+# NB: temp.sql does a reconnect which transiently uses 2 connections,
+# so keep this parallel group to at most 19 tests
+# ----------
+test: single_node_sequence
+#test: single_node_plancache single_node_limit single_node_plpgsql single_node_copy2 single_node_temp single_node_domain single_node_rangefuncs single_node_prepare single_node_without_oid single_node_conversion single_node_truncate single_node_alter_table single_node_sequence single_node_polymorphism
+#test: single_node_rowtypes 
+#test: single_node_returning single_node_largeobject single_node_with single_node_xml
+
+# run stats by itself because its delay may be insufficient under heavy load
+#test: single_node_stats
+
+# run and check forbidden functions are still forbidden to use in single node
+test: single_node_forbidden
+
+test: single_node_mergeinto merge_subquery merge_subquery3 merge_1
+test: merge_where_col
+test: merge_concurrent_update_delete_1 merge_concurrent_update_delete_2 merge_concurrent_update_delete_3 merge_into_deleted merge_into_partition_row_movement merge_into_selfmodified merge_into_updated
+
+# Trigger tests
+test: single_node_triggers
+#test: single_node_xc_trigship
+
+# Synonym tests
+#test: single_node_synonym
+test: synonym_conflict_test
+
+# unsupported view tests
+test: single_node_unsupported_view
+#test: hw_cstore
+
+# ----------
+# single_node_commit/rollback tests
+# ----------
+test: single_node_produce_commit_rollback 
+test: single_node_function_commit_rollback
+
+test: instr_unique_sql
+test: auto_explain plan_table_for_anonymous_block
+test: shutdown
+
+# List/Hash table exchange
+test: hw_partition_list_exchange
+test: hw_partition_hash_exchange
+
+# List/Hash table truncate
+test: hw_partition_list_truncate hw_partition_hash_truncate
+
+# add/drop partition
+test: hw_partition_add_drop_partition
+
+# create view on partition/subpartition
+test: hw_partition_create_view
+
+#test: hw_partition_start_end
+# To check min_max fuc support IP
+test: min_max_support_IP
+
+# encrypt decrypt
+test: encrypt_decrypt
+
+# interval partition 
+test: hw_partition_interval
+test: hw_partition_interval_exchange
+test: hw_partition_interval_index
+test: hw_partition_interval_unusable_index
+test: hw_partition_interval_reindex
+test: hw_partition_interval_movement
+# To check create interval partition parallel
+test: hw_partition_interval_parallel_prepare
+test: hw_partition_interval_parallel_insert hw_partition_interval_parallel_insert_01 hw_partition_interval_parallel_insert_02
+test: hw_partition_interval_parallel_end
+test: hw_partition_interval_select
+test: hw_partition_interval_check_syntax
+test: hw_partition_interval_split
+test: hw_partition_interval_merge
+test: hw_partition_interval_compatibility
+#test: hw_partition_interval_dump_restore
+
+# Global Partition Index feature testcase
+# gpi create
+test: gpi_build_index
+
+# gpi check
+test: gpi_create_constraint
+test: gpi_unique_check
+
+# gpi index scan
+test: gpi_index
+
+# gpi index only scan
+test: gpi_index_only
+
+# gpi bitmap
+test: gpi_bitmapscan
+
+# gpi pwj
+test: gpi_pwj
+
+# gpi set unusable
+test: gpi_set_index_unusable
+
+# gpi rebuild
+#test: gpi_rebuild_index
+
+# gpi cluster
+test: gpi_cluster_01 gpi_cluster_02 gpi_cluster_03
+
+# gpi interval
+test: gpi_interval
+
+# gpi range
+test: gpi_range
+
+# gpi invliad part
+test: gpi_invalid_part
+test: gpi_clean_wait
+
+# gpi vacuum
+test: gpi_vacuum_lazy
+test: gpi_hw_partition_vacuum_full
+test: gpi_hw_partition_vacuum_full_01
+
+# gpi alter
+test: gpi_alter_partition
+test: gpi_alter_partition_with_update
+# test: gpi_merge_partitions
+
+# global temporary table tests
+test: gtt_stats
+test: gtt_function
+test: gtt_prepare
+test: gtt_parallel_1 gtt_parallel_2
+test: gtt_clean
+test: gtt_merge
+
+#openGauss synchronization test cases
+test: partiton_pathkey_col_plan partiton_pathkey_col_randomexec partiton_pathkey_row_plan partiton_pathkey_row_randomexec
+#test the locales setting expect not affacted each other
+#test: pg_session_locale
+# ----------
+# These four each depend on the previous one(duplicate)
+# duplicated create_function_1 create_type create_table copy
+# ----------
+#test: type_sanity
+#test: create_function_1
+test: create_table create_table_2 create_table_3
+test: temp__4
+test: create_seg_table
+#test: copy#
+
+
+
+# ----------
+# More groups of parallel tests
+# duplicated create_misc
+# ----------
+#test: hw_hashagg_start
+test: create_misc
+test: create_view1 create_view2 create_view3 create_view4 create_view5
+#test: int8#
+
+#dupliacated select int8
+#test: select
+#test: misc
+#test: stats
+#test: alter_system_set
+
+#dispatch from 13
+test: function
+test: aggregates_part1 aggregates_part2 aggregates_part3 count_distinct_part1 count_distinct_part2 count_distinct_part4
+test: aggregate_B_database
+test: group_concat_max_len_gs_guc
+#test: count_distinct_part3#
+
+test: hw_dfx_thread_status
+
+test: stable_function_shippable
+
+# Postgres-XC : Removed this test from the parallel group of tests since it used to give inconsistent plan outputs.
+#test: inherit
+# ----------
+# Another group of parallel tests
+# ----------
+test: create_function_3 vacuum
+test: drop_if_exists drop_database test_if_not_exists test_create_index_if_not_exists test_create_sequence_if_not_exists
+#test: constraints
+
+#test: errors subplan_base
+test: subplan_new
+#test: select
+test: col_subplan_new
+#test: col_subplan_base_1
+#test: join
+test: select_into subselect_part2 gs_aggregate
+#test: select_distinct subselect_part1 transactions btree_index select_distinct_on arrays hash_index
+#test: transactions_control random union
+#test: aggregates
+test: holdable_cursor
+#test: portals_p2 window tsearch temp__6 col_subplan_base_2
+
+test: alter_table_000 alter_table_002 alter_table_003 alter_table_modify
+#test: alter_table_001 alter_table_modify_ustore
+test: alter_table_modify_ltt alter_table_modify_gtt
+test: alter_table_modify alter_table_modify_ustore alter_table_modify_ltt alter_table_modify_gtt
+
+# test for empty string in A format database
+test: accept_empty_str not_accept_empty_str pg_empty_str accept_empty_copy not_accept_empty_copy
+
+#test: with

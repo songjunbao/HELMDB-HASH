@@ -1,0 +1,1 @@
+/opt/rh/devtoolset-11/root/usr/bin/c++ -pthread -Wall -Wextra -march=native -mavx512bw -g CMakeFiles/ycsb.dir/ycsb.cpp.o -o ycsb  src/libpactree.a lib/PDL-ART/libpdlart.a -ltbb -lnuma -lpmem -lpmemobj

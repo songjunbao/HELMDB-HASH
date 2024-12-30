@@ -1,0 +1,404 @@
+drop database if exists part_expr_key_db;
+create database part_expr_key_db;
+\c part_expr_key_db
+--test error sql
+create table testrangepart(a int, b int) partition by range(a/2) (partition p0 values less than(100),partition p1 values less than(200));
+create table testlistpart(a int, b int) partition by list(a/2) (partition p0 values(100,200),partition p1 values(300,400));
+create table testhashpart(a int, b int) partition by hash(a/2) (partition p0 ,partition p1);
+create table testrangepart(a int, b int) partition by range(int4mul(a,2)) (partition p0 values less than(100),partition p1 values less than(200));
+create table testlistpart(a int, b int) partition by list(int4mul(a,2)) (partition p0 values(100,200),partition p1 values(300,400));
+create table testhashpart(a int, b int) partition by hash(int4mul(a,2)) (partition p0 ,partition p1);
+create table testrangepart(a int, b int) partition by range(a,b*2) (partition p0 values less than(100,1000),partition p1 values less than(200,2000));
+create table testrangepart(a int, b int) partition by range(a*2,b) (partition p0 values less than(100,1000),partition p1 values less than(200,2000));
+CREATE TABLE test_error_table0 ( column62 INT ) PARTITION BY HASH ( NOT TRUE ) ;
+CREATE TABLE testrangepart(a date) PARTITION BY RANGE (a*2) INTERVAL ('1 month')
+(
+	PARTITION p0 VALUES LESS THAN ('2020-03-01'),
+	PARTITION p1 VALUES LESS THAN ('2020-04-01')
+);
+
+--test partkeyexpr in pg_partition 
+create table testtmp1(a int, b int) partition by range(a) subpartition by range(b)
+(
+    partition p0 values less than(1000)(subpartition p00 values less than(100)),
+    partition p1 values less than(2000) (subpartition p10 values less than(200))
+);
+select count(partkeyexpr) from pg_partition where (parttype = 'r') and (parentid in (select oid from pg_class where relname = 'testtmp1'));
+select count(partkeyexpr) from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'testtmp1'));
+select count(partkeyexpr) from pg_partition where (parttype = 's') and (parentid in (select oid from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'testtmp1'))));
+create table testtmp2(a int, b int) partition by range(a) subpartition by range(b*2)
+(
+    partition p0 values less than(1000)(subpartition p00 values less than(100)),
+    partition p1 values less than(2000)(subpartition p10 values less than(200))
+);
+select count(partkeyexpr) from pg_partition where (parttype = 'r') and (parentid in (select oid from pg_class where relname = 'testtmp2'));
+select partkeyexpr from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'testtmp2'));
+select count(partkeyexpr) from pg_partition where (parttype = 's') and (parentid in (select oid from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'testtmp2'))));
+create table testtmp3(a int, b int) partition by range(a*2) subpartition by range(b)
+(
+    partition p0 values less than(1000)(subpartition p00 values less than(100)),
+    partition p1 values less than(2000)(subpartition p10 values less than(200))
+);
+select partkeyexpr from pg_partition where (parttype = 'r') and (parentid in (select oid from pg_class where relname = 'testtmp3'));
+select count(partkeyexpr) from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'testtmp3'));
+select count(partkeyexpr) from pg_partition where (parttype = 's') and (parentid in (select oid from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'testtmp3'))));
+drop table testtmp1,testtmp2,testtmp3;
+
+create table testtab(a int, b int);
+--test range partition
+create table testrangepart(a int, b int) partition by range(abs(a*2))
+(
+    partition p0 values less than(100),
+    partition p1 values less than(200)
+);
+select partkeyexpr from pg_partition where (parttype = 'r') and (parentid in (select oid from pg_class where relname = 'testrangepart'));
+insert into testrangepart values(-51,1),(49,2);
+insert into testrangepart values(-101,1);
+select * from testrangepart partition(p0);
+select * from testrangepart partition(p1);
+select * from testrangepart where a = -51;
+update testrangepart set a = -48 where a = -51;
+select * from testrangepart partition(p0);
+select * from testrangepart partition(p1);
+delete from testrangepart where a = -48 or a = 49;
+select * from testrangepart;
+insert into testtab values(-51,1),(51,2);
+insert into testrangepart select * from testtab;
+select * from testrangepart partition(p0);
+select * from testrangepart partition(p1);
+delete from testtab;
+
+--test list partition
+create table testlistpart(a int, b int) partition by list(abs(a*2))
+(
+    partition p0 values(100,200),
+    partition p1 values(300,400)
+);
+select partkeyexpr from pg_partition where (parttype = 'r') and (parentid in (select oid from pg_class where relname = 'testlistpart'));
+insert into testlistpart values(-50,1),(200,2);
+insert into testlistpart values(300,1);
+select * from testlistpart partition(p0);
+select * from testlistpart partition(p1);
+select * from testlistpart where a = -50;
+update testlistpart set a = -150 where a = -50;
+select * from testlistpart partition(p0);
+select * from testlistpart partition(p1);
+delete from testlistpart where a = -150 or a = 200;
+select * from testlistpart;
+insert into testtab values(-50,1),(200,2);
+insert into testlistpart select * from testtab;
+select * from testlistpart partition(p0);
+select * from testlistpart partition(p1);
+delete from testtab;
+
+--test hash partition
+create table testhashpart(a int, b int) partition by hash(abs(a*2)) (partition p0,partition p1);
+select partkeyexpr from pg_partition where (parttype = 'r') and (parentid in (select oid from pg_class where relname = 'testhashpart'));
+insert into testhashpart values(-51,1),(50,2);
+select * from testhashpart partition(p0);
+select * from testhashpart partition(p1);
+select * from testhashpart where a = -51;
+update testhashpart set a = -49 where a = -51;
+select * from testhashpart partition(p0);
+select * from testhashpart partition(p1);
+delete from testhashpart where a = 50 or a = -49;
+select * from testhashpart;
+insert into testtab values(-51,1),(50,2);
+insert into testhashpart select * from testtab;
+select * from testhashpart partition(p0);
+select * from testhashpart partition(p1);
+delete from testtab;
+
+--test range subpartition
+create table testrangesubpart(a int, b int) partition by range(a+b) subpartition by range(a-b)
+(
+    partition p0 values less than(1000)(subpartition p00 values less than(100)),
+    partition p1 values less than(2000)(subpartition p10 values less than(200))
+);
+select partkeyexpr from pg_partition where (parttype = 'r') and (parentid in (select oid from pg_class where relname = 'testrangesubpart'));
+select partkeyexpr from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'testrangesubpart'));
+insert into testrangesubpart values(500,401),(600,450);
+insert into testrangesubpart values(600,299);
+select * from testrangesubpart partition(p0);
+select * from testrangesubpart partition(p1);
+select * from testrangesubpart where a = 500;
+update testrangesubpart set a = 400 where a = 500;
+select * from testrangesubpart partition(p0);
+select * from testrangesubpart partition(p1);
+delete from testrangesubpart where a = 400 or a = 600;
+select * from testrangesubpart;
+insert into testtab values(500,401),(600,450);
+insert into testrangesubpart select * from testtab;
+select * from testrangesubpart partition(p0);
+select * from testrangesubpart partition(p1);
+delete from testtab;
+
+--test list subpartition
+create table testlistsubpart(a int, b int) partition by range(abs(a*2)) subpartition by list(abs(b*2)) (partition p0 values less than(1000)(subpartition p00 values(100)),partition p1 values less than(2000) (subpartition p10 values(200)));
+select partkeyexpr from pg_partition where (parttype = 'r') and (parentid in (select oid from pg_class where relname = 'testlistsubpart'));
+select partkeyexpr from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'testlistsubpart'));
+insert into testlistsubpart values(-499,-50),(600,-100);
+insert into testlistsubpart values(600,200);
+select * from testlistsubpart partition(p0);
+select * from testlistsubpart partition(p1);
+select * from testlistsubpart where a = -499;
+update testlistsubpart set a = 499 where a = -499;
+select * from testlistsubpart partition(p0);
+select * from testlistsubpart partition(p1);
+delete from testlistsubpart where a = 499 or a = 600;
+select * from testlistsubpart;
+insert into testtab values(-499,-50),(600,-100);
+insert into testlistsubpart select * from testtab;
+select * from testlistsubpart partition(p0);
+select * from testlistsubpart partition(p1);
+delete from testtab;
+
+--test hash subpartition
+create table testhashsubpart(a int, b int) partition by range(a) subpartition by hash(abs(b*2)) (partition p0 values less than(1000)(subpartition p00,subpartition p01),partition p1 values less than(2000) (subpartition p10,subpartition p11));
+select partkeyexpr from pg_partition where (parttype = 'r') and (parentid in (select oid from pg_class where relname = 'testhashsubpart'));
+select partkeyexpr from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'testhashsubpart'));
+insert into testhashsubpart values(500,-400),(1600,450);
+select * from testhashsubpart partition(p0);
+select * from testhashsubpart partition(p1);
+select * from testhashsubpart where a = 500;
+update testhashsubpart set a = 400 where a = 500;
+select * from testhashsubpart partition(p0);
+select * from testhashsubpart partition(p1);
+delete from testhashsubpart where a = 400 or a = 1600;
+select * from testhashsubpart;
+insert into testtab values(500,-400),(1600,450);
+insert into testhashsubpart select * from testtab;
+select * from testhashsubpart partition(p0);
+select * from testhashsubpart partition(p1);
+delete from testtab;
+
+--test extract function
+drop table if exists test_extract;
+create table test_extract (id int not null,
+ename varchar(30),
+hired date not null default '1970-01-01',
+separated date not null default '9999-12-31',
+job varchar(30) not null,store_id int not null)
+partition by range(extract(year from separated))
+ (partition p0 values less than (1995),
+partition p1 values less than (2000),
+partition p2 values less than (2005));
+select partkeyexpr from pg_partition where (parttype = 'r') and (parentid in (select oid from pg_class where relname = 'test_extract'));
+select partkeyexpr from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'test_extract'));
+
+--test some bug cases
+drop table if exists b_bug_1;
+create table b_bug_1(c1 int primary key,c2 numeric)
+partition by range(c1 + c2) (
+partition p1 values less than(200),
+partition p2 values less than(300),
+partition p3 values less than(400)
+);
+create index on b_bug_1 (c2) global;
+create index on b_bug_1 (c1) local;
+insert into b_bug_1 values(100,1.5),(199,2.5);
+select * from b_bug_1 partition(p1);
+select * from b_bug_1 partition(p2);
+drop table if exists b_bug_1;
+create table b_bug_2(a int, b int, c int) partition by range(a-b)
+(
+	partition p1 values less than(10),
+	partition p2 values less than(20),
+	partition p3 values less than(30)
+);
+create index on b_bug_2(a) global;
+create index on b_bug_2(b) local;
+insert into b_bug_2 values(19,10,1),(30,20,2),(50,30,3);
+select * from b_bug_2 partition(p1);
+select * from b_bug_2 partition(p2);
+select * from b_bug_2 partition(p3);
+update b_bug_2 set b = 21 where c = 2;
+select * from b_bug_2 partition(p1);
+select * from b_bug_2 partition(p2);
+select * from b_bug_2 partition(p3);
+
+--test some bug fix
+CREATE TABLE opfusion_part_table (a int) PARTITION BY RANGE (a+100)
+(PARTITION p0 VALUES LESS THAN (200),
+ PARTITION p1 VALUES LESS THAN (2000),
+ PARTITION p2 VALUES LESS THAN (20000));
+set enable_opfusion to on;
+set enable_partition_opfusion to on;
+insert into opfusion_part_table values(99),(999),(9999);
+copy opfusion_part_table from stdin;
+888
+\.
+select * from opfusion_part_table partition(p0);
+select * from opfusion_part_table partition(p1);
+select * from opfusion_part_table partition(p2);
+reset enable_opfusion;
+reset enable_partition_opfusion;
+drop table opfusion_part_table;
+
+create table subpart_range_add (col1 int, col2 int) partition by range( abs(col2) )
+subpartition by hash( abs(col1) )
+(
+    partition p1 values less than (2000)
+    (
+        SUBPARTITION p1sub1,
+        SUBPARTITION p1sub2
+    ),
+    partition p2 values less than (3000)
+    (
+        SUBPARTITION p2sub1,
+        SUBPARTITION p2sub2
+    )
+);
+select pg_get_tabledef('subpart_range_add');
+alter table subpart_range_add add partition p3 values less than(4000);
+select pg_get_tabledef('subpart_range_add');
+select partkeyexpr from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'subpart_range_add'));
+
+create table subpart_list_add (col1 int, col2 int) partition by list( abs(col2) )
+subpartition by hash( abs(col1) )
+(
+    partition p1 values(2000)
+    (
+        SUBPARTITION p1sub1,
+        SUBPARTITION p1sub2
+    ),
+    partition p2 values(3000)
+    (
+        SUBPARTITION p2sub1,
+        SUBPARTITION p2sub2
+    )
+);
+select pg_get_tabledef('subpart_list_add');
+alter table subpart_list_add add partition p3 values(4000);
+select pg_get_tabledef('subpart_list_add');
+select partkeyexpr from pg_partition where (parttype = 'p') and (parentid in (select oid from pg_class where relname = 'subpart_list_add'));
+
+
+--test pg_get_tabledef and pg_dump
+create table testnormalsubpart(a int, b int) partition by range(a) subpartition by range(b)
+(
+    partition p0 values less than(1000)(subpartition p00 values less than(100)),
+    partition p1 values less than(2000)(subpartition p10 values less than(200))
+);
+select pg_get_tabledef('testrangepart');
+select pg_get_tabledef('testlistpart');
+select pg_get_tabledef('testhashpart');
+select pg_get_tabledef('testrangesubpart');
+select pg_get_tabledef('testlistsubpart');
+select pg_get_tabledef('testhashsubpart');
+select pg_get_tabledef('testnormalsubpart');
+
+drop table testrangepart;
+drop table testlistpart;
+drop table testhashpart;
+drop table testrangesubpart;
+drop table testlistsubpart;
+drop table testhashsubpart;
+drop table testnormalsubpart;
+drop table testtab;
+\c regression
+drop database if exists part_expr_key_db;
+create database part_expr_key_db;
+\c part_expr_key_db
+create table testrangepart(a int, b int) partition by range(abs(a*2))
+(
+    partition p0 values less than(100),
+    partition p1 values less than(200)
+);
+create table testlistpart(a int, b int) partition by list(abs(a*2))
+(
+    partition p0 values(100,200),
+    partition p1 values(300,400)
+);
+create table testhashpart(a int, b int) partition by hash(abs(a*2)) (partition p0,partition p1);
+create table testrangesubpart(a int, b int) partition by range(a+b) subpartition by range(a-b)
+(
+    partition p0 values less than(1000)(subpartition p00 values less than(100)),
+    partition p1 values less than(2000)(subpartition p10 values less than(200))
+);
+create table testlistsubpart(a int, b int) partition by range(abs(a*2)) subpartition by list(abs(b*2))
+(
+	partition p0 values less than(1000)(subpartition p00 values(100)),
+	partition p1 values less than(2000) (subpartition p10 values(200))
+);
+create table testhashsubpart(a int, b int) partition by range(a) subpartition by hash(abs(b*2))
+(
+	partition p0 values less than(1000)(subpartition p00,subpartition p01),
+	partition p1 values less than(2000) (subpartition p10,subpartition p11)
+);
+create table testnormalsubpart(a int, b int) partition by range(a) subpartition by range(b)
+(
+    partition p0 values less than(1000)(subpartition p00 values less than(100)),
+    partition p1 values less than(2000)(subpartition p10 values less than(200))
+);
+\! @abs_bindir@/gs_dump part_expr_key_db -p @portstring@ -f @abs_bindir@/gs_dump_partition_expr.sql >/dev/null 2>&1; echo $?
+drop table testrangepart;
+drop table testlistpart;
+drop table testhashpart;
+drop table testrangesubpart;
+drop table testlistsubpart;
+drop table testhashsubpart;
+drop table testnormalsubpart;
+\! @abs_bindir@/gsql -p @portstring@ -d part_expr_key_db -f @abs_bindir@/gs_dump_partition_expr.sql >/dev/null 2>&1; echo $?
+select pg_get_tabledef('testrangepart');
+select pg_get_tabledef('testlistpart');
+select pg_get_tabledef('testhashpart');
+select pg_get_tabledef('testrangesubpart');
+select pg_get_tabledef('testlistsubpart');
+select pg_get_tabledef('testhashsubpart');
+select pg_get_tabledef('testnormalsubpart');
+\d testrangepart;
+\d testlistpart;
+\d testhashpart;
+\d testrangesubpart;
+\d testlistsubpart;
+\d testhashsubpart;
+\d testnormalsubpart;
+create table "testrangesubPART"(a int, b int) partition by range(a-b) subpartition by range(a+b)
+(
+    partition p0 values less than(1000)(subpartition p00 values less than(100)),
+    partition p1 values less than(2000)(subpartition p10 values less than(200))
+);
+\d "testrangesubPART"
+create database part_expr_key_db1 dbcompatibility 'B';
+\c part_expr_key_db1;
+create table t1(c1 int not null, c2 int)
+partition by range(c1 + 100) (
+partition p1 values less than(200),
+partition p2 values less than(300),
+partition p3 values less than(400)
+);
+CREATE INDEX t1_c2_idx ON t1 USING btree (c2) LOCAL(PARTITION p1_c2_idx, PARTITION p2_c2_idx, PARTITION p3_c2_idx);
+ALTER TABLE t1 ADD CONSTRAINT t3_pkey PRIMARY KEY USING btree  (c1) INCLUDE (tableoid);
+\c part_expr_key_db
+create table t(id int, c int default null)
+partition by range(abs(id))
+(PARTITION p_2017 VALUES LESS THAN (2017),
+ PARTITION p_2018 VALUES LESS THAN (2018),
+ PARTITION p_2019 VALUES LESS THAN (2019),
+PARTITION p_others VALUES LESS THAN (MAXVALUE));
+insert into t values (null,1);
+-- The null value is expected to be inserted into the last partition.
+select count(*) from t partition (p_2017);
+select count(*) from t partition (p_others);
+
+-- test exprkey across partitions
+create table test_exprkey_move_part(
+    a int,
+    b int
+)
+partition by range(a+100)
+(
+    partition p0 values less than(1000),
+    partition p1 values less than(2000)
+);
+insert into test_exprkey_move_part values(888, 1);
+update test_exprkey_move_part set a=1000 where a=888;
+select * from test_exprkey_move_part;
+update test_exprkey_move_part set a=1001 where a=1000;
+select * from test_exprkey_move_part;
+
+\c regression
+
+drop database if exists part_expr_key_db;
+drop database if exists part_expr_key_db1;

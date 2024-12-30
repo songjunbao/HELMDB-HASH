@@ -1,0 +1,3 @@
+/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/turbohash.dir
+/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/edit_cache.dir
+/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/../.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/gflags" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pcm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pcm/perfmon" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pcm/src/simdjson" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/ralloc" vcs="Git" />
+  </component>
+</project>

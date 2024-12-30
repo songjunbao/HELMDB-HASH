@@ -1,0 +1,261 @@
+select * from gs_stat_undo();
+--?.*
+--?.*
+--?.*
+(1 row)
+
+select * from gs_stat_wal_entrytable(-1) limit 1;
+--?.*
+--?.*
+--?.*
+(1 row)
+
+select * from gs_stat_wal_entrytable(1);
+--?.*
+--?.*
+--?.*
+(1 row)
+
+select * from gs_stat_wal_entrytable(-2);
+ERROR:  The idx out of range.
+select * from gs_walwriter_flush_position();
+--?.*
+--?.*
+--?.*
+(1 row)
+
+select * from gs_walwriter_flush_stat(1);
+--?.*
+--?.*
+--?.*
+(1 row)
+
+select * from gs_walwriter_flush_stat(2);
+--?.*
+--?.*
+--?.*
+(1 row)
+
+-- wal sender
+select * from gs_stat_walsender();  -- default get
+ is_enable_stat | channel | cur_time | send_times | first_send_time | last_send_time | last_reset_time | avg_send_interval | since_last_send_interval 
+----------------+---------+----------+------------+-----------------+----------------+-----------------+-------------------+--------------------------
+(0 rows)
+
+select * from gs_stat_walsender(1); -- enable
+ is_enable_stat | channel | cur_time | send_times | first_send_time | last_send_time | last_reset_time | avg_send_interval | since_last_send_interval 
+----------------+---------+----------+------------+-----------------+----------------+-----------------+-------------------+--------------------------
+(0 rows)
+
+select * from gs_stat_walsender(2); -- get
+ is_enable_stat | channel | cur_time | send_times | first_send_time | last_send_time | last_reset_time | avg_send_interval | since_last_send_interval 
+----------------+---------+----------+------------+-----------------+----------------+-----------------+-------------------+--------------------------
+(0 rows)
+
+select * from gs_stat_walsender(0); -- reset
+ is_enable_stat | channel | cur_time | send_times | first_send_time | last_send_time | last_reset_time | avg_send_interval | since_last_send_interval 
+----------------+---------+----------+------------+-----------------+----------------+-----------------+-------------------+--------------------------
+(0 rows)
+
+select * from gs_stat_walsender(null); -- reset
+ is_enable_stat | channel | cur_time | send_times | first_send_time | last_send_time | last_reset_time | avg_send_interval | since_last_send_interval 
+----------------+---------+----------+------------+-----------------+----------------+-----------------+-------------------+--------------------------
+(0 rows)
+
+select * from gs_stat_walsender(-1); -- disable
+ is_enable_stat | channel | cur_time | send_times | first_send_time | last_send_time | last_reset_time | avg_send_interval | since_last_send_interval 
+----------------+---------+----------+------------+-----------------+----------------+-----------------+-------------------+--------------------------
+(0 rows)
+
+select * from gs_stat_walsender(3); -- error
+ERROR:  illegal value "3" for parameter "operation".
+HINT:  -1: disable, 0: reset, 1: enable, 2: get
+-- wal receiver
+select * from gs_stat_walreceiver();
+--? is_enable_stat | buffer_current_size | buffer_full_times | wake_writer_times | avg_wake_interval | since_last_wake_interval | first_wake_time | last_wake_time | last_reset_time |.*
+--?.*
+--? f              |                   0 |                 0 |                 0 |                   |                          |                 |                |                 |.*
+(1 row)
+
+select * from gs_stat_walreceiver(1);
+--? is_enable_stat | buffer_current_size | buffer_full_times | wake_writer_times | avg_wake_interval | since_last_wake_interval | first_wake_time | last_wake_time | last_reset_time |.*
+--?.*
+--? t              |                   0 |                 0 |                 0 |                   |                          |                 |                |                 |.*
+(1 row)
+
+select * from gs_stat_walreceiver(2);
+--? is_enable_stat | buffer_current_size | buffer_full_times | wake_writer_times | avg_wake_interval | since_last_wake_interval | first_wake_time | last_wake_time | last_reset_time |.*
+--?.*
+--? t              |                   0 |                 0 |                 0 |                   |                          |                 |                |                 |.*
+(1 row)
+
+select * from gs_stat_walreceiver(0);
+--? is_enable_stat | buffer_current_size | buffer_full_times | wake_writer_times | avg_wake_interval | since_last_wake_interval | first_wake_time | last_wake_time |.*
+--?.*
+--? t              |                   0 |                 0 |                 0 |                   |                          |                 |                |.*
+(1 row)
+
+select * from gs_stat_walreceiver(-1);
+--? is_enable_stat | buffer_current_size | buffer_full_times | wake_writer_times | avg_wake_interval | since_last_wake_interval | first_wake_time | last_wake_time |.*
+--?.*
+--? f              |                   0 |                 0 |                 0 |                   |                          |                 |                |.*
+(1 row)
+
+select * from gs_stat_walreceiver(4); -- error
+ERROR:  illegal value "4" for parameter "operation".
+HINT:  -1: disable, 0: reset, 1: enable, 2: get
+-- wal recvwriter
+select * from gs_stat_walrecvwriter();
+--? is_enable_stat | total_write_bytes | write_times | total_write_time | avg_write_time | avg_write_bytes | total_sync_bytes | sync_times | total_sync_time | avg_sync_time | avg_sync_bytes | current_xlog_segno | inited_xlog_segno | last_reset_time |.*
+--?.*
+--? f              |                 0 |           0 |                0 |                |                 |                0 |          0 |               0 |               |                |                  0 |                 2 |                 |.*
+(1 row)
+
+select * from gs_stat_walrecvwriter(1);
+--? is_enable_stat | total_write_bytes | write_times | total_write_time | avg_write_time | avg_write_bytes | total_sync_bytes | sync_times | total_sync_time | avg_sync_time | avg_sync_bytes | current_xlog_segno | inited_xlog_segno | last_reset_time |.*
+--?.*
+--? t              |                 0 |           0 |                0 |                |                 |                0 |          0 |               0 |               |                |                  0 |                 2 |                 |.*
+(1 row)
+
+select * from gs_stat_walrecvwriter(2);
+--? is_enable_stat | total_write_bytes | write_times | total_write_time | avg_write_time | avg_write_bytes | total_sync_bytes | sync_times | total_sync_time | avg_sync_time | avg_sync_bytes | current_xlog_segno | inited_xlog_segno | last_reset_time |.*
+--?.*
+--? t              |                 0 |           0 |                0 |                |                 |                0 |          0 |               0 |               |                |                  0 |                 2 |                 |.*
+(1 row)
+
+select * from gs_stat_walrecvwriter(0);
+--? is_enable_stat | total_write_bytes | write_times | total_write_time | avg_write_time | avg_write_bytes | total_sync_bytes | sync_times | total_sync_time | avg_sync_time | avg_sync_bytes |.*
+--?.*
+--? t              |                 0 |           0 |                0 |                |                 |                0 |          0 |               0 |               |                |.*
+(1 row)
+
+select * from gs_stat_walrecvwriter(-1);
+--? is_enable_stat | total_write_bytes | write_times | total_write_time | avg_write_time | avg_write_bytes | total_sync_bytes | sync_times | total_sync_time | avg_sync_time | avg_sync_bytes |.*
+--?.*
+--? f              |                 0 |           0 |                0 |                |                 |                0 |          0 |               0 |               |                |.*
+(1 row)
+
+select * from gs_stat_walreceiver(5); -- error
+ERROR:  illegal value "5" for parameter "operation".
+HINT:  -1: disable, 0: reset, 1: enable, 2: get
+DROP TABLE IF EXISTS test_ustore;
+--?.*
+DROP INDEX IF EXISTS test_ustore_idx;
+--?.*
+DROP INDEX IF EXISTS test_ustore_idx2;
+--?.*
+START TRANSACTION;
+CREATE TABLE test_ustore (a int, b int ,c int) with(storage_type=ustore);
+CREATE INDEX test_ustore_idx ON test_ustore(a);
+CREATE INDEX test_ustore_idx2 ON test_ustore(b,c);
+INSERT INTO test_ustore values(generate_series(1,100000),generate_series(1,100000), generate_series(1,100000));
+CHECKPOINT;
+CREATE OR REPLACE FUNCTION proc_gs_index_verify(tablename in varchar2)
+RETURNS SETOF varchar 
+LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    relationOid  oid;
+	stat varchar;
+BEGIN
+	SELECT relfilenode into relationOid from pg_class where relname=tablename;
+	for stat in ( select status from gs_index_verify(relationOid, 0) ) loop
+	RETURN NEXT stat;
+    end loop;
+	for stat in ( select status from gs_index_verify(relationOid, 1) ) loop
+	RETURN NEXT stat;
+    end loop;
+    return;
+END;
+$$
+;
+SELECT proc_gs_index_verify('test_ustore_idx');
+ proc_gs_index_verify 
+----------------------
+ normal
+ normal
+(2 rows)
+
+SELECT proc_gs_index_verify('test_ustore_idx2');
+ proc_gs_index_verify 
+----------------------
+ normal
+ normal
+(2 rows)
+
+DROP TABLE IF EXISTS test_ustore;
+COMMIT;
+START TRANSACTION;
+CREATE TABLE test_ustore (a int, b int ,c int) with(storage_type=ustore);
+CREATE INDEX test_ustore_idx ON test_ustore(a);
+CREATE INDEX test_ustore_idx2 ON test_ustore(b,c);
+INSERT INTO test_ustore values(generate_series(1,100000),generate_series(1,100000), generate_series(1,100000));
+CHECKPOINT;
+CREATE OR REPLACE FUNCTION proc_gs_index_recycle_queue(tablename in varchar2)
+RETURNS SETOF varchar 
+LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    relationOid  oid;
+	stat varchar;
+BEGIN
+	SELECT relfilenode into relationOid from pg_class where relname=tablename;
+	for stat in ( select rblkno from gs_index_recycle_queue(relationOid, 0, 0) ) loop
+	RETURN NEXT stat;
+    end loop;
+	for stat in ( select rblkno from gs_index_recycle_queue(relationOid, 1, 0) ) loop
+	RETURN NEXT stat;
+    end loop;
+	for stat in ( select rblkno from gs_index_recycle_queue(relationOid, 2, 1) ) loop
+	RETURN NEXT stat;
+    end loop;
+    return;
+END;
+$$
+;
+SELECT proc_gs_index_recycle_queue('test_ustore_idx');
+ proc_gs_index_recycle_queue 
+-----------------------------
+(0 rows)
+
+SELECT proc_gs_index_recycle_queue('test_ustore_idx2');
+ proc_gs_index_recycle_queue 
+-----------------------------
+(0 rows)
+
+DROP TABLE IF EXISTS test_ustore;
+COMMIT;
+--testcase gs_undo_dump_parsepage_mv
+DROP TABLE IF EXISTS test_ustore;
+NOTICE:  table "test_ustore" does not exist, skipping
+CREATE TABLE test_ustore (user_id serial PRIMARY KEY, time_clock VARCHAR ( 50 )) with(storage_type=ustore);
+NOTICE:  CREATE TABLE will create implicit sequence "test_ustore_user_id_seq" for serial column "test_ustore.user_id"
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "test_ustore_pkey" for table "test_ustore"
+CREATE INDEX test_ustore_idx ON test_ustore(user_id);
+insert into test_ustore select generate_series(1, 200), clock_timestamp();
+update test_ustore set time_clock = NULL where user_id = 150;
+update test_ustore set time_clock = 'time' where user_id = 150;
+delete test_ustore where user_id > 190;
+CREATE OR REPLACE FUNCTION gs_undo_dump_parsepage_mv_test(tablename in varchar2, block_num in int, relation in varchar2, read_mem in bool)
+RETURNS table (output text)
+LANGUAGE plpgsql
+AS
+$$
+DECLARE
+        param1  text;
+BEGIN
+        SELECT pg_relation_filepath(tablename) into param1;
+        return query SELECT gs_undo_dump_parsepage_mv(''|| param1 ||'', block_num, relation, read_mem);
+END;
+$$
+;
+CHECKPOINT;
+SELECT gs_undo_dump_parsepage_mv_test('test_ustore', -1, 'uheap', false);
+--?.*
+--?.*
+--?.*
+(1 row)
+
+DROP TABLE IF EXISTS test_ustore;

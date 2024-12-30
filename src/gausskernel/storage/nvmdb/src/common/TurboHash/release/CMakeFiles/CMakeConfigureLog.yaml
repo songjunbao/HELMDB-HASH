@@ -1,0 +1,1003 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineSystem.cmake:205 (message)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      The system is: Linux - 3.10.0-1160.119.1.el7.x86_64 - x86_64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /opt/rh/devtoolset-11/root/usr/bin/cc 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+      
+      The C compiler identification is GNU, found in:
+        /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/3.30.5/CompilerIdC/a.out
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /opt/rh/devtoolset-11/root/usr/bin/c++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is GNU, found in:
+        /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/3.30.5/CompilerIdCXX/a.out
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-n9WC9a"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-n9WC9a"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-n9WC9a'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_1c40b/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_1c40b.dir/build.make CMakeFiles/cmTC_1c40b.dir/build
+        gmake[1]: Entering directory `/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-n9WC9a'
+        Building C object CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o
+        /opt/rh/devtoolset-11/root/usr/bin/cc   -v -o CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o -c /usr/local/share/cmake-3.30/Modules/CMakeCCompilerABI.c
+        Using built-in specs.
+        COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/cc
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+        Thread model: posix
+        Supported LTO compression algorithms: zlib
+        gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_1c40b.dir/'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/cc1 -quiet -v /usr/local/share/cmake-3.30/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_1c40b.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/ccOYOxfe.s
+        GNU C17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)
+        	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1, isl version isl-0.18-GMP
+        
+        warning: GMP header version 6.0.0 differs from library version 6.1.0.
+        warning: MPFR header version 3.1.1 differs from library version 3.1.4.
+        warning: MPC header version 1.0.1 differs from library version 1.0.3.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include-fixed"
+        ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../x86_64-redhat-linux/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include
+         /usr/local/include
+         /opt/rh/devtoolset-11/root/usr/include
+         /usr/include
+        End of search list.
+        GNU C17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)
+        	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1, isl version isl-0.18-GMP
+        
+        warning: GMP header version 6.0.0 differs from library version 6.1.0.
+        warning: MPFR header version 3.1.1 differs from library version 3.1.4.
+        warning: MPC header version 1.0.1 differs from library version 1.0.3.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: fcd9572df254446d5004a010508b613e
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_1c40b.dir/'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/as -v --64 -o CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o /tmp/ccOYOxfe.s
+        GNU assembler version 2.36.1 (x86_64-redhat-linux) using BFD version version 2.36.1-1.el7.2
+        COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.'
+        Linking C executable cmTC_1c40b
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1c40b.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/cc  -v -Wl,-v CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o -o cmTC_1c40b
+        Using built-in specs.
+        COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/cc
+        COLLECT_LTO_WRAPPER=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+        Thread model: posix
+        Supported LTO compression algorithms: zlib
+        gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) 
+        COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_1c40b' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_1c40b.'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2 -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccncOWfg.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_1c40b /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o
+        collect2 version 11.2.1 20220127 (Red Hat 11.2.1-9)
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccncOWfg.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_1c40b /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o
+        GNU ld version 2.36.1-1.el7.2
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_1c40b' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_1c40b.'
+        gmake[1]: Leaving directory `/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-n9WC9a'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerABI.cmake:182 (message)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+          add: [/usr/local/include]
+          add: [/opt/rh/devtoolset-11/root/usr/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include] ==> [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/include] ==> [/opt/rh/devtoolset-11/root/usr/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include;/usr/local/include;/opt/rh/devtoolset-11/root/usr/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
+        ignore line: [Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-n9WC9a']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_1c40b/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_1c40b.dir/build.make CMakeFiles/cmTC_1c40b.dir/build]
+        ignore line: [gmake[1]: Entering directory `/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-n9WC9a']
+        ignore line: [Building C object CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/opt/rh/devtoolset-11/root/usr/bin/cc   -v -o CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o -c /usr/local/share/cmake-3.30/Modules/CMakeCCompilerABI.c]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/cc]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib]
+        ignore line: [gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_1c40b.dir/']
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/cc1 -quiet -v /usr/local/share/cmake-3.30/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_1c40b.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/ccOYOxfe.s]
+        ignore line: [GNU C17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9)  GMP version 6.0.0  MPFR version 3.1.1  MPC version 1.0.1  isl version isl-0.18-GMP]
+        ignore line: []
+        ignore line: [warning: GMP header version 6.0.0 differs from library version 6.1.0.]
+        ignore line: [warning: MPFR header version 3.1.1 differs from library version 3.1.4.]
+        ignore line: [warning: MPC header version 1.0.1 differs from library version 1.0.3.]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../x86_64-redhat-linux/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9)  GMP version 6.0.0  MPFR version 3.1.1  MPC version 1.0.1  isl version isl-0.18-GMP]
+        ignore line: []
+        ignore line: [warning: GMP header version 6.0.0 differs from library version 6.1.0.]
+        ignore line: [warning: MPFR header version 3.1.1 differs from library version 3.1.4.]
+        ignore line: [warning: MPC header version 1.0.1 differs from library version 1.0.3.]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: fcd9572df254446d5004a010508b613e]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_1c40b.dir/']
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/as -v --64 -o CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o /tmp/ccOYOxfe.s]
+        ignore line: [GNU assembler version 2.36.1 (x86_64-redhat-linux) using BFD version version 2.36.1-1.el7.2]
+        ignore line: [COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.']
+        ignore line: [Linking C executable cmTC_1c40b]
+        ignore line: [/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1c40b.dir/link.txt --verbose=1]
+        ignore line: [/opt/rh/devtoolset-11/root/usr/bin/cc  -v -Wl -v CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o -o cmTC_1c40b]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/cc]
+        ignore line: [COLLECT_LTO_WRAPPER=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib]
+        ignore line: [gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) ]
+        ignore line: [COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_1c40b' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_1c40b.']
+        link line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2 -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccncOWfg.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_1c40b /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o]
+          arg [/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccncOWfg.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_1c40b] ==> ignore
+          arg [/lib/../lib64/crt1.o] ==> obj [/lib/../lib64/crt1.o]
+          arg [/lib/../lib64/crti.o] ==> obj [/lib/../lib64/crti.o]
+          arg [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o] ==> obj [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [-lc] ==> lib [c]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o] ==> obj [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o]
+          arg [/lib/../lib64/crtn.o] ==> obj [/lib/../lib64/crtn.o]
+        ignore line: [collect2 version 11.2.1 20220127 (Red Hat 11.2.1-9)]
+        ignore line: [/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/ccncOWfg.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_1c40b /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_1c40b.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o]
+        linker tool for 'C': /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld
+        collapse obj [/lib/../lib64/crt1.o] ==> [/lib64/crt1.o]
+        collapse obj [/lib/../lib64/crti.o] ==> [/lib64/crti.o]
+        collapse obj [/lib/../lib64/crtn.o] ==> [/lib64/crtn.o]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11] ==> [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64] ==> [/opt/rh/devtoolset-11/root/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..] ==> [/opt/rh/devtoolset-11/root/usr/lib]
+        implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+        implicit objs: [/lib64/crt1.o;/lib64/crti.o;/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o;/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o;/lib64/crtn.o]
+        implicit dirs: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11;/opt/rh/devtoolset-11/root/usr/lib64;/lib64;/usr/lib64;/opt/rh/devtoolset-11/root/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Running the C compiler's linker: "/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld" "-v"
+      GNU ld version 2.36.1-1.el7.2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-YwKbmG"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-YwKbmG"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-YwKbmG'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_2bca5/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_2bca5.dir/build.make CMakeFiles/cmTC_2bca5.dir/build
+        gmake[1]: Entering directory `/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-YwKbmG'
+        Building CXX object CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++   -v -o CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/share/cmake-3.30/Modules/CMakeCXXCompilerABI.cpp
+        Using built-in specs.
+        COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/c++
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+        Thread model: posix
+        Supported LTO compression algorithms: zlib
+        gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_2bca5.dir/'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/cc1plus -quiet -v -D_GNU_SOURCE /usr/local/share/cmake-3.30/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_2bca5.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/ccGvIErk.s
+        GNU C++17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)
+        	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1, isl version isl-0.18-GMP
+        
+        warning: GMP header version 6.0.0 differs from library version 6.1.0.
+        warning: MPFR header version 3.1.1 differs from library version 3.1.4.
+        warning: MPC header version 1.0.1 differs from library version 1.0.3.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include-fixed"
+        ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../x86_64-redhat-linux/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11
+         /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/x86_64-redhat-linux
+         /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/backward
+         /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include
+         /usr/local/include
+         /opt/rh/devtoolset-11/root/usr/include
+         /usr/include
+        End of search list.
+        GNU C++17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)
+        	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9), GMP version 6.0.0, MPFR version 3.1.1, MPC version 1.0.1, isl version isl-0.18-GMP
+        
+        warning: GMP header version 6.0.0 differs from library version 6.1.0.
+        warning: MPFR header version 3.1.1 differs from library version 3.1.4.
+        warning: MPC header version 1.0.1 differs from library version 1.0.3.
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: 4d912b14bce339cc8a41b2b0d103bc14
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_2bca5.dir/'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/as -v --64 -o CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccGvIErk.s
+        GNU assembler version 2.36.1 (x86_64-redhat-linux) using BFD version version 2.36.1-1.el7.2
+        COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_2bca5
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2bca5.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++  -v -Wl,-v CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_2bca5
+        Using built-in specs.
+        COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/c++
+        COLLECT_LTO_WRAPPER=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
+        Thread model: posix
+        Supported LTO compression algorithms: zlib
+        gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) 
+        COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_2bca5' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_2bca5.'
+         /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2 -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/cc36X1On.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_2bca5 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o
+        collect2 version 11.2.1 20220127 (Red Hat 11.2.1-9)
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/cc36X1On.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_2bca5 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o
+        GNU ld version 2.36.1-1.el7.2
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_2bca5' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_2bca5.'
+        gmake[1]: Leaving directory `/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-YwKbmG'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerABI.cmake:182 (message)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11]
+          add: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/x86_64-redhat-linux]
+          add: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/backward]
+          add: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+          add: [/usr/local/include]
+          add: [/opt/rh/devtoolset-11/root/usr/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11] ==> [/opt/rh/devtoolset-11/root/usr/include/c++/11]
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/x86_64-redhat-linux] ==> [/opt/rh/devtoolset-11/root/usr/include/c++/11/x86_64-redhat-linux]
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/backward] ==> [/opt/rh/devtoolset-11/root/usr/include/c++/11/backward]
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include] ==> [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/opt/rh/devtoolset-11/root/usr/include] ==> [/opt/rh/devtoolset-11/root/usr/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/opt/rh/devtoolset-11/root/usr/include/c++/11;/opt/rh/devtoolset-11/root/usr/include/c++/11/x86_64-redhat-linux;/opt/rh/devtoolset-11/root/usr/include/c++/11/backward;/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include;/usr/local/include;/opt/rh/devtoolset-11/root/usr/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
+        ignore line: [Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-YwKbmG']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_2bca5/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_2bca5.dir/build.make CMakeFiles/cmTC_2bca5.dir/build]
+        ignore line: [gmake[1]: Entering directory `/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-YwKbmG']
+        ignore line: [Building CXX object CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/opt/rh/devtoolset-11/root/usr/bin/c++   -v -o CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o -c /usr/local/share/cmake-3.30/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/c++]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib]
+        ignore line: [gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_2bca5.dir/']
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/cc1plus -quiet -v -D_GNU_SOURCE /usr/local/share/cmake-3.30/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_2bca5.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/ccGvIErk.s]
+        ignore line: [GNU C++17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9)  GMP version 6.0.0  MPFR version 3.1.1  MPC version 1.0.1  isl version isl-0.18-GMP]
+        ignore line: []
+        ignore line: [warning: GMP header version 6.0.0 differs from library version 6.1.0.]
+        ignore line: [warning: MPFR header version 3.1.1 differs from library version 3.1.4.]
+        ignore line: [warning: MPC header version 1.0.1 differs from library version 1.0.3.]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../x86_64-redhat-linux/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/x86_64-redhat-linux]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/backward]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C++17 (GCC) version 11.2.1 20220127 (Red Hat 11.2.1-9) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 11.2.1 20220127 (Red Hat 11.2.1-9)  GMP version 6.0.0  MPFR version 3.1.1  MPC version 1.0.1  isl version isl-0.18-GMP]
+        ignore line: []
+        ignore line: [warning: GMP header version 6.0.0 differs from library version 6.1.0.]
+        ignore line: [warning: MPFR header version 3.1.1 differs from library version 3.1.4.]
+        ignore line: [warning: MPC header version 1.0.1 differs from library version 1.0.3.]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: 4d912b14bce339cc8a41b2b0d103bc14]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_2bca5.dir/']
+        ignore line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/as -v --64 -o CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccGvIErk.s]
+        ignore line: [GNU assembler version 2.36.1 (x86_64-redhat-linux) using BFD version version 2.36.1-1.el7.2]
+        ignore line: [COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_2bca5]
+        ignore line: [/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2bca5.dir/link.txt --verbose=1]
+        ignore line: [/opt/rh/devtoolset-11/root/usr/bin/c++  -v -Wl -v CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_2bca5]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/opt/rh/devtoolset-11/root/usr/bin/c++]
+        ignore line: [COLLECT_LTO_WRAPPER=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran lto --prefix=/opt/rh/devtoolset-11/root/usr --mandir=/opt/rh/devtoolset-11/root/usr/share/man --infodir=/opt/rh/devtoolset-11/root/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --with-linker-hash-style=gnu --with-default-libstdcxx-abi=gcc4-compatible --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-11.2.1-20220127/obj-x86_64-redhat-linux/isl-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib]
+        ignore line: [gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC) ]
+        ignore line: [COMPILER_PATH=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_2bca5' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_2bca5.']
+        link line: [ /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2 -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/cc36X1On.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_2bca5 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o]
+          arg [/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/cc36X1On.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_2bca5] ==> ignore
+          arg [/lib/../lib64/crt1.o] ==> obj [/lib/../lib64/crt1.o]
+          arg [/lib/../lib64/crti.o] ==> obj [/lib/../lib64/crti.o]
+          arg [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o] ==> obj [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..] ==> dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o] ==> obj [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o]
+          arg [/lib/../lib64/crtn.o] ==> obj [/lib/../lib64/crtn.o]
+        ignore line: [collect2 version 11.2.1 20220127 (Red Hat 11.2.1-9)]
+        ignore line: [/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld -plugin /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/liblto_plugin.so -plugin-opt=/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/lto-wrapper -plugin-opt=-fresolution=/tmp/cc36X1On.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_2bca5 /lib/../lib64/crt1.o /lib/../lib64/crti.o /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../.. -v CMakeFiles/cmTC_2bca5.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o /lib/../lib64/crtn.o]
+        linker tool for 'CXX': /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld
+        collapse obj [/lib/../lib64/crt1.o] ==> [/lib64/crt1.o]
+        collapse obj [/lib/../lib64/crti.o] ==> [/lib64/crti.o]
+        collapse obj [/lib/../lib64/crtn.o] ==> [/lib64/crtn.o]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11] ==> [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../../../lib64] ==> [/opt/rh/devtoolset-11/root/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/../../..] ==> [/opt/rh/devtoolset-11/root/usr/lib]
+        implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+        implicit objs: [/lib64/crt1.o;/lib64/crti.o;/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o;/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11/crtend.o;/lib64/crtn.o]
+        implicit dirs: [/opt/rh/devtoolset-11/root/usr/lib/gcc/x86_64-redhat-linux/11;/opt/rh/devtoolset-11/root/usr/lib64;/lib64;/usr/lib64;/opt/rh/devtoolset-11/root/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
+      - "/usr/local/share/cmake-3.30/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:9 (project)"
+    message: |
+      Running the CXX compiler's linker: "/opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld" "-v"
+      GNU ld version 2.36.1-1.el7.2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include unistd.h"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-nHFIQb"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-nHFIQb"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_UNISTD_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-nHFIQb'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_27771/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_27771.dir/build.make CMakeFiles/cmTC_27771.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-nHFIQb”
+        Building CXX object CMakeFiles/cmTC_27771.dir/CheckIncludeFile.cxx.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++    -o CMakeFiles/cmTC_27771.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-nHFIQb/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_27771
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_27771.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++ -rdynamic CMakeFiles/cmTC_27771.dir/CheckIncludeFile.cxx.o -o cmTC_27771
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-nHFIQb”
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include stdint.h"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-mxRIyH"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-mxRIyH"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_STDINT_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-mxRIyH'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_5fcd5/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_5fcd5.dir/build.make CMakeFiles/cmTC_5fcd5.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-mxRIyH”
+        Building CXX object CMakeFiles/cmTC_5fcd5.dir/CheckIncludeFile.cxx.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++    -o CMakeFiles/cmTC_5fcd5.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-mxRIyH/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_5fcd5
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5fcd5.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++ -rdynamic CMakeFiles/cmTC_5fcd5.dir/CheckIncludeFile.cxx.o -o cmTC_5fcd5
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-mxRIyH”
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include inttypes.h"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-PPVItd"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-PPVItd"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_INTTYPES_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-PPVItd'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_b1cae/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_b1cae.dir/build.make CMakeFiles/cmTC_b1cae.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-PPVItd”
+        Building CXX object CMakeFiles/cmTC_b1cae.dir/CheckIncludeFile.cxx.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++    -o CMakeFiles/cmTC_b1cae.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-PPVItd/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_b1cae
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b1cae.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++ -rdynamic CMakeFiles/cmTC_b1cae.dir/CheckIncludeFile.cxx.o -o cmTC_b1cae
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-PPVItd”
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include sys/types.h"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8SrLBJ"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8SrLBJ"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_SYS_TYPES_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8SrLBJ'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_b934f/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_b934f.dir/build.make CMakeFiles/cmTC_b934f.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8SrLBJ”
+        Building CXX object CMakeFiles/cmTC_b934f.dir/CheckIncludeFile.cxx.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++    -o CMakeFiles/cmTC_b934f.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8SrLBJ/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_b934f
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b934f.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++ -rdynamic CMakeFiles/cmTC_b934f.dir/CheckIncludeFile.cxx.o -o cmTC_b934f
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8SrLBJ”
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include sys/stat.h"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-fVVbXf"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-fVVbXf"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_SYS_STAT_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-fVVbXf'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_4d445/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_4d445.dir/build.make CMakeFiles/cmTC_4d445.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-fVVbXf”
+        Building CXX object CMakeFiles/cmTC_4d445.dir/CheckIncludeFile.cxx.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++    -o CMakeFiles/cmTC_4d445.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-fVVbXf/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_4d445
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4d445.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++ -rdynamic CMakeFiles/cmTC_4d445.dir/CheckIncludeFile.cxx.o -o cmTC_4d445
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-fVVbXf”
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "lib/gflags/CMakeLists.txt:258 (check_include_file_cxx)"
+    checks:
+      - "Looking for C++ include fnmatch.h"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-G3DNvM"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-G3DNvM"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_FNMATCH_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-G3DNvM'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_bdf75/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_bdf75.dir/build.make CMakeFiles/cmTC_bdf75.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-G3DNvM”
+        Building CXX object CMakeFiles/cmTC_bdf75.dir/CheckIncludeFile.cxx.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++    -o CMakeFiles/cmTC_bdf75.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-G3DNvM/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_bdf75
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bdf75.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++ -rdynamic CMakeFiles/cmTC_bdf75.dir/CheckIncludeFile.cxx.o -o cmTC_bdf75
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-G3DNvM”
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "/usr/local/share/cmake-3.30/Modules/CheckTypeSize.cmake:261 (check_include_file_cxx)"
+      - "lib/gflags/CMakeLists.txt:279 (check_type_size)"
+    checks:
+      - "Looking for C++ include stddef.h"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-z2Wihj"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-z2Wihj"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_STDDEF_H"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-z2Wihj'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_29c19/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_29c19.dir/build.make CMakeFiles/cmTC_29c19.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-z2Wihj”
+        Building CXX object CMakeFiles/cmTC_29c19.dir/CheckIncludeFile.cxx.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++    -o CMakeFiles/cmTC_29c19.dir/CheckIncludeFile.cxx.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-z2Wihj/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_29c19
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_29c19.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++ -rdynamic CMakeFiles/cmTC_29c19.dir/CheckIncludeFile.cxx.o -o cmTC_29c19
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-z2Wihj”
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckTypeSize.cmake:147 (try_compile)"
+      - "/usr/local/share/cmake-3.30/Modules/CheckTypeSize.cmake:272 (__check_type_size_impl)"
+      - "lib/gflags/CMakeLists.txt:279 (check_type_size)"
+    checks:
+      - "Check size of uint32_t"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-2uqQfQ"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-2uqQfQ"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_uint32_t"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-2uqQfQ'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e05c5/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_e05c5.dir/build.make CMakeFiles/cmTC_e05c5.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-2uqQfQ”
+        Building CXX object CMakeFiles/cmTC_e05c5.dir/uint32_t.cpp.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++    -o CMakeFiles/cmTC_e05c5.dir/uint32_t.cpp.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-2uqQfQ/uint32_t.cpp
+        Linking CXX executable cmTC_e05c5
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e05c5.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++ -rdynamic CMakeFiles/cmTC_e05c5.dir/uint32_t.cpp.o -o cmTC_e05c5
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-2uqQfQ”
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckSymbolExists.cmake:154 (try_compile)"
+      - "/usr/local/share/cmake-3.30/Modules/CheckCXXSymbolExists.cmake:72 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "lib/gflags/CMakeLists.txt:314 (check_cxx_symbol_exists)"
+    checks:
+      - "Looking for strtoll"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-Rn79rn"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-Rn79rn"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+    buildResult:
+      variable: "HAVE_STRTOLL"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-Rn79rn'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_6f0b6/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_6f0b6.dir/build.make CMakeFiles/cmTC_6f0b6.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-Rn79rn”
+        Building CXX object CMakeFiles/cmTC_6f0b6.dir/CheckSymbolExists.cxx.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++    -o CMakeFiles/cmTC_6f0b6.dir/CheckSymbolExists.cxx.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-Rn79rn/CheckSymbolExists.cxx
+        Linking CXX executable cmTC_6f0b6
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6f0b6.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++ -rdynamic CMakeFiles/cmTC_6f0b6.dir/CheckSymbolExists.cxx.o -o cmTC_6f0b6
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-Rn79rn”
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/local/share/cmake-3.30/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.30/Modules/CheckCXXCompilerFlag.cmake:34 (cmake_check_compiler_flag)"
+      - "CMakeLists.txt:45 (CHECK_CXX_COMPILER_FLAG)"
+    checks:
+      - "Performing Test COMPILER_SUPPORTS_MARCH_NATIVE"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8rWOTU"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8rWOTU"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "COMPILER_SUPPORTS_MARCH_NATIVE"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8rWOTU'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_054a9/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_054a9.dir/build.make CMakeFiles/cmTC_054a9.dir/build
+        gmake[1]: Entering directory `/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8rWOTU'
+        Building CXX object CMakeFiles/cmTC_054a9.dir/src.cxx.o
+        /opt/rh/devtoolset-11/root/usr/bin/c++ -DCOMPILER_SUPPORTS_MARCH_NATIVE  -std=gnu++17   -march=native -o CMakeFiles/cmTC_054a9.dir/src.cxx.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8rWOTU/src.cxx
+        Linking CXX executable cmTC_054a9
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_054a9.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/c++ CMakeFiles/cmTC_054a9.dir/src.cxx.o -o cmTC_054a9
+        gmake[1]: Leaving directory `/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-8rWOTU'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/local/share/cmake-3.30/Modules/CheckCSourceCompiles.cmake:52 (cmake_check_source_compiles)"
+      - "/usr/local/share/cmake-3.30/Modules/FindThreads.cmake:97 (CHECK_C_SOURCE_COMPILES)"
+      - "/usr/local/share/cmake-3.30/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "CMakeLists.txt:55 (find_package)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-3BEXys"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-3BEXys"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-3BEXys'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_a878a/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_a878a.dir/build.make CMakeFiles/cmTC_a878a.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-3BEXys”
+        Building C object CMakeFiles/cmTC_a878a.dir/src.c.o
+        /opt/rh/devtoolset-11/root/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_a878a.dir/src.c.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-3BEXys/src.c
+        Linking C executable cmTC_a878a
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a878a.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/cc CMakeFiles/cmTC_a878a.dir/src.c.o -o cmTC_a878a
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: CMakeFiles/cmTC_a878a.dir/src.c.o: in function `main':
+        src.c:(.text+0x2d): undefined reference to `pthread_create'
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: src.c:(.text+0x39): undefined reference to `pthread_detach'
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: src.c:(.text+0x45): undefined reference to `pthread_cancel'
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: src.c:(.text+0x56): undefined reference to `pthread_join'
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: src.c:(.text+0x6a): undefined reference to `pthread_atfork'
+        collect2: error: ld returned 1 exit status
+        gmake[1]: *** [cmTC_a878a] 错误 1
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-3BEXys”
+        gmake: *** [cmTC_a878a/fast] 错误 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckLibraryExists.cmake:69 (try_compile)"
+      - "/usr/local/share/cmake-3.30/Modules/FindThreads.cmake:112 (CHECK_LIBRARY_EXISTS)"
+      - "/usr/local/share/cmake-3.30/Modules/FindThreads.cmake:175 (_threads_check_lib)"
+      - "CMakeLists.txt:55 (find_package)"
+    checks:
+      - "Looking for pthread_create in pthreads"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-OraRo0"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-OraRo0"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREADS_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-OraRo0'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_f2dcb/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_f2dcb.dir/build.make CMakeFiles/cmTC_f2dcb.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-OraRo0”
+        Building C object CMakeFiles/cmTC_f2dcb.dir/CheckFunctionExists.c.o
+        /opt/rh/devtoolset-11/root/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_f2dcb.dir/CheckFunctionExists.c.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-OraRo0/CheckFunctionExists.c
+        Linking C executable cmTC_f2dcb
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f2dcb.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_f2dcb.dir/CheckFunctionExists.c.o -o cmTC_f2dcb  -lpthreads
+        /opt/rh/devtoolset-11/root/usr/libexec/gcc/x86_64-redhat-linux/11/ld: 找不到 -lpthreads
+        collect2: error: ld returned 1 exit status
+        gmake[1]: *** [cmTC_f2dcb] 错误 1
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-OraRo0”
+        gmake: *** [cmTC_f2dcb/fast] 错误 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckLibraryExists.cmake:69 (try_compile)"
+      - "/usr/local/share/cmake-3.30/Modules/FindThreads.cmake:112 (CHECK_LIBRARY_EXISTS)"
+      - "/usr/local/share/cmake-3.30/Modules/FindThreads.cmake:176 (_threads_check_lib)"
+      - "CMakeLists.txt:55 (find_package)"
+    checks:
+      - "Looking for pthread_create in pthread"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-dXJ8my"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-dXJ8my"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREAD_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-dXJ8my'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_ca14e/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_ca14e.dir/build.make CMakeFiles/cmTC_ca14e.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-dXJ8my”
+        Building C object CMakeFiles/cmTC_ca14e.dir/CheckFunctionExists.c.o
+        /opt/rh/devtoolset-11/root/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_ca14e.dir/CheckFunctionExists.c.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-dXJ8my/CheckFunctionExists.c
+        Linking C executable cmTC_ca14e
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ca14e.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_ca14e.dir/CheckFunctionExists.c.o -o cmTC_ca14e  -lpthread
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-dXJ8my”
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/local/share/cmake-3.30/Modules/CheckIncludeFile.cmake:90 (try_compile)"
+      - "CMakeLists.txt:64 (check_include_file)"
+    checks:
+      - "Looking for jemalloc/jemalloc.h"
+    directories:
+      source: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-6XcMv6"
+      binary: "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-6XcMv6"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+    buildResult:
+      variable: "HAVE_JEMALLOC"
+      cached: true
+      stdout: |
+        Change Dir: '/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-6XcMv6'
+        
+        Run Build Command(s): /usr/local/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e7a75/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_e7a75.dir/build.make CMakeFiles/cmTC_e7a75.dir/build
+        gmake[1]: 进入目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-6XcMv6”
+        Building C object CMakeFiles/cmTC_e7a75.dir/CheckIncludeFile.c.o
+        /opt/rh/devtoolset-11/root/usr/bin/cc    -o CMakeFiles/cmTC_e7a75.dir/CheckIncludeFile.c.o -c /home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-6XcMv6/CheckIncludeFile.c
+        Linking C executable cmTC_e7a75
+        /usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e7a75.dir/link.txt --verbose=1
+        /opt/rh/devtoolset-11/root/usr/bin/cc -rdynamic CMakeFiles/cmTC_e7a75.dir/CheckIncludeFile.c.o -o cmTC_e7a75
+        gmake[1]: 离开目录“/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/src/common/TurboHash/release/CMakeFiles/CMakeScratch/TryCompile-6XcMv6”
+        
+      exitCode: 0
+...

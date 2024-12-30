@@ -1,0 +1,97 @@
+clevel_hash constructor: HashPower = 20
+hashpower : 20
+Initialization done.
+Initial capacity 12582912
+key trace size: 120960000
+generate 120960000 keys
+generate duration 2.504275 s.
+------------------------------------------------
+HashType:              CLEVEL
+Init Capacity:         12582912
+Key Size:              15
+Val Size:              15
+Entries:               120960000
+Trace size:            120960000
+Read:                  10000000 
+Write:                 1000000 
+Thread:                40 
+Report interval:       0 s
+Stats interval:        200000000 records
+benchmarks:            load,readrandom,readnon
+------------------------------------------------
+[32mStart IPMWatcher for load
+[0mThread-35 starts expanding for 2097152 buckets
+Thread-35 finishes expanding, capacity: 29360128
+expand during resizing!
+Thread-0 starts expanding for 4194304 buckets
+Thread-0 finishes expanding, capacity: 62914560
+Expand thread updates metadata, is_resizing: 1 levels_left: 3
+expand during resizing!
+Thread-0 starts expanding for 8388608 buckets
+Thread-0 finishes expanding, capacity: 125829120
+Expand thread updates metadata, is_resizing: 1 levels_left: 3
+expand during resizing!
+Thread-0 starts expanding for 16777216 buckets
+Thread-0 finishes expanding, capacity: 251658240
+Expand thread updates metadata, is_resizing: 1 levels_left: 3
+load         :       0.783 micros/op 1.217867 Mops/s;
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |      37101.33 |       11405.12 |    64870.33 |     20187.61 |   1.75 |   1.77 |
+  1   |      28924.63 |       11145.17 |    57067.95 |     19777.42 |   1.97 |   1.77 |
+  2   |      51819.13 |       55480.89 |   112139.64 |    137308.30 |   2.16 |   2.47 |
+  3   |      26316.94 |        8689.86 |    54028.76 |     15447.69 |   2.05 |   1.78 |
+  4   |      26312.58 |        8687.09 |    53977.38 |     15448.48 |   2.05 |   1.78 |
+  5   |      33696.39 |       15822.53 |    57158.81 |     20056.49 |   1.70 |   1.27 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R:  4184.3 MB/s, 399242.8 MB
+ User-R:  2139.8 MB/s, 204171.0 MB
+ DIMM-W:  2391.9 MB/s, 228226.0 MB
+ User-W:  1165.8 MB/s, 111230.7 MB
+   Time:    95.4 s
+[32mDestroy IPMWatcher.
+[0m
+randomize 120960000 keys
+randomize duration 0.179395 s.
+[32mStart IPMWatcher for readrandom
+[0mreadrandom   :       0.061 micros/op 15.683982 Mops/s; (num: 10000000, not find: 0)
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |      43518.20 |         400.74 |   113819.19 |       457.81 |   2.62 |   1.14 |
+  1   |      43122.03 |         264.33 |   113841.75 |       449.86 |   2.64 |   1.70 |
+  2   |      43108.18 |         264.25 |   113814.92 |       449.65 |   2.64 |   1.70 |
+  3   |      43152.93 |         264.34 |   113920.58 |       450.93 |   2.64 |   1.71 |
+  4   |      43145.65 |         264.37 |   113899.66 |       450.48 |   2.64 |   1.70 |
+  5   |      43149.52 |         264.19 |   113904.16 |       446.32 |   2.64 |   1.69 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R: 27309.4 MB/s, 683200.2 MB
+ User-R: 10360.8 MB/s, 259196.5 MB
+ DIMM-W:   108.1 MB/s,  2705.1 MB
+ User-W:    68.8 MB/s,  1722.2 MB
+   Time:    25.0 s
+[32mDestroy IPMWatcher.
+[0m
+randomize 120960000 keys
+randomize duration 0.148361 s.
+[32mStart IPMWatcher for readnon
+[0mExpand thread updates metadata, is_resizing: 0 levels_left: 2
+readnon      :       0.053 micros/op 17.924290 Mops/s; (num: 10000000, not find: 10000000)
+--------------------------------------------------------------------------------------
+DIMM  | Read from IMC | Write from IMC |   Read DIMM |   Write DIMM |     RA |     WA |
+  0   |      42569.00 |         217.40 |   106624.12 |       252.79 |   2.50 |   1.16 |
+  1   |      42341.04 |         140.57 |   106627.21 |       248.26 |   2.52 |   1.77 |
+  2   |      42336.50 |         140.48 |   106600.21 |       248.14 |   2.52 |   1.77 |
+  3   |      42347.66 |         140.34 |   106634.71 |       249.14 |   2.52 |   1.78 |
+  4   |      42349.16 |         140.18 |   106644.05 |       248.37 |   2.52 |   1.77 |
+  5   |      42351.90 |         140.22 |   106643.97 |       244.98 |   2.52 |   1.75 |
+--------------------------------------------------------------------------------------
+ SUM:
+ DIMM-R: 29116.4 MB/s, 639774.2 MB
+ User-R: 11573.1 MB/s, 254295.3 MB
+ DIMM-W:    67.9 MB/s,  1491.7 MB
+ User-W:    41.8 MB/s,   919.2 MB
+   Time:    22.0 s
+[32mDestroy IPMWatcher.
+[0m

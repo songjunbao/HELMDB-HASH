@@ -1,0 +1,2 @@
+/opt/rh/devtoolset-11/root/usr/bin/ar qc libturbohash.a
+/opt/rh/devtoolset-11/root/usr/bin/ranlib libturbohash.a

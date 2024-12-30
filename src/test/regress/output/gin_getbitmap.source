@@ -1,0 +1,17 @@
+\! /usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gsql -dpostgres -p 25632 -c "create table gin_getbitmap_table (c_int int,c_bigint bigint,c_varchar varchar,c_text text)with(orientation=row);";
+CREATE TABLE
+\! /usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gsql -dpostgres -p 25632 -c "\copy gin_getbitmap_table from '/usr3/data1/jiangyan/openGauss-server/src/test/regress/data/gin_@.txt' delimiter ',';";
+\! /usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gsql -dpostgres -p 25632 -c "create text search configuration tscp_utf8_003(parser=pound) with(split_flag='@');";
+CREATE TEXT SEARCH CONFIGURATION
+\! /usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gsql -dpostgres -p 25632 -c "alter text search configuration tscp_utf8_003 add mapping for zh_words, en_word, multisymbol,numeric, alnum, grapsymbol with simple;";
+ALTER TEXT SEARCH CONFIGURATION
+\! /usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gsql -dpostgres -p 25632 -c "create index gin_getbitmap_table_idx1 on gin_getbitmap_table using gin(to_tsvector('tscp_utf8_003',c_varchar));";
+CREATE INDEX
+\! /usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gsql -dpostgres -p 25632 -c "create index gin_getbitmap_table_idx2 on gin_getbitmap_table using gin(to_tsvector('tscp_utf8_003',c_text));";
+CREATE INDEX
+\! /usr3/data1/jiangyan/openGauss-server/src/test/regress/./tmp_check/install//data1/jiangyan/openGauss-server//dest/bin/gsql -dpostgres -p 25632 -c "select count(*) from gin_getbitmap_table where to_tsvector('tscp_utf8_003',c_text) @@ to_tsquery('tscp_utf8_003','////') and to_tsvector('tscp_utf8_003',c_text) @@ to_tsquery('tscp_utf8_003','\$\$\$\$\$\$') and to_tsvector('tscp_utf8_003',c_text) @@ to_tsquery('tscp_utf8_003','#####') and to_tsvector('tscp_utf8_003',c_text) @@ to_tsquery('tscp_utf8_003','%%%%%') and to_tsvector('tscp_utf8_003',c_text) @@ plainto_tsquery('tscp_utf8_003','……&**%') and to_tsvector('tscp_utf8_003',c_text) @@ plainto_tsquery('tscp_utf8_003',' ') and to_tsvector('tscp_utf8_003',c_text) @@ plainto_tsquery('tscp_utf8_003',' ') order by 1;"
+ count 
+-------
+   575
+(1 row)
+

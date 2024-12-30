@@ -1,0 +1,150 @@
+create schema hll_misc;
+set current_schema = hll_misc;
+--------------CONTENTS--------------------
+--     hyperloglog test cases
+------------------------------------------
+-- 1. check if inplace upgrade sanity
+------------------------------------------
+------------------------------------------
+-- 1. check inplace upgrade sanity
+------------------------------------------
+select oid, proname, prorettype, proargtypes, prosrc from pg_proc where proname like 'hll%' order by oid;
+ oid  |                proname                 | prorettype |      proargtypes      |       prosrc       
+------+----------------------------------------+------------+-----------------------+--------------------
+ 4305 | hll_in                                 |       4301 | 2275 26 23            | hll_in
+ 4306 | hll_out                                |       2275 | 4301                  | hll_out
+ 4307 | hll_recv                               |       4301 | 2281                  | hll_recv
+ 4308 | hll_send                               |         17 | 4301                  | hll_send
+ 4309 | hll_typmod_in                          |         23 | 1263                  | hll_typmod_in
+ 4310 | hll_typmod_out                         |       2275 | 23                    | hll_typmod_out
+ 4311 | hll                                    |       4301 | 4301 23 16            | hll
+ 4312 | hll_hashval_in                         |       4303 | 2275 26 23            | hll_hashval_in
+ 4313 | hll_hashval_out                        |       2275 | 4303                  | hll_hashval_out
+ 4314 | hll_hashval_eq                         |         16 | 4303 4303             | hll_hashval_eq
+ 4315 | hll_hashval_ne                         |         16 | 4303 4303             | hll_hashval_ne
+ 4316 | hll_hashval                            |       4303 | 20                    | hll_hashval
+ 4317 | hll_hashval_int4                       |       4303 | 23                    | hll_hashval_int4
+ 4318 | hll_eq                                 |         16 | 4301 4301             | hll_eq
+ 4319 | hll_ne                                 |         16 | 4301 4301             | hll_ne
+ 4320 | hll_cardinality                        |        701 | 4301                  | hll_cardinality
+ 4321 | hll_union                              |       4301 | 4301 4301             | hll_union
+ 4322 | hll_add                                |       4301 | 4301 4303             | hll_add
+ 4323 | hll_add_rev                            |       4301 | 4303 4301             | hll_add_rev
+ 4324 | hll_print                              |       2275 | 4301                  | hll_print
+ 4325 | hll_empty                              |       4301 |                       | hll_empty0
+ 4326 | hll_empty                              |       4301 | 23                    | hll_empty1
+ 4327 | hll_empty                              |       4301 | 23 23                 | hll_empty2
+ 4328 | hll_empty                              |       4301 | 23 23 20              | hll_empty3
+ 4329 | hll_empty                              |       4301 | 23 23 20 23           | hll_empty4
+ 4330 | hll_schema_version                     |         23 | 4301                  | hll_schema_version
+ 4331 | hll_type                               |         23 | 4301                  | hll_type
+ 4332 | hll_log2m                              |         23 | 4301                  | hll_log2m
+ 4333 | hll_regwidth                           |         23 | 4301                  | hll_regwidth
+ 4334 | hll_expthresh                          |       2249 | 4301                  | hll_expthresh
+ 4335 | hll_sparseon                           |         23 | 4301                  | hll_sparseon
+ 4336 | hll_add_trans1                         |       4370 | 4370 4303 23          | hll_add_trans1
+ 4337 | hll_add_trans2                         |       4370 | 4370 4303 23 23       | hll_add_trans2
+ 4338 | hll_add_trans3                         |       4370 | 4370 4303 23 23 20    | hll_add_trans3
+ 4339 | hll_hash_boolean                       |       4303 | 16                    | hll_hash_1byte
+ 4340 | hll_hash_smallint                      |       4303 | 21                    | hll_hash_2byte
+ 4341 | hll_hash_integer                       |       4303 | 23                    | hll_hash_4byte
+ 4342 | hll_hash_bigint                        |       4303 | 20                    | hll_hash_8byte
+ 4343 | hll_hash_bytea                         |       4303 | 17                    | hll_hash_varlena
+ 4344 | hll_hash_text                          |       4303 | 25                    | hll_hash_varlena
+ 4345 | hll_hash_any                           |       4303 | 2283                  | hll_hash_any
+ 4346 | hll_union_trans                        |       4370 | 4370 4301             | hll_union_trans
+ 4348 | hll_union_collect                      |       4370 | 4370 4370             | hll_union_collect
+ 4350 | hll_duplicatecheck                     |         23 | 4301                  | hll_duplicatecheck
+ 4351 | hll_add_trans0                         |       4370 | 4370 4303             | hll_add_trans0
+ 4352 | hll_pack                               |       4301 | 4370                  | hll_pack
+ 4353 | hll_hash_boolean                       |       4303 | 16 23                 | hll_hash_1bytes
+ 4354 | hll_hash_smallint                      |       4303 | 21 23                 | hll_hash_2bytes
+ 4355 | hll_hash_integer                       |       4303 | 23 23                 | hll_hash_4bytes
+ 4356 | hll_hash_bigint                        |       4303 | 20 23                 | hll_hash_8bytes
+ 4357 | hll_hash_bytea                         |       4303 | 17 23                 | hll_hash_varlenas
+ 4358 | hll_hash_text                          |       4303 | 25 23                 | hll_hash_varlenas
+ 4359 | hll_hash_any                           |       4303 | 2283 23               | hll_hash_anys
+ 4360 | hll_add_trans4                         |       4370 | 4370 4303 23 23 20 23 | hll_add_trans4
+ 4362 | hll_trans_recv                         |       4370 | 2281                  | hll_trans_recv
+ 4363 | hll_trans_send                         |         17 | 4370                  | hll_trans_send
+ 4364 | hll_trans_in                           |       4370 | 2275                  | hll_trans_in
+ 4365 | hll_trans_out                          |       2275 | 4370                  | hll_trans_out
+ 4366 | hll_add_agg                            |       4301 | 4303                  | aggregate_dummy
+ 4367 | hll_union_agg                          |       4301 | 4301                  | aggregate_dummy
+ 4369 | hll_hash_byteawithoutorderwithequalcol |       4303 | 4402                  | hll_hash_varlena
+ 4378 | hll_log2explicit                       |         23 | 4301                  | hll_log2explicit
+ 4379 | hll_log2sparse                         |         23 | 4301                  | hll_log2sparse
+ 4380 | hll_add_agg                            |       4301 | 4303 23               | aggregate_dummy
+ 4381 | hll_add_agg                            |       4301 | 4303 23 23            | aggregate_dummy
+ 4382 | hll_add_agg                            |       4301 | 4303 23 23 20         | aggregate_dummy
+ 4383 | hll_add_agg                            |       4301 | 4303 23 23 20 23      | aggregate_dummy
+(67 rows)
+
+select oid, * from pg_type where typname in 
+	('hll', '_hll',
+	'hll_hashval', '_hll_hashval',
+	'hll_trans_type', '_hll_trans_type') order by oid;
+ oid  |     typname     | typnamespace | typowner | typlen | typbyval | typtype | typcategory | typispreferred | typisdefined | typdelim | typrelid | typelem | typarray |    typinput    |    typoutput    |   typreceive   |    typsend     |   typmodin    |   typmodout    |    typanalyze    | typalign | typstorage | typnotnull | typbasetype | typtypmod | typndims | typcollation | typdefaultbin | typdefault | typacl 
+------+-----------------+--------------+----------+--------+----------+---------+-------------+----------------+--------------+----------+----------+---------+----------+----------------+-----------------+----------------+----------------+---------------+----------------+------------------+----------+------------+------------+-------------+-----------+----------+--------------+---------------+------------+--------
+ 4301 | hll             |           11 |       10 |     -1 | f        | b       | U           | f              | t            | ,        |        0 |       0 |     4302 | hll_in         | hll_out         | hll_recv       | hll_send       | hll_typmod_in | hll_typmod_out | -                | i        | e          | f          |           0 |        -1 |        0 |            0 |               |            | 
+ 4302 | _hll            |           11 |       10 |     -1 | f        | p       | P           | f              | t            | ,        |        0 |    4301 |        0 | array_in       | array_out       | array_recv     | array_send     | hll_typmod_in | hll_typmod_out | array_typanalyze | i        | x          | f          |           0 |        -1 |        0 |            0 |               |            | 
+ 4303 | hll_hashval     |           11 |       10 |      8 | t        | p       | P           | f              | t            | ,        |        0 |       0 |     4304 | hll_hashval_in | hll_hashval_out | -              | -              | -             | -              | -                | d        | p          | f          |           0 |        -1 |        0 |            0 |               |            | 
+ 4304 | _hll_hashval    |           11 |       10 |     -1 | f        | p       | P           | f              | t            | ,        |        0 |    4303 |        0 | array_in       | array_out       | array_recv     | array_send     | -             | -              | array_typanalyze | d        | x          | f          |           0 |        -1 |        0 |            0 |               |            | 
+ 4370 | hll_trans_type  |           11 |       10 |     -1 | f        | p       | P           | f              | t            | ,        |        0 |       0 |     4371 | hll_trans_in   | hll_trans_out   | hll_trans_recv | hll_trans_send | -             | -              | -                | i        | e          | f          |           0 |        -1 |        0 |            0 |               |            | 
+ 4371 | _hll_trans_type |           11 |       10 |     -1 | f        | p       | P           | f              | t            | ,        |        0 |    4370 |        0 | array_in       | array_out       | array_recv     | array_send     | -             | -              | array_typanalyze | i        | x          | f          |           0 |        -1 |        0 |            0 |               |            | 
+(6 rows)
+
+with type_oids as
+(
+	select oid  from pg_type where typname in 
+	('hll', '_hll',
+	'hll_hashval', '_hll_hashval',
+	'hll_trans_type', '_hll_trans_type')
+)
+select oid, * from pg_operator where oprleft in (select * from type_oids)
+								or oprright in  (select * from type_oids)
+								order by oid;
+ oid  | oprname | oprnamespace | oprowner | oprkind | oprcanmerge | oprcanhash | oprleft | oprright | oprresult | oprcom | oprnegate |     oprcode     | oprrest |  oprjoin   
+------+---------+--------------+----------+---------+-------------+------------+---------+----------+-----------+--------+-----------+-----------------+---------+------------
+ 4372 | =       |           11 |       10 | b       | f           | f          |    4301 |     4301 |        16 |   4372 |      4373 | hll_eq          | eqsel   | eqjoinsel
+ 4373 | <>      |           11 |       10 | b       | f           | f          |    4301 |     4301 |        16 |   4373 |      4372 | hll_ne          | neqsel  | neqjoinsel
+ 4374 | ||      |           11 |       10 | b       | f           | f          |    4301 |     4301 |      4301 |      0 |         0 | hll_union       | -       | -
+ 4375 | ||      |           11 |       10 | b       | f           | f          |    4301 |     4303 |      4301 |      0 |         0 | hll_add         | -       | -
+ 4376 | ||      |           11 |       10 | b       | f           | f          |    4303 |     4301 |      4301 |      0 |         0 | hll_add_rev     | -       | -
+ 4377 | #       |           11 |       10 | l       | f           | f          |       0 |     4301 |       701 |      0 |         0 | hll_cardinality | -       | -
+ 4378 | =       |           11 |       10 | b       | f           | f          |    4303 |     4303 |        16 |   4378 |      4379 | hll_hashval_eq  | eqsel   | eqjoinsel
+ 4379 | <>      |           11 |       10 | b       | f           | f          |    4303 |     4303 |        16 |   4379 |      4378 | hll_hashval_ne  | neqsel  | neqjoinsel
+(8 rows)
+
+select * from pg_aggregate where aggtranstype = (select oid from pg_type where typname = 'hll_trans_type') order by 1;
+        aggfnoid        |   aggtransfn    |   aggcollectfn    | aggfinalfn | aggsortop | aggtranstype | agginitval | agginitcollect | aggkind | aggnumdirectargs 
+------------------------+-----------------+-------------------+------------+-----------+--------------+------------+----------------+---------+------------------
+ pg_catalog.hll_add_agg | hll_add_trans0  | hll_union_collect | hll_pack   |         0 |         4370 |            |                | n       |                0
+ hll_union_agg          | hll_union_trans | hll_union_collect | hll_pack   |         0 |         4370 |            |                | n       |                0
+ pg_catalog.hll_add_agg | hll_add_trans1  | hll_union_collect | hll_pack   |         0 |         4370 |            |                | n       |                0
+ pg_catalog.hll_add_agg | hll_add_trans2  | hll_union_collect | hll_pack   |         0 |         4370 |            |                | n       |                0
+ pg_catalog.hll_add_agg | hll_add_trans3  | hll_union_collect | hll_pack   |         0 |         4370 |            |                | n       |                0
+ pg_catalog.hll_add_agg | hll_add_trans4  | hll_union_collect | hll_pack   |         0 |         4370 |            |                | n       |                0
+(6 rows)
+
+with type_oids as
+(
+	select oid  from pg_type where typname in 
+	('hll', '_hll',
+	'hll_hashval', '_hll_hashval',
+	'hll_trans_type', '_hll_trans_type')
+)
+select * from pg_cast where castsource in ( select * from type_oids )
+						or casttarget in ( select * from type_oids ) order by 1;
+ castsource | casttarget | castfunc | castcontext | castmethod | castowner 
+------------+------------+----------+-------------+------------+-----------
+         17 |       4301 |        0 | e           | b          |          
+         20 |       4303 |        0 | e           | b          |          
+         23 |       4303 |     4317 | e           | f          |          
+       4301 |       4301 |     4311 | i           | f          |          
+       4402 |       4301 |        0 | e           | b          |          
+(5 rows)
+
+--final cleaning
+drop schema hll_misc cascade;
+reset current_schema;

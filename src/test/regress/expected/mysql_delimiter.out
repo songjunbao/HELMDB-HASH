@@ -1,0 +1,209 @@
+-- B db compatibility case
+drop database if exists my_test;
+NOTICE:  database "my_test" does not exist, skipping
+create database my_test dbcompatibility 'B';
+\c my_test
+--Test default delimiter
+select 1; 
+ ?column? 
+----------
+        1
+(1 row)
+
+--Test delimiter aa
+delimiter aa;
+select 1aa
+ ?column? 
+----------
+        1
+(1 row)
+
+select 1aaselect 1;aa
+ ?column? 
+----------
+        1
+(1 row)
+
+ ?column? 
+----------
+        1
+(1 row)
+
+select kaa
+ERROR:  column "k" does not exist
+LINE 1: select k aa
+               ^
+CONTEXT:  referenced column: k
+delimiter ;aa
+--Test delimiter //
+delimiter //;
+select 1//
+ ?column? 
+----------
+        1
+(1 row)
+
+delimiter ;//
+--Test delimiter length
+delimiter ""
+ERROR:  zero-length delimited identifier at or near """"
+LINE 1: delimiter "" ";"
+                  ^
+delimiter ''
+ERROR:  DELIMITER must be followed by a 'delimiter' character or string at or near "";""
+LINE 1: delimiter '' ";"
+                     ^
+delimiter aaaaaaaaaaaaaaaa
+ERROR:  'delimiter' length should less than 16 at or near "";""
+LINE 1: delimiter aaaaaaaaaaaaaaaa ";"
+                                   ^
+delimiter "aaaaaaaaaaaaaaaa"
+ERROR:  'delimiter' length should less than 16 at or near "";""
+LINE 1: delimiter "aaaaaaaaaaaaaaaa" ";"
+                                     ^
+delimiter aaaaaaaaaaaaaaa
+delimiter ;
+--Test delimiter %
+delimiter %;
+select 1%
+ ?column? 
+----------
+        1
+(1 row)
+
+delimiter ;%
+--Test delimiter 'Mysql'
+delimiter 'Mysql';
+select 1Mysql
+ ?column? 
+----------
+        1
+(1 row)
+
+delimiter ;Mysql
+--Test other
+delimiter sds;
+delimiter aasds
+select 1aasds
+ ?column? 
+----------
+        1
+(1 row)
+
+delimiter ;aasds
+--
+delimiter asd ss;
+select 1asd
+ ?column? 
+----------
+        1
+(1 row)
+
+delimiter ;asd
+delimiter bb
+delimiter aa
+select 1aa
+ ?column? 
+----------
+        1
+(1 row)
+
+delimiter ;
+delimiter de
+delimiter abcde
+select 1abcde
+ ?column? 
+----------
+        1
+(1 row)
+
+delimiter zz sdsd aasds
+delimiter kkasda "sdsd" sdsda
+select 1kkasda
+ ?column? 
+----------
+        1
+(1 row)
+
+delimiter
+ERROR:  syntax error at or near ""kkasda""
+LINE 1: delimiter  "kkasda"
+                   ^
+delimiter "sdsd sd"
+select 1"sdsd sd"
+ ?column? 
+----------
+        1
+(1 row)
+
+delimiter ;
+-- test delimiter use in create procedure situation
+-- report gram error in server ,not subprogram end error, success in plugin 
+create table test_table (dot_no int);
+insert into test_table values(1);
+insert into test_table values(NULL);
+delimiter //
+create procedure test91()
+begin
+  declare rec_curs_value int;
+  declare curs_dot cursor for select dot_no from test_table;
+    open curs_dot;
+    fetch curs_dot into rec_curs_value;
+    while rec_curs_value is not null do
+      fetch curs_dot into rec_curs_value;
+    end while;
+    close curs_dot;
+end;
+//
+ERROR:  syntax error at or near "begin"
+LINE 2: begin
+        ^
+delimiter ;
+delimiter //
+create procedure test92()
+begin
+  declare rec_curs_value int;
+  declare curs_dot cursor for select dot_no from test_table;
+    open curs_dot;
+    fetch curs_dot into rec_curs_value;
+    while rec_curs_value is null do
+      fetch curs_dot into rec_curs_value;
+    end while;
+    close curs_dot;
+end;
+//
+ERROR:  syntax error at or near "begin"
+LINE 2: begin
+        ^
+delimiter ;
+-- test deterministic error
+create function fun2(age1 int)return int DETERMINISTIC 
+NOT SHIPPABLE NOT FENCED EXTERNAL SECURITY INVOKER  
+AS 
+declare
+a1 int;
+begin
+return a1;
+end;
+/
+select fun2(1);
+ fun2 
+------
+     
+(1 row)
+
+-- test create procedure select error 
+create table t1 (a int);
+insert into t1 values (1),(2);
+-- server should has gram error,plugin pass
+create procedure pro_test() select a from t1;
+ERROR:  syntax error at or near "select"
+LINE 1: create procedure pro_test() select a from t1;
+                                    ^
+-- server should has gram error, plugin pass;
+create procedure pro_test2() select a as b from t1;
+ERROR:  syntax error at or near "select"
+LINE 1: create procedure pro_test2() select a as b from t1;
+                                     ^
+\c regression
+drop database my_test;

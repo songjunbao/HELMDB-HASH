@@ -1,0 +1,129 @@
+select * from gs_stat_undo();
+
+select * from gs_stat_wal_entrytable(-1) limit 1;
+select * from gs_stat_wal_entrytable(1);
+select * from gs_stat_wal_entrytable(-2);
+
+select * from gs_walwriter_flush_position();
+
+select * from gs_walwriter_flush_stat(1);
+select * from gs_walwriter_flush_stat(2);
+
+-- wal sender
+select * from gs_stat_walsender();  -- default get
+select * from gs_stat_walsender(1); -- enable
+select * from gs_stat_walsender(2); -- get
+select * from gs_stat_walsender(0); -- reset
+select * from gs_stat_walsender(null); -- reset
+select * from gs_stat_walsender(-1); -- disable
+select * from gs_stat_walsender(3); -- error
+-- wal receiver
+select * from gs_stat_walreceiver();
+select * from gs_stat_walreceiver(1);
+select * from gs_stat_walreceiver(2);
+select * from gs_stat_walreceiver(0);
+select * from gs_stat_walreceiver(-1);
+select * from gs_stat_walreceiver(4); -- error
+-- wal recvwriter
+select * from gs_stat_walrecvwriter();
+select * from gs_stat_walrecvwriter(1);
+select * from gs_stat_walrecvwriter(2);
+select * from gs_stat_walrecvwriter(0);
+select * from gs_stat_walrecvwriter(-1);
+select * from gs_stat_walreceiver(5); -- error
+
+DROP TABLE IF EXISTS test_ustore;
+DROP INDEX IF EXISTS test_ustore_idx;
+DROP INDEX IF EXISTS test_ustore_idx2;
+
+START TRANSACTION;
+CREATE TABLE test_ustore (a int, b int ,c int) with(storage_type=ustore);
+CREATE INDEX test_ustore_idx ON test_ustore(a);
+CREATE INDEX test_ustore_idx2 ON test_ustore(b,c);
+INSERT INTO test_ustore values(generate_series(1,100000),generate_series(1,100000), generate_series(1,100000));
+CHECKPOINT;
+CREATE OR REPLACE FUNCTION proc_gs_index_verify(tablename in varchar2)
+RETURNS SETOF varchar 
+LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    relationOid  oid;
+	stat varchar;
+BEGIN
+	SELECT relfilenode into relationOid from pg_class where relname=tablename;
+	for stat in ( select status from gs_index_verify(relationOid, 0) ) loop
+	RETURN NEXT stat;
+    end loop;
+	for stat in ( select status from gs_index_verify(relationOid, 1) ) loop
+	RETURN NEXT stat;
+    end loop;
+    return;
+END;
+$$
+;
+SELECT proc_gs_index_verify('test_ustore_idx');
+SELECT proc_gs_index_verify('test_ustore_idx2');
+
+DROP TABLE IF EXISTS test_ustore;
+COMMIT;
+
+START TRANSACTION;
+CREATE TABLE test_ustore (a int, b int ,c int) with(storage_type=ustore);
+CREATE INDEX test_ustore_idx ON test_ustore(a);
+CREATE INDEX test_ustore_idx2 ON test_ustore(b,c);
+INSERT INTO test_ustore values(generate_series(1,100000),generate_series(1,100000), generate_series(1,100000));
+CHECKPOINT;
+CREATE OR REPLACE FUNCTION proc_gs_index_recycle_queue(tablename in varchar2)
+RETURNS SETOF varchar 
+LANGUAGE plpgsql
+AS
+$$
+DECLARE
+    relationOid  oid;
+	stat varchar;
+BEGIN
+	SELECT relfilenode into relationOid from pg_class where relname=tablename;
+	for stat in ( select rblkno from gs_index_recycle_queue(relationOid, 0, 0) ) loop
+	RETURN NEXT stat;
+    end loop;
+	for stat in ( select rblkno from gs_index_recycle_queue(relationOid, 1, 0) ) loop
+	RETURN NEXT stat;
+    end loop;
+	for stat in ( select rblkno from gs_index_recycle_queue(relationOid, 2, 1) ) loop
+	RETURN NEXT stat;
+    end loop;
+    return;
+END;
+$$
+;
+SELECT proc_gs_index_recycle_queue('test_ustore_idx');
+SELECT proc_gs_index_recycle_queue('test_ustore_idx2');
+
+DROP TABLE IF EXISTS test_ustore;
+COMMIT;
+
+--testcase gs_undo_dump_parsepage_mv
+DROP TABLE IF EXISTS test_ustore;
+CREATE TABLE test_ustore (user_id serial PRIMARY KEY, time_clock VARCHAR ( 50 )) with(storage_type=ustore);
+CREATE INDEX test_ustore_idx ON test_ustore(user_id);
+insert into test_ustore select generate_series(1, 200), clock_timestamp();
+update test_ustore set time_clock = NULL where user_id = 150;
+update test_ustore set time_clock = 'time' where user_id = 150;
+delete test_ustore where user_id > 190;
+CREATE OR REPLACE FUNCTION gs_undo_dump_parsepage_mv_test(tablename in varchar2, block_num in int, relation in varchar2, read_mem in bool)
+RETURNS table (output text)
+LANGUAGE plpgsql
+AS
+$$
+DECLARE
+        param1  text;
+BEGIN
+        SELECT pg_relation_filepath(tablename) into param1;
+        return query SELECT gs_undo_dump_parsepage_mv(''|| param1 ||'', block_num, relation, read_mem);
+END;
+$$
+;
+CHECKPOINT;
+SELECT gs_undo_dump_parsepage_mv_test('test_ustore', -1, 'uheap', false);
+DROP TABLE IF EXISTS test_ustore;

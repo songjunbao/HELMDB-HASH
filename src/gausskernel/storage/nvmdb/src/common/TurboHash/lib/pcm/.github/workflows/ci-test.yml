@@ -1,0 +1,95 @@
+name: tests
+
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ '**' ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ci-test
+    if: ${{ github.repository != 'intel/pcm' }}
+
+    steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
+      with:
+        egress-policy: audit
+
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      with:
+        submodules: recursive
+    - name: Configure CMake
+      run: |
+        cmake --version
+        rm -rf ${{ github.workspace }}/build
+        cmake -B ${{ github.workspace }}/build -DPCM_NO_ASAN=OFF
+    - name: Build
+      run: |
+        g++ --version
+        cd ${{ github.workspace }}/build
+        make -j$(nproc)
+        ldd bin/pcm
+    - name: Test
+      run: |
+        set -o pipefail
+        bash ${{ github.workspace }}/tests/test.sh 2>&1 | tee test-log.txt
+
+    - name: upload-artifact
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      with:
+        name: test-log-${{ github.sha }}
+        path: test-log.txt
+
+    - name: upload-artifact
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      with:
+        name: test-log-raw-tr-wo_ext-${{ github.sha }}
+        path: build/bin/raw_tr_wo_ext.csv
+
+    - name: upload-artifact
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      with:
+        name: test-log-raw-tr-wi_ext-${{ github.sha }}
+        path: build/bin/raw_tr_wi_ext.csv
+
+    - name: upload-artifact
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      with:
+        name: pcm-csv-${{ github.sha }}
+        path: build/bin/pcm.csv
+
+    - name: upload-artifact
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      with:
+        name: pcm-memory-csv-${{ github.sha }}
+        path: build/bin/pcm-memory.csv
+
+    - name: upload-artifact
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      with:
+        name: test-log-raw-tr-wi_ext-single_header-${{ github.sha }}
+        path: build/bin/raw_tr_wi_ext_single_header.csv
+
+    - name: upload-artifact
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      with:
+        name: test-log-raw-edp-${{ github.sha }}
+        path: build/bin/raw_edp.txt
+
+    - name: upload-artifact
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      with:
+        name: test-log-raw-json-${{ github.sha }}
+        path: build/bin/raw_json.json
+
+    - name: upload-artifact
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+      with:
+        name: test-log-raw-edp-offlined-cores-${{ github.sha }}
+        path: build/bin/raw_edp_offlined_cores.txt

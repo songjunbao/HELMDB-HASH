@@ -1,0 +1,70 @@
+syntax="proto3";
+
+package meta;
+
+option cc_generic_services = true;
+
+// The Meta service definition
+service MetaService {
+    rpc RegisterServer(RegisterServerRequest) returns (RegisterServerResponse);
+    rpc HeartBeat(Ping) returns (Pong);
+    rpc GetServerStatus(GetServerStatusRequest) returns (GetServerStatusResponse);
+    rpc SetServerStatus(SetServerStatusRequest) returns (SetServerStatusResponse);
+}
+
+enum InstanceKind {
+    TEST = 0;
+}
+
+enum ServerStatus {
+    UNKNOWN = 0;
+    STARTING = 1;
+    RUNNING = 2;
+    STOPPING = 3;
+    STOPPED = 4;
+    MAINTENANCE = 5;
+    ERROR = 6;
+    TIMEOUT = 7;
+}
+
+message RegisterServerRequest {
+    optional uint64 id = 1;
+    string hostname = 2;
+    uint32 rpc_port = 3;
+    InstanceKind instance_kind = 4;
+    ServerStatus status = 5;
+    string version = 6;
+    string git_branch = 7;
+    string git_hash = 8;
+    map<string, string> attributes = 9;
+}
+
+message RegisterServerResponse { 
+    uint64 id = 1; 
+    string message = 2;
+}
+
+message Ping {
+    int64 timestamp = 1;
+}
+
+message Pong {
+    int64 timestamp = 1;
+}
+
+message GetServerStatusRequest {
+    uint64 id = 1;
+}
+
+message GetServerStatusResponse {
+    ServerStatus status = 1;
+}
+
+message SetServerStatusRequest {
+    uint64 id = 1;
+    ServerStatus status = 2;
+}
+
+message SetServerStatusResponse {
+    ServerStatus status = 1;
+}

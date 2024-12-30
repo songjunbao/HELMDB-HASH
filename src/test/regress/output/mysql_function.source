@@ -1,0 +1,124 @@
+--test create function/procedure definer=user 
+--grammar test
+\c  mysqltest
+create schema mysqlschema;
+grant ALL  on SCHEMA mysqlschema to PUBLIC;
+CREATE  DEFINER=testusr1 FUNCTION testfunc_definer1(integer, integer) RETURNS integer SECURITY DEFINER
+AS 'select $1 + $2;'
+LANGUAGE SQL
+IMMUTABLE
+RETURNS NULL ON NULL INPUT;
+ERROR:  role "testusr1" does not exist
+CREATE  OR REPLACE DEFINER=testusr1 FUNCTION func_definer2(integer, integer) RETURNS integer SECURITY DEFINER
+AS 'select $1 + $2;'
+LANGUAGE SQL
+IMMUTABLE
+RETURNS NULL ON NULL INPUT;
+ERROR:  not support DEFINER function at or near ";"
+LINE 5: RETURNS NULL ON NULL INPUT;
+                                  ^
+CREATE DEFINER=testusr1 procedure proc_definer1() SECURITY DEFINER
+AS
+BEGIN
+   raise info 'create definer procedure.';
+END;
+/
+ERROR:  role "testusr1" does not exist
+CREATE OR REPLACE DEFINER=testusr1 procedure proc_definer2()  SECURITY DEFINER
+AS 
+BEGIN
+   raise info 'create definer procedure.';
+END;
+/
+ERROR:  not support DEFINER function at or near ";"
+LINE 5: END;
+           ^
+	
+CREATE USER testusr1 password '12345@abc';
+CREATE  DEFINER=testusr1 FUNCTION func_definer1(integer, integer) RETURNS integer SECURITY INVOKER
+AS 'select $1 + $2;'
+LANGUAGE SQL
+IMMUTABLE
+RETURNS NULL ON NULL INPUT;
+CREATE DEFINER=testusr1 procedure proc_definer1() 
+AS 
+BEGIN
+   raise info 'create definer procedure.';
+END;
+/
+--test \sf 
+\sf func_definer1
+CREATE DEFINER = testusr1 FUNCTION public.func_definer1(integer, integer)
+ RETURNS integer
+ LANGUAGE sql
+ IMMUTABLE STRICT NOT FENCED NOT SHIPPABLE
+AS $function$select $1 + $2;$function$;
+\sf  proc_definer1
+CREATE DEFINER = testusr1 PROCEDURE public.proc_definer1()
+AS  DECLARE BEGIN
+   raise info 'create definer procedure.';
+END;
+/
+--test create or replace function or procedure 
+select usename from pg_user where  usesysid = (select proowner from pg_proc where proname='proc_definer1'); 
+ usename  
+----------
+ testusr1
+(1 row)
+
+CREATE or replace procedure proc_definer1()
+AS 
+BEGIN
+   raise info 'create definer procedure.';
+END;
+/
+select usename from pg_user where  usesysid = (select proowner from pg_proc where proname='proc_definer1'); 
+ usename  
+----------
+ testusr1
+(1 row)
+
+--dump  test
+-- dump function
+\! @abs_bindir@/gs_dump mysqltest -p @portstring@  -f @abs_bindir@/mysql_function_back.sql --disable-progress
+--?gs_dump[port='@portstring@'][test_db].*
+--?gs_dump[port='@portstring@'][test_db].*
+--?gs_dump[port='@portstring@'][test_db].*
+--?gs_dump[port='@portstring@'][test_db].*
+--?gs_dump[port='@portstring@'][test_db].*
+--?gs_dump[port='@portstring@'][test_db].*
+-- restore data
+\! @abs_bindir@/gsql -p @portstring@ -d mysqltestbak -f @abs_bindir@/mysql_function_back.sql
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+--? .*
+\c mysqltestbak
+\sf proc_definer1
+CREATE DEFINER = testusr1 PROCEDURE public.proc_definer1()
+AS DECLARE BEGIN
+   raise info 'create definer procedure.';
+END;
+/

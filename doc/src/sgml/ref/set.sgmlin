@@ -1,0 +1,31 @@
+<refentry id="SQL-SET">
+<refmeta>
+<refentrytitle>SET</refentrytitle>
+<manvolnum>7</manvolnum>
+<refmiscinfo>SQL - Language Statements</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>SET</refname>
+<refpurpose>change a run-time parameter</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis>
+SET [ LOCAL | SESSION ]
+    { {config_parameter { { TO | = } { value | DEFAULT } | FROM CURRENT }}};
+SET [ SESSION | LOCAL ] TIME ZONE { timezone | LOCAL | DEFAULT };
+SET [ SESSION | LOCAL ] NAMES encoding_name;
+SET [ SESSION | LOCAL ] 
+    {CURRENT_SCHEMA { TO | = } { schema | DEFAULT }
+    | SCHEMA 'schema'};
+SET [ SESSION | LOCAL ] XML OPTION { DOCUMENT | CONTENT };
+SET { GLOBAL | @@GLOBAL.}
+    { {config_parameter = { expr | DEFAULT }}};
+SET [ SESSION | @@SESSION. | @@]
+    { {config_parameter = { expr | DEFAULT }}};
+SET @var_name := expr [, @var_name := expr] ...
+SET @var_name = expr [, @var_name = expr] ...
+NOTICE: '@var_name' are only available in CENTRALIZED mode and B-format database.
+NOTICE: '{ GLOBAL | @@GLOBAL.}' are only available in CENTRALIZED mode and B-format database.
+NOTICE: '[ @@SESSION. | @@]' are only available in CENTRALIZED mode and B-format database.
+</synopsis>
+</refsynopsisdiv>
