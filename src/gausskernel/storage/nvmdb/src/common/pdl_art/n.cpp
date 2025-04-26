@@ -172,6 +172,8 @@ void N::Change(N *node, uint8_t key, NVMPtr<N> val) {
     CHECK(false);
 }
 
+
+//这里每次扩容会创建一个大节点，然后把原节点的数据拷贝到大节点中，再把大节点替换原节点，所以这里需要同步更改跳表，要不然无法正确的修改其跳表中的节点指向
 template <typename NType, typename BiggerNType>
 void N::InsertGrow(NType *n, N *parentNode, uint8_t keyParent, uint8_t key, NVMPtr<N> val, ThreadInfo &threadInfo,
                    bool &needRestart, OpStruct *oplog, uint32_t genId) {
@@ -179,6 +181,7 @@ void N::InsertGrow(NType *n, N *parentNode, uint8_t keyParent, uint8_t key, NVMP
         n->WriteUnlock();
         return;
     }
+
 
     NVMPtr<N> nBigPtr;
     oplog->op = OpStruct::insert;
