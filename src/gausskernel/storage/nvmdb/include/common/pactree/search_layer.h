@@ -2,9 +2,28 @@
 #define SEARCHLAYER_H
 
 #include "common/pdl_art/tree.h"
+#include <vector>
+#include <memory>
+#include <iostream>
+#include "turbo/turbo_hash.h"
+#include <thread>
+#include <atomic>  // 引入 atomic 头文件
 
 constexpr int DEFAULT_INSERT_NUM = 2;
 
+
+class ValueEntry {
+public:
+    uint32_t level;
+    NVMPtr<ART_ROWEX::N> *ptid;//存储内部节点
+    NVMPtr<ART_ROWEX::N> *parent_ptid;//存储内部节点
+    uint64_t version;
+};
+
+using HashTable = turbo::unordered_map<size_t, ValueEntry*>;
+extern HashTable hashAdjTable;
+extern bool end;  // 确保 atomic 类型的正确初始化;
+extern int hash_count;
 inline void LoadIntKeyFunction(TID tid, Key &k) {
     k.SetInt(*reinterpret_cast<uint64_t *>(tid));
 }
@@ -14,8 +33,11 @@ inline void LoadStringKeyFunction(TID tid, Key &k) {
     k.Set(pkey->getData(), pkey->keyLength);
 }
 
+
+
 class PDLARTIndex {
 public:
+    std::thread* workerThread = new std::thread(&PDLARTIndex::hash_workerThreadExec, this);; // 保存线程对象
     int group{0};
     uint8_t grpMask{0};
     PDLARTIndex() {
@@ -23,6 +45,7 @@ public:
         PMem::alloc(sizeof(ART_ROWEX::Tree), (void **)&idxPtr, &oid);
         idx = new (idxPtr.getVaddr()) ART_ROWEX::Tree(LoadStringKeyFunction);
         dummyIdx = new ART_ROWEX::Tree(LoadIntKeyFunction);
+
     }
 
     ~PDLARTIndex() {
@@ -34,6 +57,7 @@ public:
         idx->genId++;
         idx->loadKey = LoadStringKeyFunction;
         dummyIdx = new ART_ROWEX::Tree(LoadIntKeyFunction);
+
     }
 
     void SetGroupId(int nma) {
@@ -54,12 +78,25 @@ public:
         Key k;
         SetKey(k, key);
         idx->Insert(k, reinterpret_cast<unsigned long>(ptr), t);
+        // 判断 hashops 的容量是否大于 1000
+        if (hashops.size() >= 1000) {
+            // 将 hashops 推入队列
+            std::vector<HashOps>* hashops_ptr = &hashops;  // 获取 hashops 的指针
+            if (!hashops_queue.push(hashops_ptr)) {
+                std::cerr << "队列已满，无法推入数据！" << std::endl;
+            }
+            // 重置 hashops 以便继续使用
+            hashops.clear();  // 清空当前的 hashops 数据
+        }
         if (key < curMin)
             curMin = key;
         numInserts++;
         return true;
     }
-
+    void hash_workerThreadExec();
+    void hash_ApplyOperation();
+    bool hash_Insert(uint64_t prefix, NVMPtr<ART_ROWEX::N>* pTid, uint64_t version, NVMPtr<ART_ROWEX::N>* par_pTid);
+    TID hashLookup(const Key &k);
     bool remove(Key_t key, void *ptr) {
         auto t = dummyIdx->GetThreadInfo();
         Key k;
@@ -74,9 +111,17 @@ public:
         auto t = dummyIdx->GetThreadInfo();
         Key endKey;
         SetKey(endKey, key);
-
-        auto result = idx->LookupNext(endKey, t);
-        return reinterpret_cast<void *>(result);
+        TID result = 0;
+        if(hash_count > 300000){
+            result =  hashLookup(endKey);
+        }
+//        if(result == 0) {
+            auto result2 = idx->LookupNext(endKey, t);
+//        }
+//            if (result != result2 && result != 0) {
+//                fprintf(stderr, "failed hash：%d vs. %d\n", result, result2);
+//            }
+        return reinterpret_cast<void *>(result2);
     }
 
     void *lookup2(Key_t key) {
@@ -100,6 +145,7 @@ public:
         return numInserts;
     }
 private:
+    int lookcount = 0;
     Key minKey;
     Key_t curMin;
     NVMPtr<ART_ROWEX::Tree> idxPtr;

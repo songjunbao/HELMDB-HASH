@@ -59,7 +59,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-
+#include "/home/song/nvm/downloads/HELMDB/src/gausskernel/storage/nvmdb/include/common/pdl_art/epoch.h"
 #include "turbo_epoche.h"
 // #define PIN_KEY_TO_THREAD
 using namespace epoche;
@@ -1865,8 +1865,8 @@ public:
     }
 
     template <typename Fn>
-    bool Find (const Key& key, epoche::ThreadInfo& thread_info, Fn&& callback) {
-        epoche::EpocheGuardReadonly epoche_guard (thread_info);
+    bool Find (const Key& key, Fn&& callback) {
+
         // calculate hash value of the key
         size_t hash_value = KeyToHash (key);
         FindSlotResult res = findSlot (key, hash_value);

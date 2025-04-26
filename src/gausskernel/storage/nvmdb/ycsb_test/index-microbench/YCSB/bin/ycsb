@@ -21,8 +21,8 @@ import fnmatch
 import io
 import os
 import shlex
-import sys
 import subprocess
+import sys
 
 try:
     mod = __import__('argparse')

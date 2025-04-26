@@ -58,7 +58,8 @@ uint64_t g_removeCount;
 
 volatile std::atomic<bool> g_removeDetected;
 
-void workerThreadExec(int threadId, int activeGrp, root_obj *root) {
+void workerThreadExec(int threadId, int activeGrp, root_obj *root, std::vector<std::thread *> *wthead)
+{
     CHECK(activeGrp > 0);
     auto thread_name = std::string("PACTreeW_") + std::to_string(threadId);
     pthread_setname_np(pthread_self(), thread_name.c_str());
@@ -68,7 +69,7 @@ void workerThreadExec(int threadId, int activeGrp, root_obj *root) {
     if (threadId < activeGrp) {
         while (threadInitialized[threadId] == 0) { }
         slReady[threadId] = false;
-        g_perGrpSlPtr[threadId] = PACTreeImpl::CreateSearchLayer(root, threadId);
+        g_perGrpSlPtr[threadId] = PACTreeImpl::CreateSearchLayer(root, threadId, wthead);
         g_perGrpSlPtr[threadId]->SetGroupId(threadId);
         slReady[threadId] = true;
     }
@@ -174,7 +175,7 @@ void CombinerThreadExec(int activeGrp) {
 void PACTreeImpl::CreateWorkerThread(int numGrp, root_obj *root) {
     for (int i = 0; i < numGrp * NVMDB_OPLOG_WORKER_THREAD_PER_GROUP; i++) {
         threadInitialized[i % numGrp] = false;
-        auto *wt = new std::thread(workerThreadExec, i, numGrp, root);
+        auto *wt = new std::thread(workerThreadExec, i, numGrp, root, wtArray);
         usleep(1);
         wtArray->push_back(wt);
         threadInitialized[i % numGrp] = true;
@@ -238,6 +239,7 @@ PACTreeImpl::PACTreeImpl(int numGrp, root_obj *root) {
     // need to read from PM
 
     g_globalStop = false;
+    end = false;
     g_combinerStop = false;
 
     CreateWorkerThread(numGrp, root);
@@ -250,6 +252,7 @@ PACTreeImpl::PACTreeImpl(int numGrp, root_obj *root) {
 
 PACTreeImpl::~PACTreeImpl() {
     g_globalStop = true;
+    end = true;
     for (auto &t : *wtArray)
         t->join();
     combinerThead->join();
@@ -288,6 +291,24 @@ bool PACTreeImpl::Insert(Key_t &key, Val_t val) {
     return ret;
 }
 
+// TID PACTreeImpl::hashLookup(Key_t &key){
+//     return 0;
+//     auto prefix = k.extractPrefix(4);
+//     ValueEntry* vbuf;
+//     auto callback = [&] (HashTable::RecordType record) {vbuf = std::move(record.value());};
+//     if(hashAdjTable.Find(prefix,callback)){
+//         auto res_node = vbuf->ptid.getVaddr();
+//         if(ART_ROWEX::N::IsLeaf(res_node)){
+//             lookcount++;
+//             if(lookcount %10000 == 0){
+//                 fprintf(stderr, "查询成功：%d keys\n", lookcount);
+//             }
+//             return ART_ROWEX::N::GetLeaf(res_node);
+//         }
+//     }
+//     return 0;
+// }
+
 Val_t PACTreeImpl::Lookup(Key_t &key, bool *found) {
     uint64_t clock = ordo_get_clock();
     g_curThreadData->ReadLock(clock);
@@ -299,7 +320,8 @@ Val_t PACTreeImpl::Lookup(Key_t &key, bool *found) {
     return val;
 }
 
-SearchLayer *PACTreeImpl::CreateSearchLayer(root_obj *root, int threadId) {
+SearchLayer *PACTreeImpl::CreateSearchLayer(root_obj *root, int threadId, std::vector<std::thread *> *wt)
+{
     // Read from Root Object or Allocate new one.
     if (pmemobj_direct(root->ptr[threadId]) == nullptr) {
         NVMPtr<SearchLayer> sPtr;
@@ -309,6 +331,7 @@ SearchLayer *PACTreeImpl::CreateSearchLayer(root_obj *root, int threadId) {
     }
     auto *s = (SearchLayer *)pmemobj_direct(root->ptr[threadId]);
     s->Init();
+    wt->push_back(s->workerThread);
     return s;
 }
 

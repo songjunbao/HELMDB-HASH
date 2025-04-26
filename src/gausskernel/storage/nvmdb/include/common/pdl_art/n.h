@@ -34,6 +34,7 @@ static_assert(sizeof(Prefix) == 8, "Prefix should be 64 bit long");
 
 class N {
 public:
+    std::atomic<uint64_t> version{0};
     static constexpr size_t childrenIndexCount = 256;
     static constexpr size_t compactCountOffset = 16;
     static constexpr size_t n48ElementCount = 48;

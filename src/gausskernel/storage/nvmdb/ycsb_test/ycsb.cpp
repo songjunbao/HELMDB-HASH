@@ -81,8 +81,8 @@ namespace Dummy {
 
 
 
-static uint64_t LOAD_SIZE = 640000;
-static uint64_t RUN_SIZE = 6400000;
+static uint64_t LOAD_SIZE = 64000000;
+static uint64_t RUN_SIZE = 64000000;
 
 void loadKey(TID tid, Key &key) {
     return ;

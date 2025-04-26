@@ -1,6 +1,9 @@
 #include "common/pdl_art/tree.h"
 #include <chrono>
 #include <shared_mutex>
+// 线程局部变量，每个线程都有独立的实例
+thread_local std::vector<HashOps> hashops;
+boost::lockfree::queue<std::vector<HashOps> *> hashops_queue(1024);
 namespace ART_ROWEX {
 void Tree::Recover() {
     for (int i = 0; i < oplogsCount; i++) {
@@ -8,11 +11,6 @@ void Tree::Recover() {
             pmemobj_free(&oplogs[i].newNodeOid);
         }
     }
-}
-
-void HashAdjEntry::Put(const uint64_t &remainingPart, NVMPtr<N>& ptid, epoche::ThreadInfo& thread_info)
-{
-    adjMap.Put(remainingPart, &ptid, thread_info); // 假设 turbo::unordered_map 支持 operator[]
 }
 Tree::Tree(LoadKeyFunction loadKey) : loadKey(loadKey) {
     NVMPtr<OpStruct> ologPtr;
@@ -34,6 +32,19 @@ Tree::Tree(LoadKeyFunction loadKey) : loadKey(loadKey) {
     root = nRootPtr;
     flushToNVM(reinterpret_cast<char *>(this), sizeof(Tree));
     smp_wmb();
+    // How many elements roughly do we expect to insert?
+    parameters.projected_element_count = 50000;
+    // Maximum tolerable false positive probability? (0,1)
+    parameters.false_positive_probability = 0.01; // 1 in 100
+    // Simple randomizer (optional)
+    parameters.random_seed = 0xA5A5A5A5;
+    if (!parameters)
+    {
+        std::cout << "Error - Invalid set of bloom filter parameters!" << std::endl;
+    }
+    parameters.compute_optimal_parameters();
+    //Instantiate Bloom Filter
+    filter = bloom_filter(parameters);
 }
 
 Tree::~Tree(){
@@ -87,22 +98,49 @@ TID Tree::CheckKey(const TID tid, const Key &k) const {
     }
     return 0;
 }
-// 插入哈希邻接表函数：分段插入哈希邻接表
-void Tree::insertIntoHashAdjTable(const Key &k, NVMPtr<N>& pTid, uint32_t level) {
-    auto thread_info = hashAdjTable.getThreadInfo ();
-    turbo::unordered_map<size_t, NVMPtr<N>*>* vbuf;
-    auto callback = [&] (HashTable::RecordType record) { vbuf = std::move(record.value()); };
-    uint64_t hashKeyPart = k.extractPrefix(5);  // 提取前5个字符的指针和长度
-    uint64_t remainingPart = k.extractRemaining(5);  // 获取从第6个字符开始的部分
-    if (hashAdjTable.Find(hashKeyPart,thread_info,callback) == false) {
-        // 使用智能指针管理 adjHash 的生命周期
-        auto adjHash = std::make_unique<turbo::unordered_map<size_t, NVMPtr<N>*>>();
-        adjHash->Put(remainingPart, &pTid, thread_info);
-        hashAdjTable.Put (hashKeyPart, adjHash.release(), thread_info);
-    }else{
-        vbuf->Put(remainingPart, &pTid, thread_info);  // 插入邻接表结构
-    }
-}
+//// 插入哈希邻接表函数：分段插入哈希邻接表
+//void Tree::insertIntoHashAdjTable(const Key &k, NVMPtr<N>& pTid, uint32_t level, NVMPtr<N>& newNodePtr, uint32_t start_level) {
+//    auto thread_info = hashAdjTable.getThreadInfo ();
+////    if(hash_count % 10000 == 0){
+////        fprintf(stderr, "hash插入的键值数量： %d keys\n", hash_count);
+////        fprintf(stderr, "平均长度： %d keys\n", hash_average_len);
+////    }
+//    ValueEntry* vbuf;
+//    auto callback = [&] (HashTable::RecordType record) {vbuf = std::move(record.value());};
+//    uint32_t prefix_count = level + (level % 2);
+//    auto hashKeyPart = k.extractPrefix(prefix_count);  // 提取前4个字符的指针和长度
+//    if (hashAdjTable.Find(hashKeyPart,callback)) {
+//        vbuf->ptid = pTid;
+//        vbuf->level = prefix_count;
+//    }else{
+//        // 使用智能指针管理 adjHash 的生命周期
+//        // 将前5个字符的哈希值插入到布隆过滤器中
+//        //        filter.insert(hashKeyPart);  // 使用布隆过滤器插入前5个字符的前缀（哈希值）
+//        auto value = std::make_unique<ValueEntry>();
+//        value->level = prefix_count;
+//        value->ptid = pTid;
+//        hashAdjTable.Put (hashKeyPart, value.release(), thread_info);
+//    }
+//}
+
+//NVMPtr<N> Tree::LookupPtr(const Key &k, uint32_t level,size_t prefix){
+//    // 使用读锁保护 hashAdjTable 的查找
+//    //std::shared_lock<std::shared_mutex> readLock(hashAdjTableMutex);
+//    NVMPtr<N> res;
+//    HashAdjEntry* vbuf = nullptr;
+//    auto callback = [&] (HashTable::RecordType record) {
+//        vbuf = record.value();
+//    };
+//    hashAdjTable.Find(prefix,  callback);
+//    if (vbuf != nullptr) {
+//        auto remaining = k.extractRemaining(level);
+//        auto res_callback = [&](turbo::unordered_map<size_t, NVMPtr<N> *>::RecordType record) {
+//            res = *record.value();
+//        };
+//        vbuf->adjMap.Find(remaining, res_callback);
+//    }
+//    return res;
+//}
 
 void Tree::Insert(const Key &k, TID tid, ART::ThreadInfo &epochInfo) {
     ART::EpochGuard epochGuard(epochInfo);
@@ -154,7 +192,6 @@ restart:
                 N4 *newNode = (N4 *)new (newNodePtr.getVaddr()) N4(nextLevel, prefix);
                 //tid:事务id,ptid根据事务id获取,用于指向叶子节点
                 NVMPtr<N> pTid(0, (unsigned long)N::SetLeaf(tid));
-
                 // 2)  add node and (tid, *k) as children
                 //这里的insert,ptid指向的就是该key的叶节点，newNode是一个内部节点
                 newNode->Insert(k[nextLevel], pTid, false);
@@ -173,6 +210,7 @@ restart:
                 }
                 N::Change(parentNode, parentKey, newNodePtr);
                 oplogs[oplogsCount].op = OpStruct::done;
+                auto version = newNode->version.load();
                 parentNode->WriteUnlock();
                 // 4) update prefix of node, unlock
                 node->SetPrefix(remainingPrefix.prefix, node->GetPrefix().prefixCount - ((nextLevel - level) + 1), true);
@@ -182,23 +220,35 @@ restart:
                 node->WriteUnlock();
                 //这里在确保art内部结构调整完成持久化之后再去执行插入哈希邻接表操作，保证数据的一致性
                 /* 插入哈希邻接表策略：
-                 * 1）待插入level>5,则执行插入哈希邻接表操作
+                 * 1）待插入level>5,则执行插入哈希邻接表操作,这里的level可以用nextLevel来判断,nextLevel正好是内部节点匹配的前缀的长度-1
                  * 2）考虑到前缀尽可能的复用，则每5个层级进行前缀分割操作，并将其插入邻接表
                  * 3）对于内部节点的索引，在邻接表存储的是子节点的指针，对于叶子节点的索引，则插入哈希邻接表存储的是ptid
                  * 4)为了更好的匹配ART的特性，hash索引的前缀不需要把key的所有字符都作为hash的key,只需要与ART匹配的前缀长度一致即可
-                 * 5）为了更好的辨别是否索引到叶子节点，则需要判断索引的指针是否是指向叶子节点的指针，在NVMPtr<N>中加入一个标志位，用于辨别是否索引到叶子节点
-                 * 6) 为了更方便索引叶子节点，由于采用节点复用，目前打算采取的策略是如果ART到leaf的前缀不等于key,则邻接表的索引key按照5长度进行补全，或者直接包含整个key
-                 * 举例（1）key:fnaskdlfjnfd
+                 * 5）为了更好的辨别是否索引到叶子节点，则需要判断索引的指针是否是指向叶子节点的指针，在NVMPtr<N>中加入一个标志位，
+                 *    用于辨别是否索引到叶子节点
+                 * 6) 为了更方便索引叶子节点，由于采用节点复用，目前打算采取的策略是如果ART到leaf的前缀不等于key,则邻接表的索引key按照5
+                 *    长度进行补全，或者直接包含整个key
+                 * 举例:
+                 * （1）key:fnaskdlfjnfd
                  * fnaskdlf->leaf(8个前缀则索引到了leaf)
                  * 则在hashAdjTable中存储的key为fnask->dlfjn->ptid
-                 * 举例（2）key:fnaskdlfj
+                 *
+                 * （2）key:fnaskdlfj
                  * fnaskdlf->leaf(8个前缀则索引到了leaf)
                  * 则在hashAdjTable中存储的key为fnask->dlfj->ptid
                  * 将其标志位设置为1，表示索引到了叶子节点
                  * */
-
-//                if(nextLevel > 5){
-//                }
+                art_average_level = (art_average_level * key_count + nextLevel) / (++key_count);
+                if(nextLevel > 2){
+                    uint32_t prefix_count = nextLevel + (nextLevel % 2);
+                    if(prefix_count != 4){
+                        fprintf(stderr, "cur_length1: %d\n", prefix_count);
+                    }
+                    auto hashKeyPart = k.extractPrefix(prefix_count);
+                    hashops.push_back(HashOps(hashKeyPart, version, &pTid, &newNodePtr));
+                    //记录需要插入hash表键值的平均长度
+                    hash_average_len = (hash_average_len * hash_count + nextLevel) / (++hash_count);
+                }
                 return;
             }
             case CheckPrefixPessimisticResult::MATCH:
@@ -221,8 +271,20 @@ restart:
             oplogsCount = 0;
             flushToNVM(reinterpret_cast<char *>(&oplogsCount), sizeof(uint64_t));
             smp_wmb();
-            if (needRestart) {
+            if (needRestart){
                 goto restart;
+            }
+            art_average_level = (art_average_level * key_count + level) / (++key_count);
+            if(level > 2){
+                uint32_t prefix_count = level + (level % 2);
+//                if(prefix_count != 4){
+//                    fprintf(stderr, "cur_length2: %d\n", prefix_count);
+//                }
+                auto hashKeyPart = k.extractPrefix(prefix_count);
+                auto verison  = node->version.load();
+                hashops.push_back(HashOps(hashKeyPart, verison, &pTid, &nodePtr));
+                //记录需要插入hash表键值的平均长度
+                hash_average_len = (hash_average_len * hash_count + level) / (++hash_count);
             }
             return;
         }
@@ -234,7 +296,6 @@ restart:
 
             Key key;
             loadKey(N::GetLeaf(nextNode), key);
-
             if (key == k) {
                 NVMPtr<N> pTid(0, (unsigned long)N::SetLeaf(tid));
                 //需要更新ptid
@@ -242,7 +303,18 @@ restart:
                 oplogsCount = 0;
                 flushToNVM(reinterpret_cast<char *>(&oplogsCount), sizeof(uint64_t));
                 smp_wmb();
+                auto verison  = node->version.load();
                 node->WriteUnlock();
+                if(level > 2){
+                    //记录需要插入hash表键值的平均长度
+                    hash_average_len = (hash_average_len * hash_count + level) / (++hash_count);
+                    uint32_t prefix_count = level + (level % 2);
+//                    if(prefix_count != 4){
+//                        fprintf(stderr, "cur_length3: %d\n", prefix_count);
+//                    }
+                    auto hashKeyPart = k.extractPrefix(prefix_count);
+                    hashops.push_back(HashOps(hashKeyPart, verison, &pTid, &nodePtr));
+                }
                 return;
             }
 
@@ -267,6 +339,10 @@ restart:
 
             n4->Insert(k[level + prefixLength], pTid, false);
             n4->Insert(key[level + prefixLength], nextNodePtr, false);
+//            n4->version.fetch_add(1);
+            node->version.fetch_add(1);
+            auto version = node->version.load();
+//            nextNodePtr.version.fetch_add(1);
             flushToNVM(reinterpret_cast<char *>(n4), sizeof(N4));
             smp_wmb();
             N::Change(node, k[level - 1], n4Ptr);
@@ -276,6 +352,31 @@ restart:
             flushToNVM(reinterpret_cast<char *>(&oplogsCount), sizeof(uint64_t));
             smp_wmb();
             node->WriteUnlock();
+            uint32_t prefix_level = level + prefixLength;
+            art_average_level = (art_average_level * key_count + prefix_level) / (++key_count);
+            art_average_level = (art_average_level * key_count + prefixLength) / (key_count);
+            if(prefix_level > 2){
+                auto old_level = level - 1;
+                uint32_t prefix_count = prefix_level + (prefix_level % 2);
+                uint32_t old_prefix_count = old_level + (old_level % 2);
+//                if(prefix_count != 4){
+//                    fprintf(stderr, "cur_length4: %d\n", prefix_count);
+//                }
+                //原来该层级是叶节点，目前已经变成了内部节点，因此需要更新该层级的hash表
+                while(old_prefix_count < prefix_count){
+                    auto old_hashKeyPart = k.extractPrefix(old_prefix_count);
+                    hashops.push_back(HashOps(old_hashKeyPart, version, &n4Ptr, &nodePtr));
+                    old_prefix_count += 2;
+                }
+                auto hashKeyPart = k.extractPrefix(prefix_count);
+                hashops.push_back(HashOps(hashKeyPart, 0, &pTid,&n4Ptr));
+                hashKeyPart = key.extractPrefix(prefix_count);
+                hashops.push_back(HashOps(hashKeyPart, 0, &nextNodePtr, &n4Ptr));
+//                insertIntoHashAdjTable(k , pTid, prefix_level, n4Ptr, level);
+//                insertIntoHashAdjTable(key , nextNodePtr, prefix_level, n4Ptr, level);
+                //记录需要插入hash表键值的平均长度
+                hash_average_len = (hash_average_len * hash_count + level) / (++hash_count);
+            }
             return;
         }
         level++;
@@ -426,6 +527,7 @@ Tree::CheckPrefixPessimisticResult Tree::CheckPrefixPessimistic(N *n,
         Key kt;
         for (uint32_t i = ((level + p.prefixCount) - n->GetLevel()); i < p.prefixCount; ++i) {
             if (i == MAX_STORED_PREFIX_LENGTH) {
+                // loadKeyFunc的作用是加载更多的键值，因为一个节点的存储的前缀的长度可能大于MAX_STORED_PREFIX_LENGTH，需要加载多出的前缀值进行匹配
                 loadKeyFunc(N::GetAnyChildTid(n), kt);
             }
             uint8_t curKey = i >= MAX_STORED_PREFIX_LENGTH ? kt[level] : p.prefix[i];
@@ -611,87 +713,40 @@ bool Tree::FindStart(TID *result,
     }
     return false;
 };
-
+void Tree::hashLookup(const Key &k, std::size_t &resultsFound, TID *result){
+//    auto prefix = k.extractPrefix(4);
+//    ValueEntry* vbuf;
+//    auto callback = [&] (HashTable::RecordType record) {vbuf = std::move(record.value());};
+//    if(hashAdjTable.Find(prefix,callback)){
+//        auto res_node = vbuf->ptid.getVaddr();
+//        if(N::IsLeaf(res_node)){
+//            result[resultsFound] = N::GetLeaf(res_node);
+//            res_count++;
+//            resultsFound++;
+//
+////            }
+//        }
+//    }
+}
 TID Tree::LookupNext(const Key &start, ART::ThreadInfo &threadEpochInfo){
     ART::EpochGuardReadonly epochGuard(threadEpochInfo);
     TID toContinue = 0;
     std::size_t resultsFound = 0;
     std::size_t resultSize = 1;
     TID result[resultSize];
-
-
-////    // 仅当键长度超过5时才使用哈希邻接表
-//    auto o0_start_time = std::chrono::high_resolution_clock::now();
-
-
-    // 仅当键长度超过5时才使用哈希邻接表
-//
-//    if (start.GetKeyLen() > 5) {
-//
-//        uint64_t prefix = start.extractPrefix(5);
-//        auto thread_info = hashAdjTable.getThreadInfo();
-//        turbo::unordered_map<size_t, NVMPtr<N>*>* vbuf = nullptr;
-//        uint64_t remaining = start.extractRemaining(5);
-//        NVMPtr<N> *res = nullptr;
-//        {
-//            //            // 使用读锁保护 hashAdjTable 的查找
-//            //            std::shared_lock<std::shared_mutex> readLock(hashAdjTableMutex);
-//            auto callback = [&] (HashTable::RecordType record) {
-//                vbuf = record.value();
-//            };
-//            hashAdjTable.Find(prefix, thread_info, callback);
-//            if (vbuf == nullptr) {
-//                goto restart;
-//            }
-//            auto vbuf_thread_info = vbuf->getThreadInfo();
-//            auto res_callback = [&] (turbo::unordered_map<size_t, NVMPtr<N>*>::RecordType record) {
-//                res = record.value();
-//            };
-//            vbuf->Find(remaining, vbuf_thread_info, res_callback);
-//            if (res == nullptr || res->getVaddr() == nullptr) {
-//                goto restart;
-//            }
-//        }
-//        // 获取 TID
-//        TID tid = N::GetLeaf(res->getVaddr());
-////        auto end_time = std::chrono::high_resolution_clock::now();
-////        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - o0_start_time).count();
-//
-//        return tid;
+//    std::size_t hash_found = 0;
+//    auto o0_start_time = std::chrono::steady_clock::now();
+//    if(hash_count > 500000){
+//        hashLookup(start, hash_found, result);
 //    }
-//    if (start.GetKeyLen() > 5) {
-//        // 使用读锁保护 hashAdjTable 的查找
-//        //std::shared_lock<std::shared_mutex> readLock(hashAdjTableMutex);
-//        uint64_t prefix = start.extractPrefix(5);
-//        auto thread_info = hashAdjTable.getThreadInfo();
-//        turbo::unordered_map<size_t, NVMPtr<N>*>* vbuf = nullptr;
-//        auto callback = [&] (HashTable::RecordType record) {
-//            vbuf = record.value();
-//        };
-//        hashAdjTable.Find(prefix, thread_info, callback);
-//        if (vbuf != nullptr) {
-//            auto vbuf_thread_info = vbuf->getThreadInfo();
-//            uint64_t remaining = start.extractRemaining(5);
-//            NVMPtr<N> *res = nullptr;
-//            auto res_callback = [&](turbo::unordered_map<size_t, NVMPtr<N> *>::RecordType record) {
-//                res = record.value();
-//            };
-//            vbuf->Find(remaining, vbuf_thread_info, res_callback);
-//            if (res != nullptr && res->getVaddr() != nullptr) {
-//                // 获取 TID
-//                TID tid = N::GetLeaf(res->getVaddr());
-//                //                    auto end_time = std::chrono::high_resolution_clock::now();
-//                //                    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - o0_start_time).count();
-//                //                    fprintf(stderr, "hash查找时间: %lld 微秒\n", duration);
-//                return tid;
-//            }
-//        }
+//    if(hash_found == 1){
+//        auto end_time = std::chrono::steady_clock::now();
+//        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - o0_start_time).count();
+//        fprintf(stderr, "hash查找时间: %lld na秒\n", duration);
+//        return result[0]; // 在找到结果时直接返回
 //    }
-    // 使用高精度计时器
-//    auto start_time = std::chrono::high_resolution_clock::now();
 restart:
     resultsFound = 0;
-
     uint32_t level = 0;
     NVMPtr<N> nodePtr = root;
     N *node = nodePtr.getVaddr();
@@ -701,8 +756,6 @@ restart:
     if (resultsFound == 0) {
         return 0;
     }
-//    auto end_time = std::chrono::high_resolution_clock::now();
-//    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
     return result[0];
 }
 

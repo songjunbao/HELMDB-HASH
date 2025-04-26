@@ -21,7 +21,7 @@ public:
     void RegisterThread(int grpId);
 
     void UnregisterThread();
-
+//    TID hashLookup(Key_t &key);
     Val_t Lookup(Key_t &key, bool *found);
 
     void Recover();
@@ -29,7 +29,7 @@ public:
     void Scan(Key_t &startKey, Key_t &endKey, int maxRange, LookupSnapshot snapshot, bool reverse,
               std::vector<std::pair<Key_t, Val_t>> &result);
 
-    static SearchLayer *CreateSearchLayer(root_obj *root, int threadId);
+    static SearchLayer *CreateSearchLayer(root_obj *root, int threadId, std::vector<std::thread *> *wt);
 
     static int GetThreadGroupId();
 

@@ -6,6 +6,7 @@
 template <typename T>
 class NVMPtr {
 public:
+    //    std::atomic<std::uint64_t> version{0};
     static constexpr size_t validAddressBits = 48;
     static constexpr size_t dirtyBitOffset = 61;
     NVMPtr() noexcept : rawPtr{}

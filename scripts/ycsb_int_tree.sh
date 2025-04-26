@@ -10,9 +10,9 @@ cd /home/song/nvm/downloads/HELMDB
 
 for idx_type in art
 do
-    for workload in a
+    for workload in c
     do
-        for nthreads in 8
+        for nthreads in 16
         do
             ./tmp_build/src/gausskernel/storage/nvmdb/ycsb_test/YCSBTests ${idx_type} ${workload} randint uniform ${nthreads} &>> ./results/ycsb_int_tree.csv
             sleep 3

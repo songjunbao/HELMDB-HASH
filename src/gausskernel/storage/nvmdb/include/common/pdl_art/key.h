@@ -4,7 +4,7 @@
 #include "common/pdl_art/string_key.h"
 #include <cstring>
 #include <memory>
-
+#include <algorithm>  // 包含 std::min
 using KeyLen = uint32_t;
 
 class Key {
@@ -148,22 +148,23 @@ public:
         }
     }
     // 新增的函数：提取前缀前5个字符
-    inline uint64_t extractPrefix(size_t length) const{
+    inline uint64_t extractPrefix(uint32_t length) const
+    {
         if (len < length) return 0;  // 如果长度不够，返回0
         uint64_t prefix = 0;
-        // 使用 memcpy 高效地将前 length 字节复制到 prefix 中
-        // 我们确保只拷贝 length 字节，这里假设你要的是 4 字节前缀
-        std::memcpy(&prefix, data, std::min(length, sizeof(prefix)));
+        // 使用 memcpy 高效地将前 length复制到 prefix 中
+        std::memcpy(&prefix, data, length);
         return prefix;
     }
 
-
     // 新增的函数：提取从指定层级开始的剩余部分
-    inline uint64_t extractRemaining(uint32_t level) const{
-        if (level >= len) return 0;  // 如果 `level` 超出范围，返回空视图
+    inline uint64_t extractRemaining(uint32_t start_level) const
+    {
+        if (start_level >= len)
+            return 0;  // 如果 `level` 超出范围，返回空视图
         uint64_t result = 0;
-        size_t remainingLen = len - level;  // 剩余部分的长度
-        std::memcpy(&result, &data[level], remainingLen);
+        uint32_t remainingLen = std::min(len - start_level, static_cast<uint32_t>(4));  // 剩余部分的,最长按5补齐
+        std::memcpy(&result, &data[start_level], remainingLen);
         return result;
     }
 };
